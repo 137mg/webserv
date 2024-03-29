@@ -22,7 +22,7 @@ First, we need to learn about what is OSI.
 
 **OSI:**
 
-The Open Systems Interconnection model (OSI model) is a conceptual model that characterizes and standardizes the communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology.
+>The Open Systems Interconnection model (OSI model) is a conceptual model that characterizes and standardizes the communication functions of a telecommunication or computing system without regard to its underlying internal structure and technology.
 Its goal is the interoperability of diverse communication systems with standard protocols.
 The model partitions a communication system into abstraction layers.
 The original version of the model defined seven layers.
@@ -31,24 +31,27 @@ To implement HTTP, we only care about **4th Layer: Transport Layer.**
 
 **Transport Layer:**
 
-The Transport layer is primarily responsible for ensuring that data is transferred from one point to another reliably and without errors. For example, the Transport layer makes sure data are sent and received in the correct sequence.
-The Transport layer provides flow control and error handling, and participates in solving problems concerned with the transmission and reception of packets. Common examples of Transport layer protocols are Transmission Control Protocol (TCP), User Datagram Protocol (UDP) and Sequenced Packet Exchange (SPX).
+>The Transport layer is primarily responsible for ensuring that data is transferred from one point to another reliably and without errors. For example, the Transport layer makes sure data are sent and received in the correct sequence.
+>
+>The Transport layer provides flow control and error handling, and participates in solving problems concerned with the transmission and reception of packets. Common examples of Transport layer protocols are Transmission Control Protocol (TCP), User Datagram Protocol (UDP) and Sequenced Packet Exchange (SPX).
 
 In Transport Layer, we mainly use Transmission Control Protocol (TCP) to implement HTTP server. We can also use User Datagram Protocol (UDP) to implement HTTP server but many don’t use it. The reasons for it can deviate from our main topic of building HTTP server.
-In short, from RFC 2616:
 
-HTTP communication usually takes place over TCP/IP connections. The default port is TCP 80, but other ports can be used. This does not preclude HTTP from being implemented on top of any other protocol on the Internet, or on other networks. HTTP only presumes a reliable transport; any protocol that provides such guarantees can be used; the mapping of the HTTP/1.1 request and response structures onto the transport data units of the protocol in question is outside the scope of this specification.
+In short, from **RFC 2616:**
+
+> HTTP communication usually takes place over TCP/IP connections. The default port is TCP 80, but other ports can be used. This does not preclude HTTP from being implemented on top of any other protocol on the Internet, or on other networks. HTTP only presumes a reliable transport; any protocol that provides such guarantees can be used; the mapping of the HTTP/1.1 request and response structures onto the transport data units of the protocol in question is outside the scope of this specification.
 
 So although it doesn’t explicitly say so, UDP is not used because it is not a “reliable transport”.
+
 All the famous HTTP servers like Apache Tomcat, NginX etc are implemented on top of TCP. So, in this post we will just stick with HTTP server based on TCP.
 
 **Now, you may think “what the heck is RFC!”**
 
 **RFC:**
 
-A Request for Comments (RFC), in the context of Internet governance, is a type of publication from the Internet Engineering Task Force (IETF) and the Internet Society(ISOC), the principal technical development and standards-setting bodies for the Internet.
-
-An RFC is authored by engineers and computer scientists in the form of a memorandum describing methods, behaviors, research, or innovations applicable to the working of the Internet and Internet-connected systems. It is submitted either for peer review or to convey new concepts, information, or (occasionally) engineering humor. The IETF adopts some of the proposals published as RFCs as Internet Standards. Request for Comments documents were invented by Steve Crocker in 1969 to help record unofficial notes on the development of ARPANET. RFCs have since become official documents of Internet specifications, communications protocols, procedures, and events.
+>A Request for Comments (RFC), in the context of Internet governance, is a type of publication from the Internet Engineering Task Force (IETF) and the Internet Society(ISOC), the principal technical development and standards-setting bodies for the Internet.
+>
+>An RFC is authored by engineers and computer scientists in the form of a memorandum describing methods, behaviors, research, or innovations applicable to the working of the Internet and Internet-connected systems. It is submitted either for peer review or to convey new concepts, information, or (occasionally) engineering humor. The IETF adopts some of the proposals published as RFCs as Internet Standards. Request for Comments documents were invented by Steve Crocker in 1969 to help record unofficial notes on the development of ARPANET. RFCs have since become official documents of Internet specifications, communications protocols, procedures, and events.
 
 In short, it is a document where someone proposes changes, modifications for current methods or proposing a new methods. And also the specifications where the methods have been standardized.
 
@@ -64,7 +67,8 @@ HTTP/2 → RFC 7540 and RFC 7541
 
 FTP → RFC959
 
-So, if we want to implement HTTP server, we have to read their particular RFC which is RFC 7230, RFC 7231, RFC 7232, RFC 7233, RFC 7234, RFC 7235.
+So, if we want to implement HTTP server, we have to read their particular
+RFC which is RFC 7230, RFC 7231, RFC 7232, RFC 7233, RFC 7234, RFC 7235.
 
 ## Now implementing what we have learned
 
@@ -80,7 +84,7 @@ To implement TCP, **we have to learn TCP socket programming.**
 
 **What is socket?**
 
-A socket is the mechanism that most popular operating systems provide to give programs access to the network. It allows messages to be sent and received between applications (unrelated processes) on different networked machines.
+>A socket is the mechanism that most popular operating systems provide to give programs access to the network. It allows messages to be sent and received between applications (unrelated processes) on different networked machines.
 
 The sockets mechanism has been created to be independent of any specific type of network. IP, however, is by far the most dominant network and the most popular use of sockets.
 
@@ -125,21 +129,21 @@ For TCP/IP sockets, we want to specify the IP address family (AF_INET) and virtu
 		return 0; 
 	}
 
-## Step 2. Indentify (name) a socket
+## Step 2. Identify (name) a socket
 When we talk about naming a socket, we are talking about assigning a transport address to the socket (a port number in IP networking). In sockets, this operation is called binding an address and the bind system call is used for this.
 
 The analogy is that of assigning a phone number to the line that you requested from the phone company in step 1 or that of assigning an address to a mailbox.
 
 The transport address is defined in a socket address structure. Because sockets were designed to work with various different types of communication interfaces, the interface is very general. Instead of accepting, say, a port number as a parameter, it takes a sockaddr structure whose actual format is determined on the address family (type of network) you're using. For example, if you're using UNIX domain sockets, bind actually creates a file in the file system.
 
-The system call for bind is:
+The system call for `bind` is:
 
 	int bind(int socket, const struct sockaddr *address, socklen_t
 	address_len);
 
-The first parameter, socket, is the socket that was created with the socket system call.
+The first parameter, `socket`, is the socket that was created with the socket system call.
 
-For the second parameter, the structure sockaddr is a generic container that just allows the OS to be able to read the first couple of bytes that identify the address family. The address family determines what variant of the sockaddr struct to use that contains elements that make sense for that specific communication type. For IP networking, we use struct sockaddr_in, which is defined in the header netinet/in.h. This structure defines:
+For the second parameter, the structure `sockaddr` is a generic container that just allows the OS to be able to read the first couple of bytes that identify the address family. The address family determines what variant of the `sockaddr` struct to use that contains elements that make sense for that specific communication type. For IP networking, we use struct `sockaddr_in`, which is defined in the header `netinet/in.h`. This structure defines:
 
 	struct sockaddr_in 
 	{ 
@@ -155,7 +159,7 @@ Before calling bind, we need to fill out this structure. The three key parts we 
 **sin_family**
 
 
-The address family we used when we set up the socket. In our case, it’s AF_INET.
+The address family we used when we set up the socket. In our case, it’s `AF_INET`.
 
 **sin_port**
 
@@ -163,9 +167,9 @@ The port number (the transport address). You can explicitly assign a transport a
 
 **sin_addr**
 
-The address for this socket. This is just your machine’s IP address. With IP, your machine will have one IP address for each network interface. For example, if your machine has both Wi-Fi and ethernet connections, that machine will have two addresses, one for each interface. Most of the time, we don’t care to specify a specific interface and can let the operating system use whatever it wants. The special address for this is 0.0.0.0, defined by the symbolic constant INADDR_ANY.
+The address for this socket. This is just your machine’s IP address. With IP, your machine will have one IP address for each network interface. For example, if your machine has both Wi-Fi and ethernet connections, that machine will have two addresses, one for each interface. Most of the time, we don’t care to specify a specific interface and can let the operating system use whatever it wants. The special address for this is 0.0.0.0, defined by the symbolic constant `INADDR_ANY`.
 
-Since the address structure may differ based on the type of transport used, the third parameter specifies the length of that structure. This is simply sizeof(struct sockaddr_in).
+Since the address structure may differ based on the type of transport used, the third parameter specifies the length of that structure. This is simply `sizeof(struct sockaddr_in)`.
 
 The code to bind a socket looks like this:
 
@@ -189,28 +193,28 @@ The code to bind a socket looks like this:
 	}
 
 ## Step 3. On the server, wait for an incoming connection
-Before a client can connect to a server, the server should have a socket that is prepared to accept the connections. The listen system call tells a socket that it should be capable of accepting incoming connections:
+Before a client can connect to a server, the server should have a socket that is prepared to accept the connections. The `listen` system call tells a socket that it should be capable of accepting incoming connections:
 
 	#include <sys/socket.h>
 	
 	int listen(int socket, int backlog);
 
-The second parameter, backlog, defines the maximum number of pending connections that can be queued up before connections are refused.
+The second parameter, `backlog`, defines the maximum number of pending connections that can be queued up before connections are refused.
 
-The accept system call grabs the first connection request on the queue of pending connections (set up in listen) and creates a new socket for that connection.
+The `accept` system call grabs the first connection request on the queue of pending connections (set up in `listen`) and creates a new socket for that connection.
 
 The original socket that was set up for listening is used only for accepting connections, not for exchanging data. By default, socket operations are synchronous, or blocking, and accept will block until a connection is present on the queue.
 
-The syntax of accept is:
+The syntax of `accept` is:
 
 	#include <sys/socket.h>
 	
 	int accept(int socket, struct sockaddr *restrict address, socklen_t
 	*restrict address_len);
 
-The first parameter, socket, is the socket that was set for accepting connections with listen.
+The first parameter, `socket`, is the socket that was set for accepting connections with `listen`.
 
-The second parameter, address, is the address structure that gets filed in with the address of the client that is doing the connect. This allows us to examine the address and port number of the connecting socket if we want to.
+The second parameter, `address`, is the address structure that gets filed in with the address of the client that is doing the connect. This allows us to examine the address and port number of the connecting socket if we want to.
 
 The third parameter is filled in with the length of the address structure.
 
@@ -231,7 +235,7 @@ The code to listen and accept look like:
 ## Step 4. Send and receive messages
 We finally have connected sockets between a client(when you visit IP address of your server from a web browser) and a server!
 
-Communication is the easy part. The same read and write system calls that work on files also work on sockets.
+Communication is the easy part. The same `read` and `write` system calls that work on files also work on sockets.
 
 	char buffer[1024] = {0};
 	
@@ -244,7 +248,7 @@ Communication is the easy part. The same read and write system calls that work o
 	char *hello = "Hello from the server"; //IMPORTANT! WE WILL GET TO IT
 	write(new_socket , hello , strlen(hello));
 
-**NOTE:** The real working of HTTP server happens based on the content present in char *hello variable. We will get back to it later.
+**NOTE:** The real working of HTTP server happens based on the content present in `char *hello` variable. We will get back to it later.
 
 ## Step 5. Close the socket
 
@@ -316,7 +320,7 @@ When we’re done communicating, the easiest thing to do is to close a socket wi
 	59 	    return 0;
 	60 	}
 
-To test out TCP server code, I have written a TCP client code:(Don’t worry about this code. This code is written to show the difference between simple TCP connection and HTTP connection. Do you remember what I have told about the variable char *hello in **Step 4. Send and receive messages?)**.
+To test out TCP server code, I have written a TCP client code:(Don’t worry about this code. This code is written to show the difference between simple TCP connection and HTTP connection. Do you remember what I have told about the variable `char *hello` in **Step 4. Send and receive messages?)**.
 
 **TCP socket client-side code:**
 
@@ -425,7 +429,7 @@ We type some URL/Address of the website in the browser
 
 ![alt text](readme_img/image-3.png)
 
-To display the page, browser fetches the file index.html from a web server.
+To display the page, browser fetches the file `index.html` from a web server.
 
 Same as www.example.com (Defaults: port 80, file index.html, http protocol).
 
@@ -437,9 +441,9 @@ This is what our web-browsers send to the servers every time you navigate the in
 
 If the server is configured to certain default pages. Like, server has a default web page where it is displayed when we visit a folder on the server.
 
-That web page is decided by the name of the file. Some servers have public.html and some will have index.html.
+That web page is decided by the name of the file. Some servers have `public.html` and some will have `index.html`.
 
-In this example, we consider index.html as default page.
+In this example, we consider `index.html` as default page.
 
 ![alt text](readme_img/image-4.png)
 
@@ -448,7 +452,7 @@ In this example, we consider index.html as default page.
 We’ll do one thing.
 
 1. Run the TCP server-side code (from above) in the Terminal.
-2. Open your web-browser and enter localhost:8080/index.html in the address bar.
+2. Open your web-browser and enter `localhost:8080/index.html` in the address bar.
 3. Now see what is the output in the Terminal.
 
 **Output in Terminal:**
@@ -490,9 +494,9 @@ This is what you see.
 
 What is the problem? Why can’t we see the data that we have sent from the server?
 
-Do you remember what I have told about the variable char *hello in **Step 4. Send and receive messages?** If you forgot about that. Go back and check what I have said there.
+Do you remember what I have told about the variable `char *hello` in **Step 4. Send and receive messages?** If you forgot about that. Go back and check what I have said there.
 
-We will get back to that variable char* hello in a minute. Don’t worry.
+We will get back to that variable `char* hello` in a minute. Don’t worry.
 
 ## HTTP Methods (Verbs):
 
@@ -528,7 +532,7 @@ This is the HTTP response format the web-browser is expecting from us:
 
 ![alt text](readme_img/image-6.png)
 
-If we want to send Hello from server, first we need to construct the **Header**.
+If we want to send `Hello from server`, first we need to construct the **Header**.
 Then insert a **blank line**, then we can send our message/data.
 
 The headers shown above are just an example. In fact there are many Headers present in HTTP. You can take a look at the HTTP RFCs → RFC 7230, RFC 7231, RFC 7232, RFC 7233, RFC 7234, RFC 7235.
@@ -540,13 +544,13 @@ Now, we will construct a minimal HTTP Header to make our server work.
 
 These 3 Headers are minimum required.
 
-1. HTTP/1.1 200 OK → This mentions what version of HTTP we are using, Status code and Status message.
-2. Content-Type: text/plain → This says that I’m (server) sending a plain text. There are many Content-Types. For example, for images we use this.
-3. Content-Length: 12 → It mentions how many bytes the server is sending to the client. The web-browser only reads how much we mention here.
+1. `HTTP/1.1 200 OK` → This mentions what version of HTTP we are using, Status code and Status message.
+2. `Content-Type: text/plain` → This says that I’m (server) sending a plain text. There are many `Content-Types`s. For example, for images we use this.
+3. `Content-Length: 12` → It mentions how many bytes the server is sending to the client. The web-browser only reads how much we mention here.
 
 The next part is the Body part. Here, we send our data.
 
-First we need to calculate how many bytes we are sending in Body. Then we mention that in Content-Length. Also, we set the Content-Type appropriately according to the data we are sending.
+First we need to calculate how many bytes we are sending in Body. Then we mention that in `Content-Length`. Also, we set the `Content-Type`  appropriately according to the data we are sending.
 
 ### Status Code and Status Messages:
 
@@ -560,7 +564,7 @@ If the client has no permission to see the file, then you send appropriate statu
 
 These are the list of status codes we can use.
 
-Now, run the below code in the Terminal and go to localhost:8080 in your browser.
+Now, run the below code in the Terminal and go to `localhost:8080` in your browser.
 
 	1 	// Server side C program to demonstrate HTTP Server programming
 	2 	#include <stdio.h>
@@ -624,9 +628,9 @@ Now, run the below code in the Terminal and go to localhost:8080 in your browser
 	60 	    return 0;
 	61 	}
 
-Now, you can see Hello world! in your browser.
+Now, you can see `Hello world!` in your browser.
 
-The only thing I have changed is char* hello variable.
+The only thing I have changed is `char* hello` variable.
 
 Finally, our HTTP server is working!
 
@@ -637,7 +641,7 @@ Till now, we learned how to send a string.
 
 Now, we will look at how we can send a file, image etc.
 
-Suppose, you have entered localhost:8080/info.html in the address bar.
+Suppose, you have entered `localhost:8080/info.html` in the address bar.
 
 In the server Terminal we get the following **Request Headers:**
 
@@ -663,7 +667,7 @@ For the sake of simplicity, **we only consider the 1st line in the Request Heade
 
 	GET /info.html HTTP/1.1
 
-So, we just have to search for the info.html file in current directory(as / specifies that it is looking in the **root directory of the server.** If it is like /messages/info.html then we have to look inside messages folder for info.html file).
+So, we just have to search for the `info.html` file in current directory(as `/` specifies that it is looking in the **root directory of the server.** If it is like `/messages/info.html` then we have to look inside messages folder for `info.html` file).
 
 There are many cases here to consider:
 
@@ -677,14 +681,14 @@ And many more…..
 
 First select appropriate status code from here.
 
-If the file is present and the client has permissions to access it, then select appropriate Content-Type from here.
+If the file is present and the client has permissions to access it, then select appropriate `Content-Type` from here.
 
-Then open the file, read the data into a variable. Count the number of bytes read from the file. When you read a simple text file, we can count while reading the file or from the return value of the read() function or strlen(variable). Set the Content-Length.
+Then open the file, read the data into a variable. Count the number of bytes read from the file. When you read a simple text file, we can count while reading the file or from the return value of the `read()` function or `strlen(variable)`. Set the `Content-Length`.
 
 Then construct the **Response Header.**
 
 
-Now add a newline at the end of **Response Header** and append the data to it which we have read from the file (If and only if the file is present and the client has permissions to access it).
+Now add a `newline` at the end of **Response Header** and append the data to it which we have read from the file (If and only if the file is present and the client has permissions to access it).
 
 **SEND THE RESPONSE HEADER TO THE CLIENT!**
 
