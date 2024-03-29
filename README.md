@@ -1,6 +1,8 @@
 # HTTP Server: Everything you need to know to Build a simple HTTP server from scratch
 
-![alt text](image.png)
+(From: https://archive.ph/suwOC)
+
+![alt text](readme_img/image.png)
 
 HTTP is everywhere! Every website we visit is ran on HTTP server. You may think that then what about HTTPS servers. Technically, HTTPS is same as HTTP with more security.
 
@@ -397,13 +399,13 @@ Now we will move on to the HTTP server implementation.
 ## HTTP
 **First we will take a look at the interaction between Server and Web Browser.**
 
-![alt text](image-1.png)
+![alt text](readme_img/image-1.png)
 
 This is the basic outline of the interaction.
 
 If we zoom in more closely to the HTTP part:
 
-![alt text](image-2.png)
+![alt text](readme_img/image-2.png)
 
 1. Initially HTTP Client(i.e., web browser) sends a HTTP request to the HTTP Server.
 
@@ -421,7 +423,7 @@ When we want to connect to the server, what we will do usually?
 
 We type some URL/Address of the website in the browser
 
-![alt text](image-3.png)
+![alt text](readme_img/image-3.png)
 
 To display the page, browser fetches the file index.html from a web server.
 
@@ -439,7 +441,7 @@ That web page is decided by the name of the file. Some servers have public.html 
 
 In this example, we consider index.html as default page.
 
-![alt text](image-4.png)
+![alt text](readme_img/image-4.png)
 
 **Can’t believe?**
 
@@ -484,7 +486,7 @@ But, wait a second. Have you looked at the web-browser?
 
 This is what you see.
 
-![alt text](image-5.png)
+![alt text](readme_img/image-5.png)
 
 What is the problem? Why can’t we see the data that we have sent from the server?
 
@@ -524,7 +526,7 @@ HTTP is nothing but following some rules specified in the RFC documents. That is
 
 This is the HTTP response format the web-browser is expecting from us:
 
-![alt text](image-6.png)
+![alt text](readme_img/image-6.png)
 
 If we want to send Hello from server, first we need to construct the **Header**.
 Then insert a **blank line**, then we can send our message/data.
