@@ -320,7 +320,9 @@ When we’re done communicating, the easiest thing to do is to close a socket wi
 	59 	    return 0;
 	60 	}
 
-To test out TCP server code, I have written a TCP client code:(Don’t worry about this code. This code is written to show the difference between simple TCP connection and HTTP connection. Do you remember what I have told about the variable `char *hello` in **Step 4. Send and receive messages?)**.
+To test out TCP server code, I have written a TCP client code:
+
+(Don’t worry about this code. This code is written to show the difference between simple TCP connection and HTTP connection. Do you remember what I have told about the variable `char *hello` in **Step 4. Send and receive messages?)**.
 
 **TCP socket client-side code:**
 
