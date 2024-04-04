@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/04 17:41:53 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/04/04 17:51:22 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,16 +48,16 @@ all: server client
 server: $(OBJ_SERVER)
 	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
 	@$(CC) $(OBJ_SERVER) $(CPPFLAGS) -o server
-	@echo "$(BLUE)$(BOLD)----------------------------------------"
+	@echo "$(BLUE)$(BOLD)-------------------------------------------"
 	@echo "     $(PROJECT) (server) = NOW READY FOR USE!"
-	@echo "----------------------------------------$(RESET)"
+	@echo "-------------------------------------------$(RESET)"
 	
 client: $(OBJ_CLIENT)
 	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
 	@$(CC) $(OBJ_CLIENT) $(CPPFLAGS) -o client
-	@echo "$(BLUE)$(BOLD)----------------------------------------"
+	@echo "$(BLUE)$(BOLD)-------------------------------------------"
 	@echo "     $(PROJECT) (client) = NOW READY FOR USE!"
-	@echo "----------------------------------------$(RESET)"
+	@echo "-------------------------------------------$(RESET)"
 
 	
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
