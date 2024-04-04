@@ -1,22 +1,24 @@
-c# **************************************************************************** #
+# **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/02/08 11:22:47 by psadeghi         ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
+#                                                    +#+                       #
+#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
+#    Updated: 2024/04/04 15:23:06 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-
 PROJECT = Webserv
+INCLUDE = -I include
 NAME = webserv
 CC = clang++
 CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
-SRC = main.cpp
-OBJ := $(SRC:%.cpp=%.o)
+OBJ_DIR	= obj/
+SRC_DIR	= src/
+SRC = src/main.cpp
+OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 RM := rm -rf
 
 BLACK   := \033[30m
@@ -46,16 +48,22 @@ $(NAME): $(OBJ)
 	@echo "     $(PROJECT) = NOW READY FOR USE!"
 	@echo "----------------------------------------$(RESET)"
 	
-%.o: %.cpp
-	@echo "Compiled ✅ $(BLUE) $(BOLD) $^ $(RESET)"
-	@$(CC) $(CPPFLAGS) -c -o $@ $^
-	
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+	@mkdir -p $(dir $@)
+	@echo "$(BOLD)Compiled ✅ $(END) $(GREEN)$< $(END)"
+	@$(CC) $(CPPFLAGS) $(INCLUDE) -c $< -o $@
+
 clean:
-	@$(RM) $(OBJ)
+	@if [ -d "$(OBJ_DIR)" ]; then \
+	echo "$(BOLD)Cleaning $(END)$(GREEN)obj folder$(END)"; \
+	fi
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@$(RM) $(NAME)
-	@echo "$(BLUE) $(BOLD)$(NAME) $(RESET) Cleansed ✅"
+	@if [ -f "$(NAME)" ]; then \
+	echo "$(BOLD)Cleaning $(END)$(GREEN)executable$(END)"; \
+	fi
+	@rm -rf $(NAME)
 
 re: fclean all
 
