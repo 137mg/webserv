@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/04 15:23:06 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/04/04 17:41:53 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,10 @@ CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
 SRC = src/main.cpp
+SRC_CLIENT = $(SRC_DIR)clientConnection.cpp
+SRC_SERVER = $(SRC_DIR)serverConnection.cpp
+OBJ_CLIENT = $(OBJ_DIR)clientConnection.o
+OBJ_SERVER = $(OBJ_DIR)serverConnection.o
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 RM := rm -rf
 
@@ -39,14 +43,22 @@ REVERSE := \033[7m
 HIDDEN  := \033[8m
 PINK 	:= \033[35m
 
-all: $(NAME)
+all: server client
 
-$(NAME): $(OBJ)
+server: $(OBJ_SERVER)
 	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
-	@$(CC) $(OBJ) $(CPPFLAGS) -o $(NAME)
+	@$(CC) $(OBJ_SERVER) $(CPPFLAGS) -o server
 	@echo "$(BLUE)$(BOLD)----------------------------------------"
-	@echo "     $(PROJECT) = NOW READY FOR USE!"
+	@echo "     $(PROJECT) (server) = NOW READY FOR USE!"
 	@echo "----------------------------------------$(RESET)"
+	
+client: $(OBJ_CLIENT)
+	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
+	@$(CC) $(OBJ_CLIENT) $(CPPFLAGS) -o client
+	@echo "$(BLUE)$(BOLD)----------------------------------------"
+	@echo "     $(PROJECT) (client) = NOW READY FOR USE!"
+	@echo "----------------------------------------$(RESET)"
+
 	
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(dir $@)
@@ -64,6 +76,8 @@ fclean: clean
 	echo "$(BOLD)Cleaning $(END)$(GREEN)executable$(END)"; \
 	fi
 	@rm -rf $(NAME)
+	@rm -rf server
+	@rm -rf client
 
 re: fclean all
 
