@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   serverConection.cpp                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/19 11:46:19 by parisasadeq       #+#    #+#             */
-/*   Updated: 2024/02/20 16:32:20 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   serverConnection.cpp                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/02/19 11:46:19 by parisasadeq   #+#    #+#                 */
+/*   Updated: 2024/04/05 13:49:06 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 #define PORT 4242
 #define BACKLOG 10
 
-int main ( void ) {
+int main ( void )
+{
 	std::cout << "             SERVER SIDE             " << std::endl;
 
 	struct sockaddr_in	sa = {};
