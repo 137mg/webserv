@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   clientConection.cpp                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/20 16:25:57 by psadeghi          #+#    #+#             */
-/*   Updated: 2024/02/20 17:01:46 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   clientConnection.cpp                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/02/20 16:25:57 by psadeghi      #+#    #+#                 */
+/*   Updated: 2024/04/05 14:52:52 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 #include <string>
 #include <cerrno>
 #include <cstring>
+#include "colors.h"
 
 #define PORT 4242
 #define BACKLOG 10
 
-int main (int argc, char **argv) {
+int main (int argc, char **argv)
+{
 	std::cout << "             CLIENT SIDE             " << std::endl;
 
 	struct sockaddr_in	sa = {};
@@ -67,10 +69,10 @@ int main (int argc, char **argv) {
 		
 	}
 	else if (bytes_sent == msg_len) {
-		std::cout << "Sent full message: " << msg << std::endl;
+		std::cout << GREEN << "Sent full message: " << msg << RESET << std::endl;
 	}
 	else {
-		std::cout << "Sent the message partialy." << std::endl;
+		std::cout << GREEN << "Sent the message partialy." << RESET << std::endl;
 	}
 
 
@@ -87,7 +89,7 @@ int main (int argc, char **argv) {
 		}
 		else {
 			buffer[bytes_read] = '\0';
-			std::cout << "Message received = " << buffer << std::endl;
+			std::cout << GREEN << "Message received = " << buffer << RESET << std::endl;
 			break;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/02/19 11:46:19 by parisasadeq   #+#    #+#                 */
-/*   Updated: 2024/04/05 13:49:06 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/05 14:51:26 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <string>
 #include <cerrno>
 #include <cstring>
+#include "colors.h"
 
 #define PORT 4242
 #define BACKLOG 10
@@ -42,21 +43,25 @@ int main ( void )
 	sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 	sa.sin_port = htons(PORT);
 
+	// Step 1: create a socket
 	socket_fd = socket(sa.sin_family, SOCK_STREAM, 0);
 	if (socket_fd == -1) {
 		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
 		return 1;
 	}
-
 	std::cout << "Created server socket fd = " << socket_fd << std::endl;
+	//
 
+	// Step 2: Identify a socket
 	status = bind(socket_fd, reinterpret_cast<struct  sockaddr*>(&sa), sizeof(sa));
 	if (status != 0) {
 		std::cerr << "bind error: " << std::strerror(errno) << std::endl;
 		return 2;
 	}
 	std::cout << "Bound socket to localhost port " << PORT << std::endl;
+	//
 
+	// Step 3: Wait for incoming connection
 	std::cout << "Listening on port " << PORT << std::endl;
 	status = listen(socket_fd, BACKLOG);
 	if (status != 0) {
@@ -71,9 +76,12 @@ int main ( void )
 		return 4; 
 	}
 	std::cout << "Accepted new connection on client socket fd: " << client_fd << std::endl;
+	//
 
+	// Step 4: Send and receive messages
 	bytes_read = 1;
-	while (bytes_read >= 0) {
+	while (bytes_read >= 0)
+	{
 		std::cout << "Reading client socket " << client_fd << std::endl;
 		bytes_read  = recv(client_fd, buffer, BUFSIZ, 0);
 		if (bytes_read == 0) {
@@ -91,17 +99,17 @@ int main ( void )
 
 			buffer[bytes_read] = '\0';
 
-			std::cout << "Message received from client socket " << client_fd << ": " << buffer << std::endl;
+			std::cout << GREEN << "Message received from client socket " << client_fd << ": " << buffer << RESET << std::endl;
 			// this is a problem
 			bytes_send = send(client_fd, "Got your message.", msg_len, 0);
 			if (bytes_send == -1) {
 				std::cerr << "send error " << std::strerror(errno) << std::endl;
 			}
 			else if (bytes_send == msg_len) {
-				std::cout << "Sent full messsage to client socket " << client_fd << ": " << msg << std::endl;
+				std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << msg << RESET << std::endl;
 			}
 			else {
-				std::cout << "Sent partial message to client socket " << socket_fd << ": " << bytes_send << " bytes sent." << std::endl;
+				std::cout << GREEN << "Sent partial message to client socket " << socket_fd << ": " << bytes_send << " bytes sent." << RESET << std::endl;
 			}
 		}
 	}

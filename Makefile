@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/04 17:51:22 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/04/05 14:37:50 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,18 +62,18 @@ client: $(OBJ_CLIENT)
 	
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(dir $@)
-	@echo "$(BOLD)Compiled ✅ $(END) $(GREEN)$< $(END)"
+	@echo "$(BOLD)Compiled ✅ $(GREEN)$< $(RESET)"
 	@$(CC) $(CPPFLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
 	@if [ -d "$(OBJ_DIR)" ]; then \
-	echo "$(BOLD)Cleaning $(END)$(GREEN)obj folder$(END)"; \
+	echo "$(BOLD)Cleaning $(GREEN)obj folder$(RESET)"; \
 	fi
 	@rm -rf $(OBJ_DIR)
 
 fclean: clean
 	@if [ -f "$(NAME)" ]; then \
-	echo "$(BOLD)Cleaning $(END)$(GREEN)executable$(END)"; \
+	echo "$(BOLD)Cleaning $(GREEN)executable$(RESET)"; \
 	fi
 	@rm -rf $(NAME)
 	@rm -rf server
