@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/02/19 11:46:19 by parisasadeq   #+#    #+#                 */
-/*   Updated: 2024/04/05 15:15:32 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/05 17:20:05 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 #include <cerrno>
 #include <cstring>
 #include "colors.h"
-
-#define PORT 4242
-#define BACKLOG 10
 
 int main ( void )
 {
@@ -40,10 +37,11 @@ int main ( void )
 	int		bytes_read;
 
 	sa.sin_family = AF_INET;
-	sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	sa.sin_addr.s_addr = INADDR_ANY;
 	sa.sin_port = htons(PORT);
 
 	// Step 1: create a socket
+	// sa.sin_family or AF_INET
 	socket_fd = socket(sa.sin_family, SOCK_STREAM, 0);
 	if (socket_fd == -1) {
 		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
@@ -102,19 +100,20 @@ int main ( void )
 
 				buffer[bytes_read] = '\0';
 
-				std::cout << GREEN << "Message received from client socket " << client_fd << ": " << buffer << RESET << std::endl;
+				std::cout << GREEN << "Message received from client socket " << client_fd << ": " << RESET << buffer << std::endl;
 				// this is a problem
 				bytes_send = send(client_fd, "Got your message.", msg_len, 0);
 				if (bytes_send == -1) {
 					std::cerr << "send error " << std::strerror(errno) << std::endl;
 				}
 				else if (bytes_send == msg_len) {
-					std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << msg << RESET << std::endl;
+					std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << RESET << msg << std::endl;
 				}
 				else {
 					std::cout << GREEN << "Sent partial message to client socket " << socket_fd << ": " << bytes_send << " bytes sent." << RESET << std::endl;
 				}
 			}
+			std::cout << "Hello from the server!" << std::endl;
 		}
 
 		std::cout << "Closing client socket." << std::endl;

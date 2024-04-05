@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/05 14:43:34 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/05 14:47:15 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/05 16:10:43 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,8 @@
 #define REVERSE "\033[7m"
 #define HIDDEN  "\033[8m"
 #define PINK 	"\033[35m"
+
+#define PORT 8080
+#define BACKLOG 10
 
 #endif
