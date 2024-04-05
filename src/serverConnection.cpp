@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/02/19 11:46:19 by parisasadeq   #+#    #+#                 */
-/*   Updated: 2024/04/05 14:51:26 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/05 15:15:32 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,53 +69,59 @@ int main ( void )
 		return 3;
 	}
 
-	addr_size = sizeof(client_addr);
-	client_fd = accept(socket_fd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
-	if (client_fd == -1) {
-		std::cerr << "client fd error: " << std::strerror(errno) << std::endl;
-		return 4; 
-	}
-	std::cout << "Accepted new connection on client socket fd: " << client_fd << std::endl;
-	//
-
-	// Step 4: Send and receive messages
-	bytes_read = 1;
-	while (bytes_read >= 0)
+	while (1)
 	{
-		std::cout << "Reading client socket " << client_fd << std::endl;
-		bytes_read  = recv(client_fd, buffer, BUFSIZ, 0);
-		if (bytes_read == 0) {
-			std::cout << "Client socket " << client_fd << " closed the connection." << std::endl;
-			break;
+		addr_size = sizeof(client_addr);
+		client_fd = accept(socket_fd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+		if (client_fd == -1) {
+			std::cerr << "client fd error: " << std::strerror(errno) << std::endl;
+			return 4; 
 		}
-		else if (bytes_read == -1) {
-			std::cerr << "recv error " << std::strerror(errno) << std::endl;
-			break;
-		}
-		else {
-			std::string msg = "Got your message.";
-			int msg_len = msg.length();
-			int bytes_send;
+		std::cout << "------------------------------------------------" << std::endl;
+		std::cout << "Accepted new connection on client socket fd: " << client_fd << std::endl;
+		//
 
-			buffer[bytes_read] = '\0';
-
-			std::cout << GREEN << "Message received from client socket " << client_fd << ": " << buffer << RESET << std::endl;
-			// this is a problem
-			bytes_send = send(client_fd, "Got your message.", msg_len, 0);
-			if (bytes_send == -1) {
-				std::cerr << "send error " << std::strerror(errno) << std::endl;
+		// Step 4: Send and receive messages
+		bytes_read = 1;
+		while (bytes_read >= 0)
+		{
+			std::cout << "Reading client socket " << client_fd << std::endl;
+			bytes_read  = recv(client_fd, buffer, BUFSIZ, 0);
+			if (bytes_read == 0) {
+				std::cout << "Client socket " << client_fd << " closed the connection." << std::endl;
+				break;
 			}
-			else if (bytes_send == msg_len) {
-				std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << msg << RESET << std::endl;
+			else if (bytes_read == -1) {
+				std::cerr << "recv error " << std::strerror(errno) << std::endl;
+				break;
 			}
 			else {
-				std::cout << GREEN << "Sent partial message to client socket " << socket_fd << ": " << bytes_send << " bytes sent." << RESET << std::endl;
+				std::string msg = "Got your message.";
+				int msg_len = msg.length();
+				int bytes_send;
+
+				buffer[bytes_read] = '\0';
+
+				std::cout << GREEN << "Message received from client socket " << client_fd << ": " << buffer << RESET << std::endl;
+				// this is a problem
+				bytes_send = send(client_fd, "Got your message.", msg_len, 0);
+				if (bytes_send == -1) {
+					std::cerr << "send error " << std::strerror(errno) << std::endl;
+				}
+				else if (bytes_send == msg_len) {
+					std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << msg << RESET << std::endl;
+				}
+				else {
+					std::cout << GREEN << "Sent partial message to client socket " << socket_fd << ": " << bytes_send << " bytes sent." << RESET << std::endl;
+				}
 			}
 		}
-	}
 
-	std::cout << "Closing client socket." << std::endl;
-	close(client_fd);
+		std::cout << "Closing client socket." << std::endl;
+		close(client_fd);
+		std::cout << "------------------------------------------------" << std::endl;
+	}
+	
 	std::cout << "Closing server socket." << std::endl;
 	close(socket_fd);
 
