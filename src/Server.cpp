@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/09 14:00:18 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/09 14:31:52 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 Server::Server(void)
 {	
+	this->_port = 0;
+	this->_serverName = "";
+	this->_root = "";
+	this->_index = "";
+	this->_listenFd = 0;
+	this->_clientMaxBodySize = 0;
+	this->_autoIndex = false;
 	return;
 }
 
@@ -21,22 +28,22 @@ void	Server::config(void)
 {
 	int	status;
 
-	this->_address.sin_family = AF_INET;
-	this->_address.sin_addr.s_addr = INADDR_ANY;
-	this->_address.sin_port = htons(PORT);
+	this->_serverAddress.sin_family = AF_INET;
+	this->_serverAddress.sin_addr.s_addr = INADDR_ANY;
+	this->_serverAddress.sin_port = htons(PORT);
 
 	// Step 1: create a socket
 	// sa.sin_family or AF_INET
-	this->_socketFd = socket(this->_address.sin_family , SOCK_STREAM, 0);
-	if (this->_socketFd == -1) {
+	this->_listenFd = socket(this->_serverAddress.sin_family , SOCK_STREAM, 0);
+	if (this->_listenFd == -1) {
 		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
 		return;
 	}
-	std::cout << "Created server socket fd = " << this->_socketFd << std::endl;
+	std::cout << "Created server socket fd = " << this->_listenFd << std::endl;
 	//
 
 	// Step 2: Identify a socket
-	status = bind(this->_socketFd, reinterpret_cast<struct  sockaddr*>(&this->_address), sizeof(this->_address));
+	status = bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_serverAddress), sizeof(this->_serverAddress));
 	if (status != 0) {
 		std::cerr << "bind error: " << std::strerror(errno) << std::endl;
 		return ;
@@ -46,7 +53,7 @@ void	Server::config(void)
 
 	// Step 3: Wait for incoming connection
 	std::cout << "Listening on port " << PORT << std::endl;
-	status = listen(this->_socketFd, BACKLOG);
+	status = listen(this->_listenFd, BACKLOG);
 	if (status != 0) {
 		std::cerr << "Listen error " << std::strerror(errno) << std::endl;
 		return ;
@@ -56,7 +63,7 @@ void	Server::config(void)
 Server::~Server(void)
 {
 	std::cout << "Closing server socket." << std::endl;
-	close(this->_socketFd);
+	close(this->_listenFd);
 	return;
 }
 
@@ -71,16 +78,14 @@ void	Server::run(void)
 	while (1)
 	{
 		addr_size = sizeof(client_addr);
-		client_fd = accept(this->_socketFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+		client_fd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 		if (client_fd == -1) {
 			std::cerr << "client fd error: " << std::strerror(errno) << std::endl;
 			return ; 
 		}
 		std::cout << "------------------------------------------------" << std::endl;
 		std::cout << "Accepted new connection on client socket fd: " << client_fd << std::endl;
-		//
 
-		// Step 4: Send and receive messages
 		bytes_read = 1;
 		while (bytes_read >= 0)
 		{
@@ -94,33 +99,21 @@ void	Server::run(void)
 				std::cerr << "recv error " << std::strerror(errno) << std::endl;
 				break;
 			}
-			else {
-				std::string msg = "Got your message.";
-				int msg_len = msg.length();
-				int bytes_send;
+			else
+				this->handleRequest(buffer);
 
-				buffer[bytes_read] = '\0';
-
-				std::cout << GREEN << "Message received from client socket " << client_fd << ": " << RESET << buffer << std::endl;
-				// this is a problem
-				bytes_send = send(client_fd, "Got your message.", msg_len, 0);
-				if (bytes_send == -1) {
-					std::cerr << "send error " << std::strerror(errno) << std::endl;
-				}
-				else if (bytes_send == msg_len) {
-					std::cout << GREEN << "Sent full messsage to client socket " << client_fd << ": " << RESET << msg << std::endl;
-				}
-				else {
-					std::cout << GREEN << "Sent partial message to client socket " << this->_socketFd << ": " << bytes_send << " bytes sent." << RESET << std::endl;
-				}
-			}
-			std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-			std::cout << hello << std::endl;
 		}
-
 		std::cout << "Closing client socket." << std::endl;
 		close(client_fd);
 		std::cout << "------------------------------------------------" << std::endl;
 	}
 	return;
+}
+
+// to be implemented, will handle the GET and POST requests
+void	Server::handleRequest(std::string buffer)
+{
+	std::cout << "Handling request..." << std::endl;
+	std::cout << buffer << std::endl;
+	return;	
 }

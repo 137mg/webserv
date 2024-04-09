@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/09 13:57:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/09 14:29:34 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,15 @@
 class Server
 {
 	private:
-		int					_socketFd;
-		struct sockaddr_in	_address;
+		uint16_t			_port;
+		int					_listenFd;
+		int					_clientMaxBodySize;
+		std::string			_serverName;
+		std::string			_root;
+		std::string			_index;
+		bool				_autoIndex;
+		struct sockaddr_in	_serverAddress;
+		// location && error pages
 		
 	public:
 		Server();
@@ -37,6 +44,7 @@ class Server
 	
 		void	run(void);
 		void	config(void);
+		void	handleRequest(std::string buffer);
 		
 };
 
