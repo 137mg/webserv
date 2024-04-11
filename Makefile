@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/09 14:01:52 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/04/11 17:38:56 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC = clang++
 CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
-SRC = src/main.cpp src/Server.cpp
+SRC = src/main.cpp src/Server.cpp src/Request.cpp
 SRC_CLIENT = $(SRC_DIR)notUsing/clientConnection.cpp
 SRC_SERVER = $(SRC_DIR)notUsing/serverConnection.cpp
 OBJ_CLIENT = $(OBJ_DIR)notUsing/clientConnection.o
@@ -46,9 +46,9 @@ PINK 	:= \033[35m
 all: server client $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "---------$(BOLD)Linking...$(END)---------"
+	@echo "---------$(BOLD)Linking...$(RESET)---------"
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-	@echo "$(GREEN)$(BOLD)["$(NAME)"]$(END)" "ready for execution!"
+	@echo "$(GREEN)$(BOLD)["$(NAME)"]$(RESET)" "ready for execution!"
 
 server: $(OBJ_SERVER)
 	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"

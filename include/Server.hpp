@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/11 16:39:49 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/11 17:27:35 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 #include <string>
 #include <cerrno>
 #include <cstring>
+#include <vector>
+#include <sstream>
 #include "colors.h"
 
 class Server
@@ -44,7 +46,7 @@ class Server
 	
 		void	run(void);
 		void	config(void);
-		void	handleRequest(std::string buffer);
+		void	handleRequest(char *buffer);
 		void	createSocket(void);
 		void	bindSocket(void);
 		void	acceptConnection(void);

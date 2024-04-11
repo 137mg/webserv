@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/11 16:41:51 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/11 17:38:43 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,11 @@ void	Server::acceptConnection(void)
 	client_fd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 	if (client_fd == -1) {
 		std::cerr << "client fd error: " << std::strerror(errno) << std::endl;
-		return ; 
+		exit(1);
 	}
 	std::cout << "------------------------------------------------" << std::endl;
 	std::cout << "Accepted new connection on client socket fd: " << client_fd << std::endl;
+	this->processConnection(client_fd);
 }
 
 void	Server::processConnection(int client_fd)
@@ -124,12 +125,4 @@ void	Server::run(void)
 		this->acceptConnection();
 	}
 	return;
-}
-
-// to be implemented, will handle the GET and POST requests
-void	Server::handleRequest(std::string buffer)
-{
-	std::cout << "Handling request..." << std::endl;
-	std::cout << buffer << std::endl;
-	return;	
 }
