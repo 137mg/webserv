@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/09 14:29:34 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/11 16:39:49 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ class Server
 		void	run(void);
 		void	config(void);
 		void	handleRequest(std::string buffer);
+		void	createSocket(void);
+		void	bindSocket(void);
+		void	acceptConnection(void);
+		void	processConnection(int client_fd);
 		
 };
 
