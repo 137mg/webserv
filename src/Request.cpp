@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 17:34:56 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 17:52:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	Server::getPage(std::string file)
 		// Send a 404 Not Found response
 		std::string response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\n404 Not Found: The requested resource could not be found";
 		write(this->_clientFd, response.c_str(), response.size());
+		close(this->_clientFd);
 	}
 	else
 	{

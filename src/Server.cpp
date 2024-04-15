@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 17:39:25 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 17:47:53 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	Server::processConnection(void)
 	fds[0].fd = this->_clientFd;
 	fds[0].events = POLLIN | POLLHUP | POLLERR;
 	bytes_read = 1;
-	while (bytes_read >= 0)
+	while (1)
 	{
 		// Wait for events on the client socket
 		std::cout << "Reading client socket " << this->_clientFd << std::endl;
@@ -133,9 +133,18 @@ void	Server::processConnection(void)
 				std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
 				break;
 			}
-			else if (bytes_read == -1) {
-				std::cerr << RED << BOLD << "read error " << std::strerror(errno) << RESET << std::endl;
-				break;
+			else if (bytes_read == -1)
+			{
+				if (errno == EAGAIN || errno == EWOULDBLOCK)
+                {
+                    // No data available to read, wait for more data
+                    continue;
+                }
+				else
+				{
+					std::cerr << RED << BOLD << "read error " << std::strerror(errno) << RESET << std::endl;
+					break;	
+				}
 			}
 			else
 				this->handleRequest(buffer);
