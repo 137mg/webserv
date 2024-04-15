@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/05 14:43:34 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/11 17:32:06 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 14:43:21 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@
 #define DIM     "\033[2m"
 #define ITALIC  "\033[3m"
 #define UNDER   "\033[4m"
-#define BLINK   "\033[5m"
 #define REVERSE "\033[7m"
 #define HIDDEN  "\033[8m"
 #define PINK 	"\033[35m"
 
-#define PORT 2424
+#define PORT 4242
 #define BACKLOG 10
 
 #endif

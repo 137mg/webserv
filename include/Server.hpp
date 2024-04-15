@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/11 17:27:35 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 14:58:16 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #include <cstring>
 #include <vector>
 #include <sstream>
+#include <fstream>
+
 #include "colors.h"
 
 class Server
@@ -32,6 +34,7 @@ class Server
 	private:
 		uint16_t			_port;
 		int					_listenFd;
+		int					_clientFd;
 		int					_clientMaxBodySize;
 		std::string			_serverName;
 		std::string			_root;
@@ -50,7 +53,8 @@ class Server
 		void	createSocket(void);
 		void	bindSocket(void);
 		void	acceptConnection(void);
-		void	processConnection(int client_fd);
+		void	processConnection(void);
+		void	getPage(std::string file);
 		
 };
 
