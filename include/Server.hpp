@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 14:58:16 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 15:41:43 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <fcntl.h>
+#include <poll.h>
 
 #include "colors.h"
 

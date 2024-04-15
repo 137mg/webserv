@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 14:55:26 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/15 17:39:25 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Server::Server(void)
 	this->_root = "";
 	this->_index = "";
 	this->_listenFd = 0;
-	this->_clientMaxBodySize = 0;
+	this->_clientMaxBodySize = 1;
 	this->_autoIndex = false;
 	return;
 }
@@ -95,9 +95,11 @@ void	Server::acceptConnection(void)
 	addr_size = sizeof(client_addr);
 	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 	if (this->_clientFd == -1) {
-		std::cerr << "client fd error: " << std::strerror(errno) << std::endl;
+		std::cerr << RED << BOLD << "client fd error: " << std::strerror(errno) << RESET << std::endl;
 		exit(1);
 	}
+
+	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 	std::cout << "------------------------------------------------" << std::endl;
 	std::cout << "Accepted new connection on client socket fd: " << this->_clientFd << std::endl;
 	this->processConnection();
@@ -105,28 +107,50 @@ void	Server::acceptConnection(void)
 
 void	Server::processConnection(void)
 {
-	char	buffer[BUFSIZ];
-	int		bytes_read;
-	
+	char			buffer[BUFSIZ];
+	struct pollfd	fds[this->_clientMaxBodySize + 1];
+	int				bytes_read;
+	int				pollResult;
+
+	fds[0].fd = this->_clientFd;
+	fds[0].events = POLLIN | POLLHUP | POLLERR;
 	bytes_read = 1;
 	while (bytes_read >= 0)
 	{
+		// Wait for events on the client socket
 		std::cout << "Reading client socket " << this->_clientFd << std::endl;
-		bytes_read  = recv(this->_clientFd, buffer, BUFSIZ, 0);
-		if (bytes_read == 0) {
-			std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
+		pollResult = poll(fds, 1, -1);
+		if (pollResult == -1)
+		{
+			std::cerr << RED << BOLD << "poll error " << std::strerror(errno) << RESET << std::endl;
 			break;
 		}
-		else if (bytes_read == -1) {
-			std::cerr << "recv error " << std::strerror(errno) << std::endl;
+		if (fds[0].revents && POLLIN)
+		{
+			bytes_read  = read(this->_clientFd, buffer, BUFSIZ);
+			if (bytes_read == 0)
+			{
+				std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
+				break;
+			}
+			else if (bytes_read == -1) {
+				std::cerr << RED << BOLD << "read error " << std::strerror(errno) << RESET << std::endl;
+				break;
+			}
+			else
+				this->handleRequest(buffer);
+		}
+		// Check for hanging or errors
+		if (fds[0].revents & (POLLHUP | POLLERR))
+		{
+			std::cerr << RED << BOLD << "Error or connection closed on socket " << this->_clientFd << RESET << std::endl;
 			break;
 		}
-		else
-			this->handleRequest(buffer);
+
 
 	}
 	std::cout << "Closing client socket." << std::endl;
-	// close(this->_clientFd);
+	close(this->_clientFd);
 	std::cout << "------------------------------------------------" << std::endl;
 }
 
