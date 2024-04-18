@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 17:47:53 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 15:13:30 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 Server::Server(void)
 {	
-	this->_port = 0;
-	this->_serverName = "";
+	this->_port = PORT;
+	this->_serverName = "Webserv";
 	this->_root = "";
 	this->_index = "";
 	this->_listenFd = 0;
@@ -51,7 +51,6 @@ void	Server::createSocket(void)
         close(this->_listenFd);
         return;
     }
-	std::cout << "Created server socket fd = " << this->_listenFd << std::endl;
 }
 
 // Step 2: Identify a socket
@@ -64,10 +63,8 @@ void	Server::bindSocket(void)
 		std::cerr << "bind error: " << std::strerror(errno) << std::endl;
 		return ;
 	}
-	std::cout << "Bound socket to localhost port " << PORT << std::endl;
 
 	// Step 3: Wait for incoming connection
-	std::cout << "Listening on port " << PORT << std::endl;
 	status = listen(this->_listenFd, BACKLOG);
 	if (status != 0) {
 		std::cerr << "Listen error " << std::strerror(errno) << std::endl;
@@ -84,6 +81,11 @@ void	Server::config(void)
 
 	this->createSocket();
 	this->bindSocket();
+	
+	printTimestamp();
+	std::cout << this->_serverName << " up and running. Listening on port: "
+		<< this->_port << std::endl;
+	
 }
 
 void	Server::acceptConnection(void)
@@ -95,13 +97,11 @@ void	Server::acceptConnection(void)
 	addr_size = sizeof(client_addr);
 	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 	if (this->_clientFd == -1) {
-		std::cerr << RED << BOLD << "client fd error: " << std::strerror(errno) << RESET << std::endl;
+		std::cerr << RED << "client fd error: " << std::strerror(errno) << RESET << std::endl;
 		exit(1);
 	}
 
 	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
-	std::cout << "------------------------------------------------" << std::endl;
-	std::cout << "Accepted new connection on client socket fd: " << this->_clientFd << std::endl;
 	this->processConnection();
 }
 
@@ -117,8 +117,6 @@ void	Server::processConnection(void)
 	bytes_read = 1;
 	while (1)
 	{
-		// Wait for events on the client socket
-		std::cout << "Reading client socket " << this->_clientFd << std::endl;
 		pollResult = poll(fds, 1, -1);
 		if (pollResult == -1)
 		{
@@ -136,10 +134,7 @@ void	Server::processConnection(void)
 			else if (bytes_read == -1)
 			{
 				if (errno == EAGAIN || errno == EWOULDBLOCK)
-                {
-                    // No data available to read, wait for more data
                     continue;
-                }
 				else
 				{
 					std::cerr << RED << BOLD << "read error " << std::strerror(errno) << RESET << std::endl;
@@ -158,7 +153,8 @@ void	Server::processConnection(void)
 
 
 	}
-	std::cout << "Closing client socket." << std::endl;
+	printTimestamp();
+	std::cout << "Closing client socket. " << std::endl;
 	close(this->_clientFd);
 	std::cout << "------------------------------------------------" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/05 14:43:34 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 14:43:21 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 14:38:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,31 @@
 #define HIDDEN  "\033[8m"
 #define PINK 	"\033[35m"
 
-#define PORT 4242
+#define BG_BLACK		"\033[40m"
+#define BG_RED			"\033[41m"
+#define BG_GREEN		"\033[42m"
+#define BG_YELLOW		"\033[43m"
+#define BG_BLUE			"\033[44m"
+#define BG_MAGENTA		"\033[45m"
+#define BG_CYAN			"\033[46m"
+#define BG_WHITE		"\033[47m"
+#define BG_DEFAULT		"\033[49m"
+#define BG_LIGHT_RED	"\033[101m"
+#define BG_LIGHT_GREEN	"\033[102m"
+#define BG_LIGHT_YELLOW	"\033[103m"
+#define BG_LIGHT_BLUE	"\033[104m"
+#define BG_LIGHT_MAGENTA	"\033[105m"
+#define BG_LIGHT_CYAN	"\033[106m"
+#define BG_LIGHT_WHITE	"\033[107m"
+#define BG_DARK_GRAY	"\033[100m"
+#define BG_LIGHT_GRAY	"\033[47m"
+#define BG_ORANGE		"\033[48;5;208m"
+#define BG_PURPLE		"\033[48;5;129m"
+#define BG_TEAL			"\033[48;5;30m"
+#define BG_LAVENDER		"\033[48;5;183m"
+#define BG_BROWN		"\033[48;5;130m"
+
+#define PORT 8080
 #define BACKLOG 10
 
 #endif

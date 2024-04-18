@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 17:52:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 15:24:53 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,14 @@ void	Server::handleRequest(char *buffer)
 	std::istringstream			iss(buffer);
 	std::string					method;
 	std::string					file;
+	size_t						position;
 
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
 	
+	position = std::string(buffer).find('\n');
+	printTimestamp();
+	std::cout << std::string(buffer).substr(0, position) << std::endl;
 	method = tokens[0];
 	file = tokens[1];
 	if (method.compare("GET") == 0)
@@ -35,6 +39,8 @@ void	Server::getPage(std::string file)
 {
 	std::string filePath;
 
+	if (file.compare("/") == 0)
+		file = "/index.html";
 	filePath = "html" + file;
 	std::ifstream fileStream(filePath);
 	if (!fileStream)

@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/15 15:41:43 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 14:46:32 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ class Server
 		void	getPage(std::string file);
 		
 };
+
+void	printTimestamp(void);
 
 #endif
