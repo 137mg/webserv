@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/05 14:43:34 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/18 14:38:15 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 17:08:55 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@
 #define UNDER   "\033[4m"
 #define REVERSE "\033[7m"
 #define HIDDEN  "\033[8m"
-#define PINK 	"\033[35m"
+#define PINK	"\033[95m"
+#define ORANGE	"\033[33m"
+#define TEAL	"\033[36m"
+#define GRAY	"\033[90m"
+#define PURPLE	"\033[35m"
+#define BROWN	"\033[33m"
 
 #define BG_BLACK		"\033[40m"
 #define BG_RED			"\033[41m"
