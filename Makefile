@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/18 14:43:50 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/04/18 15:39:09 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ REVERSE := \033[7m
 HIDDEN  := \033[8m
 PINK 	:= \033[35m
 
-all: server client $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "---------$(BOLD)Linking...$(RESET)---------"
