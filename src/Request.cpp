@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/18 15:38:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/18 16:26:39 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	Server::handleRequest(char *buffer)
 	method = tokens[0];
 	file = tokens[1];
 	if (method.compare("GET") == 0)
-		this->getPage(file);
+		this->getRequest(file);
 	return;	
 }
 
-void	Server::getPage(std::string file)
+void	Server::getRequest(std::string file)
 {
 	std::string filePath = "";
 	std::string response = "";
@@ -47,10 +47,17 @@ void	Server::getPage(std::string file)
 	std::ifstream fileStream(filePath);
 	if (!fileStream)
 	{
+		
+		std::ifstream fileStream2("html/PageNotFound.html");
 		// Send a 404 Not Found response
-		response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\n404 Not Found: The requested resource could not be found";
+		// Read the file contents into a string
+        std::stringstream responseStream;
+		responseStream << fileStream2.rdbuf();
+        std::string fileContents = responseStream.str();
+        // Send the file contents as the HTTP response
+        response = "HTTP/1.1 404 Not Found\r\nContent-Length: " + std::to_string(fileContents.size()) + "\r\nContent-Type: text/html\r\n\r\n" + fileContents;
+
 		write(this->_clientFd, response.c_str(), response.size());
-		close(this->_clientFd);
 	}
 	else
 	{
