@@ -21,6 +21,10 @@ body {
 	text-align: center;
 }
 
+.form-block {
+	background-color: red;
+}
+
 h1 {
 	font-family: "Venose", sans-serif;
 	font-size: 65px;

@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/22 22:49:41 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/22 23:55:53 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ void	Server::getRequest(std::string file)
 
 	if (file.compare("/") == 0)
 		file = "/home.html";
-	filePath = "html" + file;
-
+	if (file.find(".html") != std::string::npos)
+		filePath = "html" + file;
+	else
+		filePath = file.erase(0, 1);	
 	if (fileAccess(filePath))
 		response = serveFile(filePath, "200 OK", GREEN);
 	else
