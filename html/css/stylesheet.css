@@ -1,9 +1,46 @@
-html, body {
-    height: 100vh;
-    margin: 0;
-	}
+body {
+	height: 100vh;
+	margin: 0;
+	overflow:hidden;
+}
 
-	body {
-		background: rgb(227,138,222);
-		background: linear-gradient(0deg, rgba(227,138,222,1) 0%, rgba(142,169,255,1) 100%);
+body {
+	background: rgb(227,138,222);
+	background: linear-gradient(0deg, rgba(227,138,222,1) 0%, rgba(142,169,255,1) 100%);
+}
+
+@font-face {
+    font-family: "Venose";
+    src: url("Venose.otf") format("opentype");
+}
+
+.block {
+	margin: auto;
+	width: 50%;
+	margin-top: 50px;
+	text-align: center;
+}
+
+h1 {
+	font-family: "Venose", sans-serif;
+	font-size: 65px;
+	text-shadow: 1px 1px 2px rgba(52, 22, 184, 0.88);
+	letter-spacing: 0px;
+}
+
+.navigation-bar {
+	top: 0px;
+	overflow: hidden;
+	width: 100%;
+}
+
+
+.navigation-bar a{
+	float: left;
+	display: block;
+	color: #eaeaea;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px rgba(52, 22, 184, 0.88);
 }
