@@ -1,0 +1,9 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+	}
+
+	body {
+		background: rgb(227,138,222);
+		background: linear-gradient(0deg, rgba(227,138,222,1) 0%, rgba(142,169,255,1) 100%);
+}

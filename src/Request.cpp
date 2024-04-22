@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/18 17:44:34 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/22 22:08:49 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ std::string	Server::serveFile(const std::string &path, const std::string &status
     std::string fileContents = responseStream.str();
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	response += "Content-Type: text/html\r\n\r\n";
+	if (path.find(".css") != std::string::npos)
+		response += "Content-Type: text/css\r\n\r\n";
+	else
+		response += "Content-Type: text/html\r\n\r\n";
 	response += fileContents;
 	return response;
 }
