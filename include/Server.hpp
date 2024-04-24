@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/23 23:06:06 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/24 15:30:21 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class Server
 		void	acceptConnection(void);
 		void	processConnection(void);
 		void	getRequest(std::string file);
-		void	postRequest(std::string path);
+		void	postRequest(std::string path, char *buffer);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
 		bool	fileAccess(const std::string &path);

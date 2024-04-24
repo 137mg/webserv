@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/23 23:10:35 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/24 16:11:59 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	Server::handleRequest(char *buffer)
 
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(requestedPath);
+		postRequest(requestedPath, buffer);
 		return ;
 	}
 	while (std::getline(iss, token, ' '))
