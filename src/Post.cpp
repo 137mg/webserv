@@ -6,7 +6,7 @@
 /*   By: Julia <Julia@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/23 23:05:36 by Julia         #+#    #+#                 */
-/*   Updated: 2024/04/24 16:55:15 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/24 16:57:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,14 @@ void	Server::postRequest(std::string path, char *buffer)
 
 	pipe(fds);
 	pid = fork();
-	// char *hardcoded_path = "./cgi-bin/upload.py";
 
 	if (pid == 0)
 	{
 		dup2(fds[0], STDIN_FILENO);
 		close(fds[0]);
 		close(fds[1]);
-		// Set up environment variables for the Python script
-		char *const envp[] = {nullptr};
 
-		// Define arguments for the program
+		char *const envp[] = {nullptr};
 		const char *args[] = {"./cgi-bin/upload.py", nullptr};
     	execve("./cgi-bin/upload.py", const_cast<char**>(args), envp);
 		exit(EXIT_FAILURE);
