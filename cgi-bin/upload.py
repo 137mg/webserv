@@ -1,14 +1,19 @@
 #!/usr/bin/python3
 
-import os, cgi, sys
-import cgitb; cgitb.enable()
+import os
 
-form = cgi.FieldStorage()
+for param in os.environ.keys():
+	print ("%20s: %s" % (param, os.environ[param]))
 
-print('Content-type: text/html')
-sys.path.insert(0, os.getcwd())
+# import os, cgi, sys
+# import cgitb; cgitb.enable()
 
-if 'filename' in form.keys():
-	print("Recognised a file upload")
-else:
-	print("No file was uploaded")
+# form = cgi.FieldStorage()
+
+# print('Content-type: text/html')
+# sys.path.insert(0, os.getcwd())
+
+# if 'filename' in form.keys():
+# 	print("Recognised a file upload")
+# else:
+# 	print("No file was uploaded")

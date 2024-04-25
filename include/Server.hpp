@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/24 15:30:21 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/25 15:23:25 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 class Server
 {
-	private:
+	protected:
 		uint16_t			_port;
 		int					_listenFd;
 		int					_clientFd;
@@ -48,6 +48,8 @@ class Server
 	public:
 		Server();
 		~Server();
+		Server(const Server &other);
+		Server & operator=(const Server &other);
 	
 		void	run(void);
 		void	config(void);

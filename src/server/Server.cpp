@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/18 15:13:30 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/25 15:06:47 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@ Server::~Server(void)
 	std::cout << "Closing server socket." << std::endl;
 	close(this->_listenFd);
 	return;
+}
+
+Server::Server(const Server &other)
+{
+	*this = other;
+}
+
+Server & Server::operator=(const Server &other)
+{
+	if (this != &other)
+	{
+		this->_port = other._port;
+		this->_listenFd = other._listenFd;
+		this->_clientFd = other._clientFd;
+		this->_clientMaxBodySize = other._clientMaxBodySize;
+		this->_serverName = other._serverName;
+		this->_root = other._root;
+		this->_autoIndex = other._autoIndex;
+		this->_serverAddress = other._serverAddress;
+	}
+	return *this;
 }
 
 // Step 1: create a socket
