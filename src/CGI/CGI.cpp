@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/25 18:00:07 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/29 00:45:49 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 CGI::CGI(void)
 {
 	this->_envp = nullptr;
-	initEnvp();
 }
 
 CGI::~CGI(void)
@@ -37,21 +36,33 @@ CGI & CGI::operator=(const CGI &other)
 	return *this;
 }
 
-void	CGI::initEnvp(void)
+char	**CGI::getEnvp(void) const
 {
-	this->_envpVector.push_back("CONTENT_TYPE=");
-	this->_envpVector.push_back("CONTENT_LENGTH=");
-	this->_envpVector.push_back("HTTP_COOKIE=");
-	this->_envpVector.push_back("HTTP_USER_AGENT=");
-	this->_envpVector.push_back("PATH_INFO=");
+	return this->_envp;
+}
+
+void	CGI::initEnvp(std::string content, std::string contentLength)
+{
+	std::string	fullContent = "CONTENT_TYPE=" + content;
+	std::string	fullContentLen = "CONTENT_LENGTH=" + contentLength;
+	
+	this->_envpVector.push_back(fullContent);
+	this->_envpVector.push_back(fullContentLen);
+	this->_envpVector.push_back("HTTP_COOKIE=test");
+	this->_envpVector.push_back("GATEWAY_INTERFACE=CGI/1.1");
+	this->_envpVector.push_back("HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.1234.56 Safari/537.36");
+	this->_envpVector.push_back("PATH_INFO=test");
 	this->_envpVector.push_back("QUERY_STRING=");
-	this->_envpVector.push_back("REMOTE_ADDR=");
-	this->_envpVector.push_back("REMOTE_HOST=");
-	this->_envpVector.push_back("REQUEST_METHOD=");
-	this->_envpVector.push_back("SCRIPT_FILENAME=");
-	this->_envpVector.push_back("SCRIPT_NAME=");
-	this->_envpVector.push_back("SERVER_NAME=");
-	this->_envpVector.push_back("SERVER_SOFTWARE=");
+	this->_envpVector.push_back("REMOTE_ADDR=127.0.0.1");
+	this->_envpVector.push_back("REMOTE_HOST=localhost");
+	this->_envpVector.push_back("REQUEST_METHOD=POST");
+	this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/upload.py");
+	this->_envpVector.push_back("SCRIPT_NAME=upload.py");
+	this->_envpVector.push_back("SERVER_NAME=Webserv");
+	this->_envpVector.push_back("SERVER_PORT=8080");
+	this->_envpVector.push_back("SERVER_PROTOCOL=HTTP/1.1");
+	this->_envpVector.push_back("SERVER_SOFTWARE=webserv");
+	this->_envpVector.push_back("REDIRECT_STATUS=200");
 	this->_envpVector.push_back("");
 }
 
@@ -70,23 +81,50 @@ void	CGI::convertVector(void)
 
 std::string	CGI::executeScript(void)
 {
-	std::string	response = "";
-	pid_t		pid;
+	int		fds[2];
+	pid_t	pid;
 
 	convertVector();
+	pipe(fds);
 	pid = fork();
 	if (pid == 0)
 	{
+		dup2(fds[0], STDIN_FILENO);
+		close(fds[0]);
+		close(fds[1]);
+
 		const char *args[] = {"./cgi-bin/upload.py", nullptr};
     	execve("./cgi-bin/upload.py", const_cast<char**>(args), this->_envp);
+		exit(EXIT_FAILURE);
 	}
-	else
-	{		
-		waitpid(pid, nullptr, 0);
-	}
+	close(fds[0]);
+	close(fds[1]);
+	waitpid(pid, nullptr, 0);
+	std::string response = "";
+	response = serveFile("html/home.html", "200 OK", GREEN);
+	write(this->_clientFd, response.c_str(), response.size());
+	terminalMessage("Server response to ", response);
 	return response;
 }
 
+// std::string	CGI::executeScript(void)
+// {
+// 	std::string	response = "";
+// 	pid_t		pid;
+
+// 	convertVector();
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		const char *args[] = {"./cgi-bin/upload.py", nullptr};
+//     	execve("./cgi-bin/upload.py", const_cast<char**>(args), this->_envp);
+// 	}
+// 	else
+// 	{		
+// 		waitpid(pid, nullptr, 0);
+// 	}
+// 	return response;
+// }
 
 // std::string	CGI::executeScript1(void)
 // {

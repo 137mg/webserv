@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/25 15:06:47 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/28 23:31:44 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	Server::processConnection(void)
 				}
 			}
 			else
-				this->handleRequest(buffer);
+				this->handleRequest(buffer, bytes_read);
 		}
 		// Check for hanging or errors
 		if (fds[0].revents & (POLLHUP | POLLERR))
@@ -187,4 +187,26 @@ void	Server::run(void)
 		this->acceptConnection();
 	}
 	return;
+}
+
+std::string	Server::getHeader(std::string buffer, std::string key)
+{
+	size_t keyPos = buffer.find(key + ":");
+    if (keyPos == std::string::npos) {
+        // Key not found in the buffer
+        return "";
+    }
+
+    // Find the end of the line containing the key
+    size_t endOfLinePos = buffer.find("\r\n", keyPos);
+    if (endOfLinePos == std::string::npos) {
+        // End of line not found
+        return "";
+    }
+
+    // Extract the value after the key
+    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
+    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
+
+    return value;
 }

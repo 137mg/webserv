@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/25 15:23:25 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/28 23:28:27 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,20 @@ class Server
 	
 		void	run(void);
 		void	config(void);
-		void	handleRequest(char *buffer);
+		void	handleRequest(char *buffer, int bytesRead);
 		void	createSocket(void);
 		void	bindSocket(void);
 		void	acceptConnection(void);
 		void	processConnection(void);
 		void	getRequest(std::string file);
-		void	postRequest(std::string path, char *buffer);
+		void	postRequest(std::string path, char *buffer, int bytesRead);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
 		bool	fileAccess(const std::string &path);
 
 		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
 		std::string	parseRequest(const std::string &request);
+		std::string	getHeader(std::string buffer, std::string key);
 		
 };
 

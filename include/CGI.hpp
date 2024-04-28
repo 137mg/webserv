@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/25 17:13:17 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/28 23:37:20 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ class CGI : public Server
 		CGI(const CGI &other);
 		CGI & operator=(const CGI &other);
 
-		void		initEnvp(void);
+		void		initEnvp(std::string content, std::string contentLength);
 		void		convertVector(void);
 		std::string	executeScript(void);
+		char		**getEnvp(void) const;
 
 		
 };

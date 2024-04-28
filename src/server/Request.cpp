@@ -6,14 +6,14 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/24 17:06:10 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/28 23:12:48 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-// handle the request received from the client (for now only GET requests)
-void	Server::handleRequest(char *buffer)
+// handle the request received from the client
+void	Server::handleRequest(char *buffer, int bytesRead)
 {
 	std::vector<std::string>	tokens;
 	std::string					token;
@@ -25,7 +25,7 @@ void	Server::handleRequest(char *buffer)
 	terminalMessage("Client request from ", buffer);
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(requestedPath, buffer);
+		postRequest(requestedPath, buffer, bytesRead);
 		return ;
 	}
 	if (tokens[0].compare("GET") == 0)

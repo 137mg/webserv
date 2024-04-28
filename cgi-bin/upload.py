@@ -1,19 +1,13 @@
 #!/usr/bin/python3
 
-import os
+import sys
 
-for param in os.environ.keys():
-	print ("%20s: %s" % (param, os.environ[param]))
+def main():
+    # 표준 입력에서 데이터 읽기
+    data = sys.stdin.read()
+    
+    # 데이터 처리하기 (예시)
+    print("Received data:", data)
 
-# import os, cgi, sys
-# import cgitb; cgitb.enable()
-
-# form = cgi.FieldStorage()
-
-# print('Content-type: text/html')
-# sys.path.insert(0, os.getcwd())
-
-# if 'filename' in form.keys():
-# 	print("Recognised a file upload")
-# else:
-# 	print("No file was uploaded")
+if __name__ == "__main__":
+    main()
