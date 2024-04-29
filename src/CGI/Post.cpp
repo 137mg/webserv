@@ -6,7 +6,7 @@
 /*   By: Julia <Julia@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/23 23:05:36 by Julia         #+#    #+#                 */
-/*   Updated: 2024/04/29 00:47:59 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/29 13:48:54 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	Server::postRequest(std::string path, char *buffer, int bytesRead)
     pid_t pid;
     CGI cgi;
 
+    std::cout << buffer << std::endl;
+    exit(1);
     cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"));
     cgi.convertVector();
     pipe(fds); // Create a pipe

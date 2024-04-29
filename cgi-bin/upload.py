@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 
-import sys
+import sys, cgi
 
-def main():
-    # 표준 입력에서 데이터 읽기
-    data = sys.stdin.read()
-    
-    # 데이터 처리하기 (예시)
-    print("Received data:", data)
+form = cgi.FieldStorage()
 
-if __name__ == "__main__":
-    main()
+if 'filename' in form:
+	print("Recognises file upload")
+else:
+	print("Not recognising upload")

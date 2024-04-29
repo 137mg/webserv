@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/28 23:31:44 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/29 14:50:48 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,51 +128,30 @@ void	Server::acceptConnection(void)
 
 void	Server::processConnection(void)
 {
-	char			buffer[BUFSIZ];
-	struct pollfd	fds[this->_clientMaxBodySize + 1];
+	char			buffer[MESSAGE_BUFFER];
 	int				bytes_read;
-	int				pollResult;
 
-	fds[0].fd = this->_clientFd;
-	fds[0].events = POLLIN | POLLHUP | POLLERR;
-	bytes_read = 1;
+	bytes_read = 0;
 	while (1)
 	{
-		pollResult = poll(fds, 1, -1);
-		if (pollResult == -1)
+		bytes_read  = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
+		if (bytes_read == 0)
 		{
-			std::cerr << RED << BOLD << "poll error " << std::strerror(errno) << RESET << std::endl;
+			std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
 			break;
 		}
-		if (fds[0].revents && POLLIN)
+		else if (bytes_read < 0)
 		{
-			bytes_read  = read(this->_clientFd, buffer, BUFSIZ);
-			if (bytes_read == 0)
-			{
-				std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
-				break;
-			}
-			else if (bytes_read == -1)
-			{
-				if (errno == EAGAIN || errno == EWOULDBLOCK)
-                    continue;
-				else
-				{
-					std::cerr << RED << BOLD << "read error " << std::strerror(errno) << RESET << std::endl;
-					break;	
-				}
-			}
+			if (errno == EAGAIN || errno == EWOULDBLOCK)
+				continue;
 			else
-				this->handleRequest(buffer, bytes_read);
+			{
+				std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+				break;	
+			}
 		}
-		// Check for hanging or errors
-		if (fds[0].revents & (POLLHUP | POLLERR))
-		{
-			std::cerr << RED << BOLD << "Error or connection closed on socket " << this->_clientFd << RESET << std::endl;
-			break;
-		}
-
-
+		else
+			this->handleRequest(buffer, bytes_read);
 	}
 	printTimestamp();
 	std::cout << "Closing client socket. " << std::endl;

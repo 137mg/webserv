@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/28 23:12:48 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/29 15:02:55 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,23 @@
 // handle the request received from the client
 void	Server::handleRequest(char *buffer, int bytesRead)
 {
+	std::string request(buffer, bytesRead);
+
+    size_t headerEnd = request.find("\r\n\r\n");
+    if (headerEnd == std::string::npos) {
+        std::cerr << "Invalid request: No header-body separator found." << std::endl;
+        return;
+    }
+    std::string header = request.substr(0, headerEnd);
+    std::string body = request.substr(headerEnd + 4);
+
+    size_t contentLengthPos = header.find("Content-Length: ");
+    if (contentLengthPos != std::string::npos) {
+        size_t start = contentLengthPos + 16; 
+        size_t end = header.find("\r\n", start);
+        std::string contentLengthStr = header.substr(start, end - start);
+    }
+	std::cout << body << std::endl;
 	std::vector<std::string>	tokens;
 	std::string					token;
 	std::istringstream			iss(buffer);
@@ -23,15 +40,32 @@ void	Server::handleRequest(char *buffer, int bytesRead)
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
 	terminalMessage("Client request from ", buffer);
-	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
-	{
-		postRequest(requestedPath, buffer, bytesRead);
-		return ;
-	}
 	if (tokens[0].compare("GET") == 0)
 		this->getRequest(tokens[1]);
 	return;	
 }
+
+// // handle the request received from the client
+// void	Server::handleRequest(char *buffer, int bytesRead)
+// {
+// 	std::vector<std::string>	tokens;
+// 	std::string					token;
+// 	std::istringstream			iss(buffer);
+// 	std::string					requestedPath = parseRequest(buffer);
+
+// 	std::cout << buffer << std::endl;
+// 	while (std::getline(iss, token, ' '))
+// 		tokens.push_back(token);
+// 	terminalMessage("Client request from ", buffer);
+// 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
+// 	{
+// 		postRequest(requestedPath, buffer, bytesRead);
+// 		return ;
+// 	}
+// 	if (tokens[0].compare("GET") == 0)
+// 		this->getRequest(tokens[1]);
+// 	return;	
+// }
 
 // This is a very rough parsing function for now
 std::string	Server::parseRequest(const std::string &request)

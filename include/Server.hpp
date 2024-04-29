@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/28 23:28:27 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/29 14:56:51 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ class Server
 };
 
 void	printTimestamp(void);
+#define MESSAGE_BUFFER 40000
 
 #endif
