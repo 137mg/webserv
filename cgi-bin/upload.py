@@ -2,10 +2,10 @@
 
 import cgi, os, sys
 
-# Get current directory
-sub_dir = 'cgi-bin/uploads'
 cwd = os.getcwd()
+sub_dir = 'cgi-bin/uploads'
 upload_dir = os.path.join(cwd, sub_dir)
+
 # Create the subdirectory if it doesn't already exist
 if not os.path.exists(upload_dir):
     os.makedirs(upload_dir)
