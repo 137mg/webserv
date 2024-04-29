@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/29 00:45:49 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/29 18:57:11 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,97 +79,29 @@ void	CGI::convertVector(void)
     this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-std::string	CGI::executeScript(void)
+void	CGI::executeScript(char *cgiContent, int bytesRead)
 {
-	int		fds[2];
-	pid_t	pid;
+	int 		fds[2];
+    pid_t 		pid;
 
-	convertVector();
-	pipe(fds);
-	pid = fork();
-	if (pid == 0)
-	{
-		dup2(fds[0], STDIN_FILENO);
-		close(fds[0]);
-		close(fds[1]);
+    this->convertVector();
+    pipe(fds);
+    pid = fork();
+    if (pid == 0)
+    {
+        close(fds[1]);
+        dup2(fds[0], STDIN_FILENO);
+        close(fds[0]);
 
-		const char *args[] = {"./cgi-bin/upload.py", nullptr};
-    	execve("./cgi-bin/upload.py", const_cast<char**>(args), this->_envp);
-		exit(EXIT_FAILURE);
-	}
-	close(fds[0]);
-	close(fds[1]);
-	waitpid(pid, nullptr, 0);
-	std::string response = "";
-	response = serveFile("html/home.html", "200 OK", GREEN);
-	write(this->_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response to ", response);
-	return response;
+        const char *args[] = {"./cgi-bin/upload.py", nullptr};
+        execve("./cgi-bin/upload.py", const_cast<char **>(args), this->getEnvp());
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        close(fds[0]);
+        write(fds[1], cgiContent, bytesRead);
+        close(fds[1]);
+        waitpid(pid, nullptr, 0);
+    }
 }
-
-// std::string	CGI::executeScript(void)
-// {
-// 	std::string	response = "";
-// 	pid_t		pid;
-
-// 	convertVector();
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		const char *args[] = {"./cgi-bin/upload.py", nullptr};
-//     	execve("./cgi-bin/upload.py", const_cast<char**>(args), this->_envp);
-// 	}
-// 	else
-// 	{		
-// 		waitpid(pid, nullptr, 0);
-// 	}
-// 	return response;
-// }
-
-// std::string	CGI::executeScript1(void)
-// {
-// 	std::string	response = "";
-// 	int			fdsRequest[2];
-// 	int			fdsResponse[2];
-// 	pid_t		pid;
-
-// 	convertVector();
-// 	pipe(fdsRequest);
-// 	pipe(fdsResponse);
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		dup2(fdsResponse[1], STDOUT_FILENO);
-// 		close(fdsResponse[0]);
-// 		close(fdsResponse[1]);
-		
-// 		dup2(fdsRequest[0], STDIN_FILENO);
-// 		close(fdsRequest[1]);
-// 		close(fdsRequest[0]);
-
-// 		const char *args[] = {"./cgi-bin/upload.py", nullptr};
-//     	execve("./cgi-bin/upload.py", const_cast<char**>(args), this->_envp);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	else
-// 	{
-// 		close(fdsRequest[0]);
-// 		close(fdsResponse[1]);
-		
-// 		write(fdsRequest[1], response.c_str(), response.size());
-// 		close(fdsRequest[1]);
-		
-// 		waitpid(pid, nullptr, 0);
-	
-// 		char buffer_[1024];
-// 		int ret = 0;
-// 		do {
-// 			std::memset(buffer_, 0, 1024);
-// 			ret = read(fdsResponse[0], buffer_, 1024) ;
-// 			response.append(buffer_, ret);
-
-// 		} while (ret > 0);
-// 		close(fdsResponse[0]);
-// 	}
-// 	return response;
-// }
