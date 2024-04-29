@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/29 18:57:11 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/30 00:00:33 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	CGI::convertVector(void)
     this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-void	CGI::executeScript(char *cgiContent, int bytesRead)
+void	CGI::executeScript(std::string cgiContent, int bytesRead)
 {
 	int 		fds[2];
     pid_t 		pid;
@@ -100,7 +100,7 @@ void	CGI::executeScript(char *cgiContent, int bytesRead)
     else
     {
         close(fds[0]);
-        write(fds[1], cgiContent, bytesRead);
+        write(fds[1], cgiContent.c_str(), bytesRead);
         close(fds[1]);
         waitpid(pid, nullptr, 0);
     }

@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/29 14:50:48 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/04/30 00:11:01 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,38 +126,57 @@ void	Server::acceptConnection(void)
 	this->processConnection();
 }
 
-void	Server::processConnection(void)
-{
-	char			buffer[MESSAGE_BUFFER];
-	int				bytes_read;
+void Server::processConnection(void) {
+    char buffer[MESSAGE_BUFFER];
+    int bytes_read;
+    std::string requestBuffer;
 
-	bytes_read = 0;
-	while (1)
-	{
-		bytes_read  = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
-		if (bytes_read == 0)
-		{
-			std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
-			break;
-		}
-		else if (bytes_read < 0)
-		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				continue;
-			else
-			{
-				std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-				break;	
-			}
-		}
-		else
-			this->handleRequest(buffer, bytes_read);
-	}
-	printTimestamp();
-	std::cout << "Closing client socket. " << std::endl;
-	close(this->_clientFd);
-	std::cout << "------------------------------------------------" << std::endl;
+    // Read from the socket until the entire request is received
+    while (1) {
+        bytes_read = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
+        if (bytes_read == 0) {
+            std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
+            break;
+        } else if (bytes_read < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+                continue;
+            else {
+                std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+                break;
+            }
+        } else {
+            // Append received data to the request buffer
+            requestBuffer.append(buffer, bytes_read);
+
+            // Check if the request is complete
+            size_t headerEnd = requestBuffer.find("\r\n\r\n");
+            if (headerEnd != std::string::npos) {
+                // Check if Content-Length header exists
+                size_t contentLengthPos = requestBuffer.find("Content-Length:");
+                if (contentLengthPos != std::string::npos) {
+                    size_t contentLengthEnd = requestBuffer.find("\r\n", contentLengthPos);
+                    size_t contentLength = std::stoi(requestBuffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
+                    size_t totalExpectedSize = headerEnd + 4 + contentLength;
+                    if (requestBuffer.size() >= totalExpectedSize) {
+                        // We have received the complete request
+                        this->handleRequest(requestBuffer.c_str(), totalExpectedSize);
+                        break;
+                    }
+                } else {
+                    // No Content-Length header, assume request is complete
+                    this->handleRequest(requestBuffer.c_str(), requestBuffer.size());
+                    break;
+                }
+            }
+        }
+    }
+
+    printTimestamp();
+    std::cout << "Closing client socket. " << std::endl;
+    close(this->_clientFd);
+    std::cout << "------------------------------------------------" << std::endl;
 }
+
 
 void	Server::run(void)
 {

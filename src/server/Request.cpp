@@ -6,24 +6,23 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/29 19:01:28 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/30 00:02:02 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // handle the request received from the client
-void	Server::handleRequest(char *buffer, int bytesRead)
+void	Server::handleRequest(std::string buffer, int bytesRead)
 {
 	std::vector<std::string>	tokens;
 	std::string					token;
 	std::istringstream			iss(buffer);
 	std::string					requestedPath = parseRequest(buffer);
 
-	std::cout << buffer << std::endl;
+	terminalMessage("Client request ", buffer);
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
-	terminalMessage("Client request from ", buffer);
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
 		postRequest(buffer, bytesRead);
@@ -31,30 +30,8 @@ void	Server::handleRequest(char *buffer, int bytesRead)
 	}
 	if (tokens[0].compare("GET") == 0)
 		this->getRequest(tokens[1]);
-	return;	
+	return;
 }
-
-// // handle the request received from the client
-// void	Server::handleRequest(char *buffer, int bytesRead)
-// {
-// 	std::vector<std::string>	tokens;
-// 	std::string					token;
-// 	std::istringstream			iss(buffer);
-// 	std::string					requestedPath = parseRequest(buffer);
-
-// 	std::cout << buffer << std::endl;
-// 	while (std::getline(iss, token, ' '))
-// 		tokens.push_back(token);
-// 	terminalMessage("Client request from ", buffer);
-// 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
-// 	{
-// 		postRequest(requestedPath, buffer, bytesRead);
-// 		return ;
-// 	}
-// 	if (tokens[0].compare("GET") == 0)
-// 		this->getRequest(tokens[1]);
-// 	return;	
-// }
 
 // This is a very rough parsing function for now
 std::string	Server::parseRequest(const std::string &request)
@@ -88,7 +65,7 @@ void	Server::getRequest(std::string file)
 		response = serveFile("html/PageNotFound.html", "404 Not Found", RED);
 
 	write(this->_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response to ", response);
+	terminalMessage("Server response ", response);
 }
 
 std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
@@ -118,10 +95,14 @@ void	Server::terminalMessage(const std::string &s1, const std::string &s2)
 {
 	size_t		position;
 	std::string	header;
+	std::size_t	found = s1.find("Client");
 
 	position = std::string(s2).find('\n');
 	header = std::string(s2).substr(0, position);
 	
 	printTimestamp();
-	std::cout << RESET << s1 << "socket " << this->_clientFd << "	" << header << std::endl;
+	if (found != std::string::npos)
+		std::cout << RESET << BLUE << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
+	else
+		std::cout << RESET << PINK << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
 }
