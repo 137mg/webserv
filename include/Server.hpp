@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/29 23:59:23 by Julia         ########   odam.nl         */
+/*   Updated: 2024/04/30 14:33:14 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ class Server
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
 		bool	fileAccess(const std::string &path);
+
+		// int		readFromSocket(char *buffer);
 
 		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
 		std::string	parseRequest(const std::string &request);
