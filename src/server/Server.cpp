@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/30 14:33:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/01 00:53:57 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,22 @@ void	Server::createSocket(void)
     }
 }
 
+void	Server::config(void)
+{
+
+	this->_serverAddress.sin_family = AF_INET;
+	this->_serverAddress.sin_addr.s_addr = INADDR_ANY;
+	this->_serverAddress.sin_port = htons(PORT);
+
+	this->createSocket();
+	this->bindSocket();
+	
+	printTimestamp();
+	std::cout << this->_serverName << " up and running. Listening on port: "
+		<< this->_port << std::endl;
+	
+}
+
 // Step 2: Identify a socket
 void	Server::bindSocket(void)
 {
@@ -93,22 +109,6 @@ void	Server::bindSocket(void)
 	}
 }
 
-void	Server::config(void)
-{
-
-	this->_serverAddress.sin_family = AF_INET;
-	this->_serverAddress.sin_addr.s_addr = INADDR_ANY;
-	this->_serverAddress.sin_port = htons(PORT);
-
-	this->createSocket();
-	this->bindSocket();
-	
-	printTimestamp();
-	std::cout << this->_serverName << " up and running. Listening on port: "
-		<< this->_port << std::endl;
-	
-}
-
 void	Server::acceptConnection(void)
 {
 	struct sockaddr_storage	client_addr;
@@ -126,66 +126,77 @@ void	Server::acceptConnection(void)
 	this->processConnection();
 }
 
-// void	Server::readRequest(std::string buffer)
-// {
+int Server::readFromSocket(std::string &outbuffer)
+{
+	char	buffer[MESSAGE_BUFFER];
+	int		bytes_read = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
 	
-// }
+	if (bytes_read > 0)
+		outbuffer.append(buffer, bytes_read);
+	else if (bytes_read == 0)
+	{
+		std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
+        return -1;
+	}
+	else
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+        	return 0;
+        else
+		{
+            std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+            return -1;
+        }
+	}
+	return bytes_read;
+}
+
+int Server::processRequest(const std::string &request_buffer)
+{
+	// Check if the request is complete
+	size_t headerEnd = request_buffer.find("\r\n\r\n");
+	if (headerEnd != std::string::npos)
+	{
+		// Check if Content-Length header exists
+		size_t contentLengthPos = request_buffer.find("Content-Length:");
+		if (contentLengthPos != std::string::npos)
+		{
+			size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
+			size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
+			size_t totalExpectedSize = headerEnd + 4 + contentLength;
+			if (request_buffer.size() >= totalExpectedSize)
+			{
+				// We have received the complete request
+				this->handleRequest(request_buffer.c_str(), totalExpectedSize);
+				return 1;
+			}
+		} else
+		{
+			// No Content-Length header, assume request is complete
+			this->handleRequest(request_buffer.c_str(), request_buffer.size());
+			return 1;
+		}
+	}
+	return 0;
+}
 
 void Server::processConnection(void)
 {
-    char		buffer[MESSAGE_BUFFER];
-    int			bytes_read;
     std::string request_buffer;
+	int bytes_read;
 
-    // Read from the socket until the entire request is received
     while (1)
 	{
-		bytes_read = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
-		if (bytes_read == 0)
-		{
-            std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
-            break;
-        }
-		else if (bytes_read < 0)
-		{
-            // No data available to read, continue looping
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-                continue;
-			else
-			{
-				std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-				break;
-			}
-        }
+		bytes_read = readFromSocket(request_buffer);
+        if (bytes_read < 0)
+        	break;
+		else if (bytes_read == 0)
+			continue;
 		else
 		{
-			// Append received data to the request buffer
-            request_buffer.append(buffer, bytes_read);
-
-            // Check if the request is complete
-            size_t headerEnd = request_buffer.find("\r\n\r\n");
-            if (headerEnd != std::string::npos)
-			{
-                // Check if Content-Length header exists
-                size_t contentLengthPos = request_buffer.find("Content-Length:");
-                if (contentLengthPos != std::string::npos)
-				{
-                    size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
-                    size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
-                    size_t totalExpectedSize = headerEnd + 4 + contentLength;
-                    if (request_buffer.size() >= totalExpectedSize)
-					{
-                        // We have received the complete request
-                        this->handleRequest(request_buffer.c_str(), totalExpectedSize);
-                        break;
-                    }
-                } else
-				{
-                    // No Content-Length header, assume request is complete
-                    this->handleRequest(request_buffer.c_str(), request_buffer.size());
-                    break;
-                }
-            }
+            request_buffer.append(this->_buffer);
+			if (processRequest(request_buffer) == 1)
+				break;
 		}
     }
 
