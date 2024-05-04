@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 15:39:05 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/04 19:41:20 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,18 @@ std::string	Server::getHeader(std::string buffer, std::string key)
     std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
 
     return value;
+}
+
+size_t Server::getRequestSize(std::string request_buffer)
+{
+	// Check if Content-Length header exists
+	size_t contentLengthPos = request_buffer.find("Content-Length:");
+	if (contentLengthPos != std::string::npos)
+	{
+		size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
+		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
+		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
+		return totalExpectedSize;
+	} 
+	return request_buffer.size();
 }

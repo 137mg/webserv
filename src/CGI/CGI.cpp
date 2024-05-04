@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/30 14:34:32 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/04 16:04:36 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	CGI::initEnvp(std::string content, std::string contentLength)
 {
 	std::string	fullContent = "CONTENT_TYPE=" + content;
 	std::string	fullContentLen = "CONTENT_LENGTH=" + contentLength;
+	std::string	fullPort = "SERVER_PORT=" + std::to_string(PORT);
 	
 	this->_envpVector.push_back(fullContent);
 	this->_envpVector.push_back(fullContentLen);
@@ -59,7 +60,7 @@ void	CGI::initEnvp(std::string content, std::string contentLength)
 	this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/upload.py");
 	this->_envpVector.push_back("SCRIPT_NAME=upload.py");
 	this->_envpVector.push_back("SERVER_NAME=Webserv");
-	this->_envpVector.push_back("SERVER_PORT=8080");
+	this->_envpVector.push_back(fullPort);
 	this->_envpVector.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	this->_envpVector.push_back("SERVER_SOFTWARE=webserv");
 	this->_envpVector.push_back("REDIRECT_STATUS=200");

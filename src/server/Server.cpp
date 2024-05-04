@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 15:51:53 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/04 17:23:22 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,23 @@ void	Server::config(void)
 // Create a socket for the server to listen for incoming connections
 void	Server::createSocket(void)
 {
+	int	opt;
+
 	// sa.sin_family or AF_INET
 	this->_listenFd = socket(this->_serverAddress.sin_family , SOCK_STREAM, 0);
 	if (this->_listenFd == -1) {
 		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
 		return;
 	}
+
+	// this allows the socket to reuse a local address even if it is already in use
+	opt = 1;
+    if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	{
+        std::cerr << "setsockopt error: " << std::strerror(errno) << std::endl;
+        close(this->_listenFd);
+        return;
+    }
 }
 
 // Bind the socket to a specific address and port and listen for incoming connections
@@ -130,11 +141,13 @@ void Server::handleClientConnection(void)
 		else
 		{
             request_buffer.append(this->_buffer);
-			if (processRequest(request_buffer) == 1)
+			if (isRequestComplete(request_buffer))
+			{
+				handleRequest(request_buffer, bytes_read);
 				break;
+			}
 		}
     }
-
     printTimestamp();
     std::cout << "Closing client socket " << this->_clientFd << std::endl;
     close(this->_clientFd);
@@ -168,37 +181,21 @@ int Server::readFromSocket(std::string &outbuffer)
 
 bool Server::isRequestComplete(const std::string &request_buffer)
 {
-	size_t headerEnd = request_buffer.find("\r\n\r\n");
+	size_t	headerEnd;
+	size_t totalExpectedSize;
+	size_t contentLengthPos;
 
-	if (headerEnd != std::string::npos)
-		return true;
-	return false;
-}
-
-int Server::processRequest(const std::string &request_buffer)
-{
-	// Check if the request is complete
-	if (!isRequestComplete(request_buffer))
-		return 0;
-		
-	// Check if Content-Length header exists
-	size_t contentLengthPos = request_buffer.find("Content-Length:");
+	headerEnd = request_buffer.find("\r\n\r\n");
+	if (headerEnd == std::string::npos)
+		return false;
+	totalExpectedSize = getRequestSize(request_buffer);
+	contentLengthPos = request_buffer.find("Content-Length:");
 	if (contentLengthPos != std::string::npos)
 	{
-		size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
-		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
-		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
 		if (request_buffer.size() >= totalExpectedSize)
-		{
-			// We have received the complete request
-			this->handleRequest(request_buffer.c_str(), totalExpectedSize);
-			return 1;
-		}
-	} else
-	{
-		// No Content-Length header, assume request is complete
-		this->handleRequest(request_buffer.c_str(), request_buffer.size());
-		return 1;
-	}
-	return 0;
+			return true;
+	} 
+	else
+		return true;
+	return false;
 }
