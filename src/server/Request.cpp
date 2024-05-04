@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/30 00:02:02 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/04 15:39:05 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,26 @@ void	Server::terminalMessage(const std::string &s1, const std::string &s2)
 		std::cout << RESET << BLUE << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
 	else
 		std::cout << RESET << PINK << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
+}
+
+std::string	Server::getHeader(std::string buffer, std::string key)
+{
+	size_t keyPos = buffer.find(key + ":");
+    if (keyPos == std::string::npos) {
+        // Key not found in the buffer
+        return "";
+    }
+
+    // Find the end of the line containing the key
+    size_t endOfLinePos = buffer.find("\r\n", keyPos);
+    if (endOfLinePos == std::string::npos) {
+        // End of line not found
+        return "";
+    }
+
+    // Extract the value after the key
+    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
+    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
+
+    return value;
 }

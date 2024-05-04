@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/01 00:53:57 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/04 15:41:11 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,45 +52,31 @@ Server & Server::operator=(const Server &other)
 	return *this;
 }
 
-// Step 1: create a socket
-void	Server::createSocket(void)
-{
-	int	opt;
-
-	// sa.sin_family or AF_INET
-	this->_listenFd = socket(this->_serverAddress.sin_family , SOCK_STREAM, 0);
-	if (this->_listenFd == -1) {
-		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
-		return;
-	}
-
-	// this allows the socket to reuse a local address even if it is already in use
-	opt = 1;
-    if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
-	{
-        std::cerr << "setsockopt error: " << std::strerror(errno) << std::endl;
-        close(this->_listenFd);
-        return;
-    }
-}
-
 void	Server::config(void)
 {
-
 	this->_serverAddress.sin_family = AF_INET;
 	this->_serverAddress.sin_addr.s_addr = INADDR_ANY;
 	this->_serverAddress.sin_port = htons(PORT);
 
 	this->createSocket();
 	this->bindSocket();
-	
 	printTimestamp();
 	std::cout << this->_serverName << " up and running. Listening on port: "
 		<< this->_port << std::endl;
-	
 }
 
-// Step 2: Identify a socket
+// Create a socket for the server to listen for incoming connections
+void	Server::createSocket(void)
+{
+	// sa.sin_family or AF_INET
+	this->_listenFd = socket(this->_serverAddress.sin_family , SOCK_STREAM, 0);
+	if (this->_listenFd == -1) {
+		std::cerr << "Socket fd error = " << std::strerror(errno) << std::endl;
+		return;
+	}
+}
+
+// Bind the socket to a specific address and port and listen for incoming connections
 void	Server::bindSocket(void)
 {
 	int	status;
@@ -101,7 +87,6 @@ void	Server::bindSocket(void)
 		return ;
 	}
 
-	// Step 3: Wait for incoming connection
 	status = listen(this->_listenFd, BACKLOG);
 	if (status != 0) {
 		std::cerr << "Listen error " << std::strerror(errno) << std::endl;
@@ -109,23 +94,53 @@ void	Server::bindSocket(void)
 	}
 }
 
-void	Server::acceptConnection(void)
+// Keep accepting connections while the server is running
+void	Server::run(void)
 {
-	struct sockaddr_storage	client_addr;
-	socklen_t				addr_size;
-
-	
-	addr_size = sizeof(client_addr);
-	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
-	if (this->_clientFd == -1) {
-		std::cerr << RED << "client fd error: " << std::strerror(errno) << RESET << std::endl;
-		exit(1);
+	while (1)
+	{
+		struct sockaddr_storage	client_addr;
+		socklen_t				addr_size;
+		
+		addr_size = sizeof(client_addr);
+		this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+		if (this->_clientFd == -1) {
+			std::cerr << RED << "Client fd error: " << std::strerror(errno) << RESET << std::endl;
+			exit(1);
+		}
+		fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
+		this->handleClientConnection();
 	}
-
-	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
-	this->processConnection();
+	return;
 }
 
+// Handle the connection with a client, reading incoming data and processing requests
+void Server::handleClientConnection(void)
+{
+    std::string request_buffer;
+	int bytes_read;
+
+    while (1)
+	{
+		bytes_read = readFromSocket(request_buffer);
+        if (bytes_read < 0)
+        	break;
+		else if (bytes_read == 0)
+			continue;
+		else
+		{
+            request_buffer.append(this->_buffer);
+			if (processRequest(request_buffer) == 1)
+				break;
+		}
+    }
+
+    printTimestamp();
+    std::cout << "Closing client socket " << this->_clientFd << std::endl;
+    close(this->_clientFd);
+}
+
+// Read data from the client socket into a buffer
 int Server::readFromSocket(std::string &outbuffer)
 {
 	char	buffer[MESSAGE_BUFFER];
@@ -178,61 +193,4 @@ int Server::processRequest(const std::string &request_buffer)
 		}
 	}
 	return 0;
-}
-
-void Server::processConnection(void)
-{
-    std::string request_buffer;
-	int bytes_read;
-
-    while (1)
-	{
-		bytes_read = readFromSocket(request_buffer);
-        if (bytes_read < 0)
-        	break;
-		else if (bytes_read == 0)
-			continue;
-		else
-		{
-            request_buffer.append(this->_buffer);
-			if (processRequest(request_buffer) == 1)
-				break;
-		}
-    }
-
-    printTimestamp();
-    std::cout << "Closing client socket " << this->_clientFd << std::endl;
-    close(this->_clientFd);
-}
-
-
-void	Server::run(void)
-{
-	while (1)
-	{
-		this->acceptConnection();
-	}
-	return;
-}
-
-std::string	Server::getHeader(std::string buffer, std::string key)
-{
-	size_t keyPos = buffer.find(key + ":");
-    if (keyPos == std::string::npos) {
-        // Key not found in the buffer
-        return "";
-    }
-
-    // Find the end of the line containing the key
-    size_t endOfLinePos = buffer.find("\r\n", keyPos);
-    if (endOfLinePos == std::string::npos) {
-        // End of line not found
-        return "";
-    }
-
-    // Extract the value after the key
-    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
-    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
-
-    return value;
 }

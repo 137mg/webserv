@@ -6,7 +6,7 @@
 #    By: psadeghi <psadeghi@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/04/25 14:52:45 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/05/04 13:46:47 by Julia         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ CC = clang++
 CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
+UPLOAD_DIR = cgi-bin/uploads
 SRC = src/main.cpp src/server/Server.cpp src/server/Request.cpp src/server/utils.cpp src/CGI/Post.cpp \
 		src/CGI/CGI.cpp
 SRC_CLIENT = $(SRC_DIR)notUsing/clientConnection.cpp
@@ -76,6 +77,7 @@ clean:
 	echo "$(BOLD)Cleaning $(GREEN)obj folder$(RESET)"; \
 	fi
 	@rm -rf $(OBJ_DIR)
+	@rm -rf $(UPLOAD_DIR)
 
 fclean: clean
 	@if [ -f "$(NAME)" ]; then \
