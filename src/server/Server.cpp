@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 17:23:22 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/08 14:16:20 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ Server::Server(void)
 
 Server::~Server(void)
 {
-	std::cout << "Closing server socket." << std::endl;
+    printTimestamp();
+    std::cout << RED << "Closing server socket " << RESET << std::endl;
 	close(this->_listenFd);
 	return;
 }
@@ -121,6 +122,9 @@ void	Server::run(void)
 		}
 		fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 		this->handleClientConnection();
+		printTimestamp();
+		std::cout << RED << "Closing client socket " << RESET << this->_clientFd << std::endl;
+		close(this->_clientFd);
 	}
 	return;
 }
@@ -148,9 +152,6 @@ void Server::handleClientConnection(void)
 			}
 		}
     }
-    printTimestamp();
-    std::cout << "Closing client socket " << this->_clientFd << std::endl;
-    close(this->_clientFd);
 }
 
 // Read data from the client socket into a buffer

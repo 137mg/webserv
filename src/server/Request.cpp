@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 19:41:20 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/08 13:03:47 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ void	Server::terminalMessage(const std::string &s1, const std::string &s2)
 	
 	printTimestamp();
 	if (found != std::string::npos)
-		std::cout << RESET << BLUE << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
+		std::cout << RESET << GREEN << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
 	else
-		std::cout << RESET << PINK << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
+		std::cout << RESET << YELLOW << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
 }
 
 std::string	Server::getHeader(std::string buffer, std::string key)
