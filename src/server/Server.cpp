@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/08 14:16:20 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/09 20:37:00 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,23 +109,24 @@ void	Server::bindSocket(void)
 // Keep accepting connections while the server is running
 void	Server::run(void)
 {
+	struct sockaddr_storage	client_addr;
+	socklen_t				addr_size;
+	
+	addr_size = sizeof(client_addr);
+	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+	if (this->_clientFd == -1)
+	{
+		std::cerr << RED << "Client fd error: " << std::strerror(errno) << RESET << std::endl;
+		exit(1);
+	}
+	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 	while (1)
 	{
-		struct sockaddr_storage	client_addr;
-		socklen_t				addr_size;
-		
-		addr_size = sizeof(client_addr);
-		this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
-		if (this->_clientFd == -1) {
-			std::cerr << RED << "Client fd error: " << std::strerror(errno) << RESET << std::endl;
-			exit(1);
-		}
-		fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 		this->handleClientConnection();
-		printTimestamp();
-		std::cout << RED << "Closing client socket " << RESET << this->_clientFd << std::endl;
-		close(this->_clientFd);
 	}
+	printTimestamp();
+	std::cout << RED << "Closing client socket " << RESET << this->_clientFd << std::endl;
+	close(this->_clientFd);
 	return;
 }
 
