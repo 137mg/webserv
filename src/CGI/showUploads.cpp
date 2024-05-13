@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/13 14:03:46 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/13 15:04:43 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ std::string	Server::showUploads(const std::string &path, const std::string &stat
 	
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	std::string fileContents = responseStream.str();
-	getFolderContents();
+	// getFolderContents();
 	for (int i = 0; i < 2; i++)
 	{
 		fileContents += "<li> hey </li>";
