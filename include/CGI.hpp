@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGI.hpp                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 15:33:09 by Julia         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGI.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 14:52:49 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/13 16:57:59 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-class CGI : public Server
+class CGI
 {
 	private:
 		char						**_envp;
@@ -33,8 +33,6 @@ class CGI : public Server
 		void		convertVector(void);
 		void		executeScript(std::string cgiContent, int bytesRead);
 		char		**getEnvp(void) const;
-
-		
 };
 
 #endif

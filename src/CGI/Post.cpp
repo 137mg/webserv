@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Post.cpp                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: Julia <Julia@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/23 23:05:36 by Julia         #+#    #+#                 */
-/*   Updated: 2024/05/08 13:06:31 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Post.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 23:05:36 by Julia             #+#    #+#             */
+/*   Updated: 2024/05/13 17:36:10 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
 #include "CGI.hpp"
-#include <sys/types.h>
-#include <sys/wait.h>
 
 void	Server::postRequest(std::string buffer, int bytesRead)
 {

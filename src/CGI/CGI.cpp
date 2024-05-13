@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGI.cpp                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 16:04:36 by Julia         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGI.cpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/13 16:39:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ CGI::CGI(void)
 
 CGI::~CGI(void)
 {
-	
+	if (this->_envp)
+	{
+		for (int i = 0; this->_envp[i]; i++)
+			delete[] this->_envp[i];
+		delete[] this->_envp;
+	}
 }
 
 CGI::CGI(const CGI &other)

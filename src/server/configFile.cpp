@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   configFile.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/13 18:09:08 by mgoedkoo         ###   ########.fr       */
+/*   Created: 2024/05/13 17:42:09 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/13 18:06:18 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-int main(int argc, char** argv)
+void	Server::configFile(char* filename)
 {
-	Server	server;
+	std::ifstream	ifs(filename);
 
-	if (argc > 2)
-	{
-		std::cerr << "Error: too many arguments" << std::endl;
-		return (1);
-	}
-	try
-	{
-		if (argc == 2)
-			server.configFile(argv[1]);
-		server.config();
-		server.run();
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << "Error: " << e.what() << std::strerror(errno) << std::endl;
-		return (1);
-	}
-	return (0);
+	if (ifs.fail())
+		throw ConfigFileException();
+	ifs.close();
 }
