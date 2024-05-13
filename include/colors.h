@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/05 14:43:34 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/08 13:03:14 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/13 13:03:22 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@
 #define BG_LAVENDER		"\033[48;5;183m"
 #define BG_BROWN		"\033[48;5;130m"
 
-#define PORT 8082
 #define BACKLOG 10
 
 #endif

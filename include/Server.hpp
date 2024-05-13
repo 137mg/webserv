@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/04 17:21:56 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/13 14:19:33 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <cstring>
 #include <vector>
 #include <sstream>
+#include <dirent.h>
 #include <fstream>
 #include <fcntl.h>
 #include <poll.h>
@@ -69,6 +70,7 @@ class Server
 		int		readFromSocket(std::string &outBuffer);
 		size_t	getRequestSize(std::string request_buffer);
 
+		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);
 		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
 		std::string	parseRequest(const std::string &request);
 		std::string	getHeader(std::string buffer, std::string key);
@@ -76,6 +78,8 @@ class Server
 };
 
 void	printTimestamp(void);
+
 #define MESSAGE_BUFFER 40000
+#define PORT 8082
 
 #endif

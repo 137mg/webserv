@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/08 13:03:47 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/13 14:56:34 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	Server::handleRequest(std::string buffer, int bytesRead)
 	return;
 }
 
-// This is a very rough parsing function for now
 std::string	Server::parseRequest(const std::string &request)
 {
 	std::string	path = "";
@@ -59,11 +58,15 @@ void	Server::getRequest(std::string file)
 		filePath = "html" + file;
 	else
 		filePath = file.erase(0, 1);
-	if (fileAccess(filePath))
-		response = serveFile(filePath, "200 OK", GREEN);
+	if (filePath.compare("html/files.html") == 0)
+		response = showUploads(filePath, "200 OK", GREEN);
 	else
-		response = serveFile("html/PageNotFound.html", "404 Not Found", RED);
-
+	{
+		if (fileAccess(filePath))
+			response = serveFile(filePath, "200 OK", GREEN);
+		else
+			response = serveFile("html/PageNotFound.html", "404 Not Found", RED);		
+	}
 	write(this->_clientFd, response.c_str(), response.size());
 	terminalMessage("Server response ", response);
 }
@@ -77,6 +80,7 @@ std::string	Server::serveFile(const std::string &path, const std::string &status
     std::string fileContents = responseStream.str();
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
+	response += "Connection: keep-alive\r\n";
 	if (path.find(".css") != std::string::npos)
 		response += "Content-Type: text/css\r\n\r\n";
 	else
@@ -110,14 +114,17 @@ void	Server::terminalMessage(const std::string &s1, const std::string &s2)
 std::string	Server::getHeader(std::string buffer, std::string key)
 {
 	size_t keyPos = buffer.find(key + ":");
-    if (keyPos == std::string::npos) {
+	
+    if (keyPos == std::string::npos)
+	{
         // Key not found in the buffer
         return "";
     }
 
     // Find the end of the line containing the key
     size_t endOfLinePos = buffer.find("\r\n", keyPos);
-    if (endOfLinePos == std::string::npos) {
+    if (endOfLinePos == std::string::npos)
+	{
         // End of line not found
         return "";
     }
@@ -125,7 +132,6 @@ std::string	Server::getHeader(std::string buffer, std::string key)
     // Extract the value after the key
     size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
     std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
-
     return value;
 }
 

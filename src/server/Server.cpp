@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/09 20:37:00 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/13 14:26:14 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,9 @@ Server::Server(void)
 	this->_listenFd = 0;
 	this->_clientMaxBodySize = 1;
 	this->_autoIndex = false;
-	return;
 }
 
-Server::~Server(void)
-{
-    printTimestamp();
-    std::cout << RED << "Closing server socket " << RESET << std::endl;
-	close(this->_listenFd);
-	return;
-}
+Server::~Server(void) {}
 
 Server::Server(const Server &other)
 {
