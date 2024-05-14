@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 15:35:12 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/14 16:13:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,12 @@ std::string	getFolderContents(void)
 				folderContents += line;
 			}
 		}
+		if (folderContents == "")
+			folderContents = "No files uploaded";
 		closedir(dr);
 	}
 	else
-		folderContents = "No files uploaded so far";
+		folderContents = "No files uploaded";
 	return folderContents;
 }
 

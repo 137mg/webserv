@@ -23,6 +23,17 @@
 			{
 				method: 'DELETE'
 			})
+			.then(response =>
+			{
+            	if (response.ok)
+				{
+					window.location.reload();
+				}
+				else
+				{
+					console.error('Failed to delete file');
+				}
+        	})
 		}
 	</script>
 
