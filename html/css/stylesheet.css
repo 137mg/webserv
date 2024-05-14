@@ -46,6 +46,10 @@ body {
 	padding: 20px;
 }
 
+.files-block {
+	text-align: left;
+}
+
 .form {
 	text-align: left;
 }

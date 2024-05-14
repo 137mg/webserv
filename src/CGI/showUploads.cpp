@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/13 15:04:43 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/14 13:59:41 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 std::string	getFolderContents(void)
 {
 	std::string		folderContents = "";
+	std::string		line;
 	DIR				*dr;
 	struct dirent	*en;
 
@@ -23,10 +24,16 @@ std::string	getFolderContents(void)
 	{
 		while ((en = readdir(dr)) != NULL)
 		{
-			std::cout << en->d_name << std::endl;
+			if (std::string(en->d_name) != "." && std::string(en->d_name) != "..")
+			{
+				line = "<li>" + std::string(en->d_name) + "</li>";
+				folderContents += line;
+			}
 		}
 		closedir(dr);
 	}
+	else
+		folderContents = "No files uploaded so far";
 	return folderContents;
 }
 
@@ -38,11 +45,7 @@ std::string	Server::showUploads(const std::string &path, const std::string &stat
 	
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	std::string fileContents = responseStream.str();
-	// getFolderContents();
-	for (int i = 0; i < 2; i++)
-	{
-		fileContents += "<li> hey </li>";
-	}
+	fileContents += getFolderContents();
 	fileContents += "</ul></div></body></html>";
 	
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
