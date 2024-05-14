@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 13:59:41 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/14 15:35:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string	getFolderContents(void)
 	std::string		line;
 	DIR				*dr;
 	struct dirent	*en;
-
+	
 	dr = opendir("./cgi-bin/uploads");
 	if (dr)
 	{
@@ -26,7 +26,8 @@ std::string	getFolderContents(void)
 		{
 			if (std::string(en->d_name) != "." && std::string(en->d_name) != "..")
 			{
-				line = "<li>" + std::string(en->d_name) + "</li>";
+				line = "<li>" + std::string(en->d_name);
+				line += "<button class='delete-button' value='" + std::string(en->d_name) +"'onclick='deleteFile(this.value)'>Delete</button></li>";
 				folderContents += line;
 			}
 		}

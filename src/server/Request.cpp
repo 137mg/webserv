@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/13 14:56:34 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/14 15:17:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	Server::handleRequest(std::string buffer, int bytesRead)
 	}
 	if (tokens[0].compare("GET") == 0)
 		this->getRequest(tokens[1]);
+	else if (tokens[0].compare("DELETE") == 0)
+		this->deleteRequest(tokens[1]);
 	return;
 }
 

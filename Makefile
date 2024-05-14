@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/05/13 18:00:27 by mgoedkoo         ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
+#                                                    +#+                       #
+#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
+#    Updated: 2024/05/14 15:15:28 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,13 +19,14 @@ OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGI.cpp				\
-		src/CGI/Post.cpp			\
 		src/CGI/showUploads.cpp		\
 		src/server/configFile.cpp	\
+		src/server/postRequest.cpp	\
 		src/server/Request.cpp		\
 		src/server/Server.cpp		\
 		src/server/utils.cpp		\
-		src/main.cpp
+		src/main.cpp				\
+		src/server/deleteRequest.cpp
 SRC_CLIENT = $(SRC_DIR)notUsing/clientConnection.cpp
 SRC_SERVER = $(SRC_DIR)notUsing/serverConnection.cpp
 OBJ_CLIENT = $(OBJ_DIR)notUsing/clientConnection.o

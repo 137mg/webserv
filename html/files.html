@@ -16,6 +16,16 @@
 		<a href="/files.html">Files</a>
 	</div>
 
+	<script>
+		function deleteFile(filename)
+		{
+			fetch(filename,
+			{
+				method: 'DELETE'
+			})
+		}
+	</script>
+
 	<div class ="block form-block files-block">
 		<h2>Uploaded files</h2>
 		<ul>
