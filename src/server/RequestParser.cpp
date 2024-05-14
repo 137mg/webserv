@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   Request.cpp                                        :+:    :+:            */
+/*   RequestParser.cpp                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 15:17:15 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/14 17:40:23 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,71 +48,8 @@ std::string	Server::parseRequest(const std::string &request)
 	}
 	return path;
 }
-	
-void	Server::getRequest(std::string file)
-{
-	std::string filePath = "";
-	std::string response = "";
 
-	if (file.compare("/") == 0)
-		file = "/home.html";
-	if (file.find(".html") != std::string::npos)
-		filePath = "html" + file;
-	else
-		filePath = file.erase(0, 1);
-	if (filePath.compare("html/files.html") == 0)
-		response = showUploads(filePath, "200 OK", GREEN);
-	else
-	{
-		if (fileAccess(filePath))
-			response = serveFile(filePath, "200 OK", GREEN);
-		else
-			response = serveFile("html/PageNotFound.html", "404 Not Found", RED);		
-	}
-	write(this->_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response ", response);
-}
-
-std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
-{
-	std::ifstream		fileStream(path);
-	std::stringstream	responseStream;
-	responseStream << fileStream.rdbuf();
-	
-    std::string fileContents = responseStream.str();
-	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
-	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	response += "Connection: keep-alive\r\n";
-	if (path.find(".css") != std::string::npos)
-		response += "Content-Type: text/css\r\n\r\n";
-	else
-		response += "Content-Type: text/html\r\n\r\n";
-	response += fileContents;
-	return response;
-}
-
-bool	Server::fileAccess(const std::string &path)
-{
-	std::ifstream fileStream(path);
-	return fileStream.good();
-}
-
-void	Server::terminalMessage(const std::string &s1, const std::string &s2)
-{
-	size_t		position;
-	std::string	header;
-	std::size_t	found = s1.find("Client");
-
-	position = std::string(s2).find('\n');
-	header = std::string(s2).substr(0, position);
-	
-	printTimestamp();
-	if (found != std::string::npos)
-		std::cout << RESET << GREEN << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
-	else
-		std::cout << RESET << YELLOW << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
-}
-
+// Returns the value of a specific header
 std::string	Server::getHeader(std::string buffer, std::string key)
 {
 	size_t keyPos = buffer.find(key + ":");
@@ -137,6 +74,7 @@ std::string	Server::getHeader(std::string buffer, std::string key)
     return value;
 }
 
+// Returns the size of a request
 size_t Server::getRequestSize(std::string request_buffer)
 {
 	// Check if Content-Length header exists

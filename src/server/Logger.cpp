@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.cpp                                          :+:    :+:            */
+/*   Logger.cpp                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/18 14:41:06 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/04/28 23:27:53 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/14 16:40:56 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,22 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+
+void	Server::terminalMessage(const std::string &s1, const std::string &s2)
+{
+	size_t		position;
+	std::string	header;
+	std::size_t	found = s1.find("Client");
+
+	position = std::string(s2).find('\n');
+	header = std::string(s2).substr(0, position);
+	
+	printTimestamp();
+	if (found != std::string::npos)
+		std::cout << RESET << GREEN << s1 << RESET << "from socket " << this->_clientFd << "	" << header << std::endl;
+	else
+		std::cout << RESET << YELLOW << s1 << RESET << "to socket " << this->_clientFd << "	" << header << std::endl;
+}
 
 void	printTimestamp(void)
 {
