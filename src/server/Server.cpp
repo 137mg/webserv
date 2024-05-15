@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 13:34:08 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 16:25:01 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,11 @@ void	Server::run(void)
 	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 	while (1)
 	{
-		this->handleClientConnection();
+		if(!this->handleClientConnection())
+			break;
 	}
 	printTimestamp();
-	std::cout << RED << "Closing client socket " << RESET << this->_clientFd << std::endl;
+	std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
 	close(this->_clientFd);
 	return;
 }

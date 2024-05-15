@@ -6,14 +6,14 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 14:47:17 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 16:37:42 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // Handle the connection with a client, reading incoming data and processing requests
-void Server::handleClientConnection(void)
+bool	Server::handleClientConnection(void)
 {
     std::string request_buffer;
 	int			bytes_read;
@@ -22,7 +22,7 @@ void Server::handleClientConnection(void)
 	{
 		bytes_read = readFromSocket(request_buffer);
         if (bytes_read < 0)
-        	break;
+        	return false;
 		else if (bytes_read == 0)
 			continue;
 		else
@@ -35,6 +35,7 @@ void Server::handleClientConnection(void)
 			}
 		}
     }
+	return true;
 }
 
 // Read data from the client socket into a buffer
@@ -47,7 +48,8 @@ int Server::readFromSocket(std::string &outbuffer)
 		outbuffer.append(buffer, bytes_read);
 	else if (bytes_read == 0)
 	{
-		std::cout << "Client socket " << this->_clientFd << " closed the connection." << std::endl;
+		printTimestamp();
+		std::cout << GREEN << "Client socket " << RESET << this->_clientFd << RED << " closed " << RESET << "the connection." << std::endl;
         return -1;
 	}
 	else

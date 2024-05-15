@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 14:47:04 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 16:16:27 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ class Server
 		void	handleRequest(std::string);
 		void	createSocket(void);
 		void	bindSocket(void);
-		void	handleClientConnection(void);
 		void	getRequest(std::string file);
 		void	deleteRequest(std::string file);
 		void	postRequest(std::string buffer);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
+		bool	handleClientConnection(void);
 		bool	fileAccess(const std::string &path);
 		bool	isRequestComplete(const std::string &request_buffer);
 
