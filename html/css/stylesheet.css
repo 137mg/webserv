@@ -98,7 +98,7 @@ h1 {
 }
 
 
-.navigation-bar a{
+.navigation-bar a {
 	float: left;
 	display: block;
 	color: #eaeaea;
@@ -106,4 +106,32 @@ h1 {
 	padding: 14px 16px;
 	text-decoration: none;
 	text-shadow: 1px 1px 1px rgba(52, 22, 184, 0.88);
+}
+
+.delete-button {
+	border-radius: 10px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: #363636;
+	color: #ffffff;
+	/* margin-left: 20%; */
+	font-size: 12px;
+	transition: 0.4s;
+	border: 0px;
+}
+
+.delete-button:hover {
+	background-color: #81c77f;
+	color: #101010;
+}
+
+p {
+	padding: 10px;
+	display: inline;
+}
+
+.entry {
+	padding: 2px;
 }

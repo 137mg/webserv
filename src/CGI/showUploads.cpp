@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 16:13:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 15:38:35 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ std::string	getFolderContents(void)
 		{
 			if (std::string(en->d_name) != "." && std::string(en->d_name) != "..")
 			{
-				line = "<li>" + std::string(en->d_name);
-				line += "<button class='delete-button' value='" + std::string(en->d_name) +"'onclick='deleteFile(this.value)'>Delete</button></li>";
+				line = "<div class='entry'><button class='delete-button' value='" + std::string(en->d_name) +"'onclick='deleteFile(this.value)'>Delete</button>";
+				line += "<p>";
+				line += std::string(en->d_name);
+				line += "</p><br></div>";
 				folderContents += line;
 			}
 		}
