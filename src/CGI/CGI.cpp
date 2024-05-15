@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/13 16:39:42 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.cpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/15 14:45:57 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	CGI::convertVector(void)
     this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-void	CGI::executeScript(std::string cgiContent, int bytesRead)
+void	CGI::executeScript(std::string cgiContent)
 {
 	int 		fds[2];
     pid_t 		pid;
@@ -106,7 +106,7 @@ void	CGI::executeScript(std::string cgiContent, int bytesRead)
     else
     {
         close(fds[0]);
-        write(fds[1], cgiContent.c_str(), bytesRead);
+        write(fds[1], cgiContent.c_str(), cgiContent.size());
         close(fds[1]);
         waitpid(pid, nullptr, 0);
     }

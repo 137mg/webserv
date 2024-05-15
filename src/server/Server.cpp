@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 17:00:41 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 13:34:08 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ void	Server::config(void)
 	this->createSocket();
 	this->bindSocket();
 	printTimestamp();
-	std::cout << this->_serverName << " up and running. Listening on port: "
-		<< this->_port << std::endl;
+	std::cout << PURPLE << UNDER << this->_serverName << RESET << " up and running. Listening on port: "
+		<< UNDER << this->_port << RESET << std::endl;
+	std::cout << "-----------------------------------------------------------------------" << std::endl;
 }
 
 // Create a socket for the server to listen for incoming connections

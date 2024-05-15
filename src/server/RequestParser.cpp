@@ -6,14 +6,14 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 17:40:23 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 14:46:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // handle the request received from the client
-void	Server::handleRequest(std::string buffer, int bytesRead)
+void	Server::handleRequest(std::string buffer)
 {
 	std::vector<std::string>	tokens;
 	std::string					token;
@@ -25,7 +25,7 @@ void	Server::handleRequest(std::string buffer, int bytesRead)
 		tokens.push_back(token);
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(buffer, bytesRead);
+		postRequest(buffer);
 		return ;
 	}
 	if (tokens[0].compare("GET") == 0)
@@ -72,19 +72,4 @@ std::string	Server::getHeader(std::string buffer, std::string key)
     size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
     std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
     return value;
-}
-
-// Returns the size of a request
-size_t Server::getRequestSize(std::string request_buffer)
-{
-	// Check if Content-Length header exists
-	size_t contentLengthPos = request_buffer.find("Content-Length:");
-	if (contentLengthPos != std::string::npos)
-	{
-		size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
-		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
-		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
-		return totalExpectedSize;
-	} 
-	return request_buffer.size();
 }

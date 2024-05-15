@@ -12,9 +12,10 @@ if not os.path.exists(upload_dir):
 
 form = cgi.FieldStorage()
 sys.path.insert(0, upload_dir)
-message = 'No file was uploaded'
 
 if 'filename' in form:
     fileitem = form['filename']
-    filename = os.path.basename(fileitem.filename)
-    open(os.path.join(upload_dir, filename), 'wb').write(fileitem.file.read())
+    if fileitem.filename:
+        filename = os.path.basename(fileitem.filename)
+        with open(os.path.join(upload_dir, filename), 'wb') as file:
+            file.write(fileitem.file.read())

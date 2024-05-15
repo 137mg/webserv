@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 16:34:03 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 14:48:33 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ void	Server::deleteRequest(std::string file)
     terminalMessage("Server response ", response);
 }
 
-void	Server::postRequest(std::string buffer, int bytesRead)
+void	Server::postRequest(std::string buffer)
 {
     CGI cgi;
 
     cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"));
     cgi.convertVector();
-    cgi.executeScript(buffer, bytesRead);
+    cgi.executeScript(buffer);
     std::string response = serveFile("html/home.html", "200 OK", GREEN);
     write(this->_clientFd, response.c_str(), response.size());
     terminalMessage("Server response ", response);

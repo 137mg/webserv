@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 17:33:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/15 14:47:17 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Server::handleClientConnection(void)
             request_buffer.append(this->_buffer);
 			if (isRequestComplete(request_buffer))
 			{
-				handleRequest(request_buffer, bytes_read);
+				handleRequest(request_buffer);
 				break;
 			}
 		}
@@ -82,4 +82,19 @@ bool Server::isRequestComplete(const std::string &request_buffer)
 	else
 		return true;
 	return false;
+}
+
+// Returns the size of a request
+size_t Server::getRequestSize(std::string request_buffer)
+{
+	// Check if Content-Length header exists
+	size_t contentLengthPos = request_buffer.find("Content-Length:");
+	if (contentLengthPos != std::string::npos)
+	{
+		size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
+		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
+		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
+		return totalExpectedSize;
+	} 
+	return request_buffer.size();
 }
