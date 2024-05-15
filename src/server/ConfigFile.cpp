@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   configFile.cpp                                     :+:      :+:    :+:   */
+/*   ConfigFile.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 17:42:09 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/13 18:06:18 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:51:36 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	Server::configFile(char* filename)
+void	Server::configFile(const char* filename)
 {
 	std::ifstream	ifs(filename);
 

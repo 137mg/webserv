@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/13 18:09:08 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:47:50 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int main(int argc, char** argv)
 	{
 		if (argc == 2)
 			server.configFile(argv[1]);
+		else
+			server.configFile(DEFAULT_PATH);
 		server.config();
 		server.run();
 	}

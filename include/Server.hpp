@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.hpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/09 13:19:11 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 16:16:27 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/09 13:19:11 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/15 19:47:10 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class Server
 	
 		void	run(void);
 		void	config(void);
-		void	configFile(char* filename);
+		void	configFile(const char* filename);
 		void	handleRequest(std::string);
 		void	createSocket(void);
 		void	bindSocket(void);
@@ -97,5 +97,6 @@ void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 40000
 #define PORT 8080
+#define DEFAULT_PATH "default.conf"
 
 #endif
