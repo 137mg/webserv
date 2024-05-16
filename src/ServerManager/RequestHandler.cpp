@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   RequestHandler.cpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/16 15:45:00 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   RequestHandler.cpp                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/16 17:02:55 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ServerManager::getRequest(std::string file)
 			response = serveFile("html/PageNotFound.html", "404 Not Found", RED);		
 	}
 	write(this->_clientFd, response.c_str(), response.size());
-	terminalMessage("ServerManager response ", response);
+	terminalMessage("Server response ", response);
 }
 
 void	ServerManager::deleteRequest(std::string file)
@@ -50,17 +50,17 @@ void	ServerManager::deleteRequest(std::string file)
 	}
 	std::string response = serveFile("html/files.html", "200 OK", GREEN);
     write(this->_clientFd, response.c_str(), response.size());
-    terminalMessage("ServerManager response ", response);
+    terminalMessage("Server response ", response);
 }
 
-void	ServerManager::postRequest(std::string buffer)
+void	ServerManager::postRequest(std::string buffer, std::string method)
 {
     CGI cgi;
-
-    cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"));
+	
+    cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"), method);
     cgi.convertVector();
     cgi.executeScript(buffer);
     std::string response = serveFile("html/home.html", "200 OK", GREEN);
     write(this->_clientFd, response.c_str(), response.size());
-    terminalMessage("ServerManager response ", response);
+    terminalMessage("Server response ", response);
 }

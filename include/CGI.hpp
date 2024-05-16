@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.hpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 14:52:49 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/16 15:39:14 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.hpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/16 16:42:14 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class CGI
 		CGI(const CGI &other);
 		CGI & operator=(const CGI &other);
 
-		void		initEnvp(std::string content, std::string contentLength);
+		void		initEnvp(std::string content, std::string contentLength, std::string method);
 		void		convertVector(void);
 		void		executeScript(std::string cgiContent);
 		char		**getEnvp(void) const;

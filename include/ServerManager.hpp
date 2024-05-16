@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerManager.hpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 16:01:51 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerManager.hpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/05/16 16:44:22 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class ServerManager
 		void	bindSocket(void);
 		void	getRequest(std::string file);
 		void	deleteRequest(std::string file);
-		void	postRequest(std::string buffer);
+		void	postRequest(std::string buffer, std::string method);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
 		bool	handleClientConnection(void);

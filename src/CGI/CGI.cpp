@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 14:45:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/16 16:37:06 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ char	**CGI::getEnvp(void) const
 	return this->_envp;
 }
 
-void	CGI::initEnvp(std::string content, std::string contentLength)
+void	CGI::initEnvp(std::string content, std::string contentLength, std::string method)
 {
 	std::string	fullContent = "CONTENT_TYPE=" + content;
 	std::string	fullContentLen = "CONTENT_LENGTH=" + contentLength;
 	std::string	fullPort = "SERVER_PORT=" + std::to_string(PORT);
+	std::string	fullMethod = "REQUEST_METHOD=" + method;
 	
 	this->_envpVector.push_back(fullContent);
 	this->_envpVector.push_back(fullContentLen);
@@ -61,7 +62,7 @@ void	CGI::initEnvp(std::string content, std::string contentLength)
 	this->_envpVector.push_back("QUERY_STRING=");
 	this->_envpVector.push_back("REMOTE_ADDR=127.0.0.1");
 	this->_envpVector.push_back("REMOTE_HOST=localhost");
-	this->_envpVector.push_back("REQUEST_METHOD=POST");
+	this->_envpVector.push_back(fullMethod);
 	this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/upload.py");
 	this->_envpVector.push_back("SCRIPT_NAME=upload.py");
 	this->_envpVector.push_back("SERVER_NAME=Webserv");
