@@ -6,15 +6,15 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/15 19:47:50 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:36:48 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
 int main(int argc, char** argv)
 {
-	Server	server;
+	ServerManager	serverManager;
 
 	if (argc > 2)
 	{
@@ -24,11 +24,11 @@ int main(int argc, char** argv)
 	try
 	{
 		if (argc == 2)
-			server.configFile(argv[1]);
+			serverManager.configFile(argv[1]);
 		else
-			server.configFile(DEFAULT_PATH);
-		server.config();
-		server.run();
+			serverManager.configFile(DEFAULT_PATH);
+		serverManager.config();
+		serverManager.run();
 	}
 	catch (std::exception& e)
 	{

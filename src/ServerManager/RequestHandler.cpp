@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   RequestHandler.cpp                                 :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 14:48:33 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   RequestHandler.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:45:00 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 #include "CGI.hpp"
 
-void	Server::getRequest(std::string file)
+void	ServerManager::getRequest(std::string file)
 {
 	std::string filePath = "";
 	std::string response = "";
@@ -34,10 +34,10 @@ void	Server::getRequest(std::string file)
 			response = serveFile("html/PageNotFound.html", "404 Not Found", RED);		
 	}
 	write(this->_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response ", response);
+	terminalMessage("ServerManager response ", response);
 }
 
-void	Server::deleteRequest(std::string file)
+void	ServerManager::deleteRequest(std::string file)
 {
 	std::string	fullFilePath = "";
 	int			result;
@@ -50,10 +50,10 @@ void	Server::deleteRequest(std::string file)
 	}
 	std::string response = serveFile("html/files.html", "200 OK", GREEN);
     write(this->_clientFd, response.c_str(), response.size());
-    terminalMessage("Server response ", response);
+    terminalMessage("ServerManager response ", response);
 }
 
-void	Server::postRequest(std::string buffer)
+void	ServerManager::postRequest(std::string buffer)
 {
     CGI cgi;
 
@@ -62,5 +62,5 @@ void	Server::postRequest(std::string buffer)
     cgi.executeScript(buffer);
     std::string response = serveFile("html/home.html", "200 OK", GREEN);
     write(this->_clientFd, response.c_str(), response.size());
-    terminalMessage("Server response ", response);
+    terminalMessage("ServerManager response ", response);
 }

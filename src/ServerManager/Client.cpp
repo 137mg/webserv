@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Client.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 16:37:42 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:43:56 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
 // Handle the connection with a client, reading incoming data and processing requests
-bool	Server::handleClientConnection(void)
+bool	ServerManager::handleClientConnection(void)
 {
     std::string request_buffer;
 	int			bytes_read;
@@ -39,7 +39,7 @@ bool	Server::handleClientConnection(void)
 }
 
 // Read data from the client socket into a buffer
-int Server::readFromSocket(std::string &outbuffer)
+int ServerManager::readFromSocket(std::string &outbuffer)
 {
 	char	buffer[MESSAGE_BUFFER];
 	int		bytes_read = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
@@ -65,7 +65,7 @@ int Server::readFromSocket(std::string &outbuffer)
 	return bytes_read;
 }
 
-bool Server::isRequestComplete(const std::string &request_buffer)
+bool ServerManager::isRequestComplete(const std::string &request_buffer)
 {
 	size_t	headerEnd;
 	size_t totalExpectedSize;
@@ -87,7 +87,7 @@ bool Server::isRequestComplete(const std::string &request_buffer)
 }
 
 // Returns the size of a request
-size_t Server::getRequestSize(std::string request_buffer)
+size_t ServerManager::getRequestSize(std::string request_buffer)
 {
 	// Check if Content-Length header exists
 	size_t contentLengthPos = request_buffer.find("Content-Length:");

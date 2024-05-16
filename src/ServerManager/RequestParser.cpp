@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   RequestParser.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 14:46:58 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   RequestParser.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:45:28 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
 // handle the request received from the client
-void	Server::handleRequest(std::string buffer)
+void	ServerManager::handleRequest(std::string buffer)
 {
 	std::vector<std::string>	tokens;
 	std::string					token;
@@ -35,7 +35,7 @@ void	Server::handleRequest(std::string buffer)
 	return;
 }
 
-std::string	Server::parseRequest(const std::string &request)
+std::string	ServerManager::parseRequest(const std::string &request)
 {
 	std::string	path = "";
 	size_t		start_pos = request.find(" ") + 1; // Find the position of the first space after the request method (e.g., "GET")
@@ -50,7 +50,7 @@ std::string	Server::parseRequest(const std::string &request)
 }
 
 // Returns the value of a specific header
-std::string	Server::getHeader(std::string buffer, std::string key)
+std::string	ServerManager::getHeader(std::string buffer, std::string key)
 {
 	size_t keyPos = buffer.find(key + ":");
 	

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   showUploads.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 15:44:06 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   showUploads.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:43:19 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
 std::string	getFolderContents(void)
 {
@@ -42,7 +42,7 @@ std::string	getFolderContents(void)
 	return folderContents;
 }
 
-std::string	Server::showUploads(const std::string &path, const std::string &status, const std::string &color)
+std::string	ServerManager::showUploads(const std::string &path, const std::string &status, const std::string &color)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;

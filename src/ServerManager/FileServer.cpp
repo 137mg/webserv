@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   serveFile.cpp                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 16:41:56 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 16:42:14 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   FileServer.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 16:41:56 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:44:37 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
-std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
+std::string	ServerManager::serveFile(const std::string &path, const std::string &status, const std::string &color)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;
@@ -30,7 +30,7 @@ std::string	Server::serveFile(const std::string &path, const std::string &status
 	return response;
 }
 
-bool	Server::fileAccess(const std::string &path)
+bool	ServerManager::fileAccess(const std::string &path)
 {
 	std::ifstream fileStream(path);
 	return fileStream.good();

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 13:19:11 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/15 19:47:10 by mgoedkoo         ###   ########.fr       */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/16 15:47:14 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#ifndef SERVERMANAGER_HPP
+#define SERVERMANAGER_HPP
 
 #include <netinet/in.h>
 #include <netdb.h>
@@ -31,27 +31,27 @@
 
 #include "colors.h"
 
-class Server
+class ServerManager
 {
 	private:
 		uint16_t			_port;
 		int					_listenFd;
 		int					_clientFd;
 		int					_clientMaxBodySize;
-		std::string			_serverName;
+		std::string			_ServerManagerName;
 		std::string			_root;
 		std::string			_index;
 		bool				_autoIndex;
-		struct sockaddr_in	_serverAddress;
+		struct sockaddr_in	_ServerManagerAddress;
 		std::string			_buffer;
 		size_t				_requestSize;
 		// location && error pages
 		
 	public:
-		Server();
-		~Server();
-		Server(const Server &other);
-		Server & operator=(const Server &other);
+		ServerManager();
+		~ServerManager();
+		ServerManager(const ServerManager &other);
+		ServerManager & operator=(const ServerManager &other);
 	
 		void	run(void);
 		void	config(void);

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
-#                                                    +#+                       #
-#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/05/14 17:33:02 by juvan-to      ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
+#    Updated: 2024/05/16 15:42:19 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,20 +18,16 @@ CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
-SRC =	src/CGI/CGI.cpp					\
-		src/CGI/showUploads.cpp			\
-		src/server/ConfigFile.cpp		\
-		src/server/RequestHandler.cpp	\
-		src/server/RequestParser.cpp	\
-		src/server/Server.cpp			\
-		src/server/Logger.cpp			\
-		src/server/FileServer.cpp		\
-		src/server/Client.cpp			\
+SRC =	src/CGI/CGI.cpp							\
+		src/CGI/showUploads.cpp					\
+		src/ServerManager/ConfigFile.cpp		\
+		src/ServerManager/RequestHandler.cpp	\
+		src/ServerManager/RequestParser.cpp		\
+		src/ServerManager/ServerManager.cpp		\
+		src/ServerManager/Logger.cpp			\
+		src/ServerManager/FileServer.cpp		\
+		src/ServerManager/Client.cpp			\
 		src/main.cpp
-SRC_CLIENT = $(SRC_DIR)notUsing/clientConnection.cpp
-SRC_SERVER = $(SRC_DIR)notUsing/serverConnection.cpp
-OBJ_CLIENT = $(OBJ_DIR)notUsing/clientConnection.o
-OBJ_SERVER = $(OBJ_DIR)notUsing/serverConnection.o
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 RM := rm -rf
 
@@ -60,21 +56,6 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo "$(GREEN)$(BOLD)["$(NAME)"]$(RESET)" "ready for execution!"
 
-server: $(OBJ_SERVER)
-	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
-	@$(CC) $(OBJ_SERVER) $(CPPFLAGS) -o server
-	@echo "$(BLUE)$(BOLD)-------------------------------------------"
-	@echo "     $(PROJECT) (server) = NOW READY FOR USE!"
-	@echo "-------------------------------------------$(RESET)"
-	
-client: $(OBJ_CLIENT)
-	@echo "Compiled with $(GREEN)$(BOLD)$(CPPFLAGS)$(RESET)"
-	@$(CC) $(OBJ_CLIENT) $(CPPFLAGS) -o client
-	@echo "$(BLUE)$(BOLD)-------------------------------------------"
-	@echo "     $(PROJECT) (client) = NOW READY FOR USE!"
-	@echo "-------------------------------------------$(RESET)"
-
-	
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(dir $@)
 	@echo "$(BOLD)Compiled ✅ $(GREEN)$< $(RESET)"
@@ -92,8 +73,6 @@ fclean: clean
 	echo "$(BOLD)Cleaning $(GREEN)executable$(RESET)"; \
 	fi
 	@rm -rf $(NAME)
-	@rm -rf server
-	@rm -rf client
 
 re: fclean all
 

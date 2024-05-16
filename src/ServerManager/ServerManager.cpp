@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/09 13:19:41 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/15 16:58:57 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerManagerManager.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 15:46:03 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/16 15:46:06 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 
-Server::Server(void)
+ServerManager::ServerManager(void)
 {	
 	this->_port = PORT;
-	this->_serverName = "Webserv";
+	this->_ServerManagerName = "Webserv";
 	this->_root = "";
 	this->_index = "";
 	this->_listenFd = -1;
@@ -23,18 +23,18 @@ Server::Server(void)
 	this->_autoIndex = false;
 }
 
-Server::~Server(void)
+ServerManager::~ServerManager(void)
 {
 	if (this->_listenFd != -1)
 		close(this->_listenFd);
 }
 
-Server::Server(const Server &other)
+ServerManager::ServerManager(const ServerManager &other)
 {
 	*this = other;
 }
 
-Server & Server::operator=(const Server &other)
+ServerManager & ServerManager::operator=(const ServerManager &other)
 {
 	if (this != &other)
 	{
@@ -42,35 +42,35 @@ Server & Server::operator=(const Server &other)
 		this->_listenFd = other._listenFd;
 		this->_clientFd = other._clientFd;
 		this->_clientMaxBodySize = other._clientMaxBodySize;
-		this->_serverName = other._serverName;
+		this->_ServerManagerName = other._ServerManagerName;
 		this->_root = other._root;
 		this->_autoIndex = other._autoIndex;
-		this->_serverAddress = other._serverAddress;
+		this->_ServerManagerAddress = other._ServerManagerAddress;
 	}
 	return *this;
 }
 
-void	Server::config(void)
+void	ServerManager::config(void)
 {
-	this->_serverAddress.sin_family = AF_INET;
-	this->_serverAddress.sin_addr.s_addr = INADDR_ANY;
-	this->_serverAddress.sin_port = htons(PORT);
+	this->_ServerManagerAddress.sin_family = AF_INET;
+	this->_ServerManagerAddress.sin_addr.s_addr = INADDR_ANY;
+	this->_ServerManagerAddress.sin_port = htons(PORT);
 
 	this->createSocket();
 	this->bindSocket();
 	printTimestamp();
-	std::cout << PURPLE << UNDER << this->_serverName << RESET << " up and running. Listening on port: "
+	std::cout << PURPLE << UNDER << this->_ServerManagerName << RESET << " up and running. Listening on port: "
 		<< UNDER << this->_port << RESET << std::endl;
 	std::cout << "-----------------------------------------------------------------------" << std::endl;
 }
 
-// Create a socket for the server to listen for incoming connections
-void	Server::createSocket(void)
+// Create a socket for the ServerManager to listen for incoming connections
+void	ServerManager::createSocket(void)
 {
 	int	opt;
 
 	// sa.sin_family or AF_INET
-	this->_listenFd = socket(this->_serverAddress.sin_family , SOCK_STREAM, 0);
+	this->_listenFd = socket(this->_ServerManagerAddress.sin_family , SOCK_STREAM, 0);
 	if (this->_listenFd == -1)
 		throw ServerSocketException();
 	// this allows the socket to reuse a local address even if it is already in use
@@ -80,18 +80,18 @@ void	Server::createSocket(void)
 }
 
 // Bind the socket to a specific address and port and listen for incoming connections
-void	Server::bindSocket(void)
+void	ServerManager::bindSocket(void)
 {	
-	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_serverAddress),
-		sizeof(this->_serverAddress)) != 0)
+	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_ServerManagerAddress),
+		sizeof(this->_ServerManagerAddress)) != 0)
 		throw ServerSocketException();
 
 	if (listen(this->_listenFd, BACKLOG) != 0)
 		throw ServerSocketException();
 }
 
-// Keep accepting connections while the server is running
-void	Server::run(void)
+// Keep accepting connections while the ServerManager is running
+void	ServerManager::run(void)
 {
 	struct sockaddr_storage	client_addr;
 	socklen_t				addr_size;
@@ -112,17 +112,17 @@ void	Server::run(void)
 	return;
 }
 
-const char*	Server::ConfigFileException::what(void) const throw()
+const char*	ServerManager::ConfigFileException::what(void) const throw()
 {
 	return ("Configuration file: ");
 }
 
-const char*	Server::ServerSocketException::what(void) const throw()
+const char*	ServerManager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");
 }
 
-const char*	Server::ClientSocketException::what(void) const throw()
+const char*	ServerManager::ClientSocketException::what(void) const throw()
 {
 	return ("Client socket: ");
 }

@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Logger.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/18 14:41:06 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/14 16:40:56 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Logger.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 14:41:06 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/16 15:44:47 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "ServerManager.hpp"
 #include <ctime>
 #include <iomanip>
 #include <iostream>
 
-void	Server::terminalMessage(const std::string &s1, const std::string &s2)
+void	ServerManager::terminalMessage(const std::string &s1, const std::string &s2)
 {
 	size_t		position;
 	std::string	header;
