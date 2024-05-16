@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 15:47:14 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:01:51 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,6 @@ class ServerManager
 		std::string	parseRequest(const std::string &request);
 		std::string	getHeader(std::string buffer, std::string key);
 
-		class	ConfigFileException : public std::exception
-		{
-			public:
-				const char*	what(void) const throw();
-		};
 		class	ServerSocketException : public std::exception
 		{
 			public:

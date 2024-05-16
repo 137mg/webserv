@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/05/16 15:42:19 by mgoedkoo         ###   ########.fr        #
+#    Updated: 2024/05/16 15:59:04 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGI.cpp							\
 		src/CGI/showUploads.cpp					\
+		src/Config/Config.cpp					\
 		src/ServerManager/ConfigFile.cpp		\
 		src/ServerManager/RequestHandler.cpp	\
 		src/ServerManager/RequestParser.cpp		\

@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ConfigFile.cpp                                     :+:      :+:    :+:   */
+/*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 17:42:09 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 16:04:22 by mgoedkoo         ###   ########.fr       */
+/*   Created: 2024/05/16 15:59:10 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/16 16:14:58 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
 #include "Config.hpp"
 
-void	ServerManager::configFile(const char* filename)
+Config::Config(const char* filename)
 {
-	Config	config(filename);
+	std::ifstream	ifs(filename);
 
+	if (ifs.fail())
+		throw ConfigFileException();
+	ifs.close();
+}
+
+Config::~Config(void)
+{
+}
+
+const char*	Config::ConfigFileException::what(void) const throw()
+{
+	return ("Configuration file: ");
 }

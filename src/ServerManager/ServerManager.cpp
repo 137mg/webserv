@@ -112,11 +112,6 @@ void	ServerManager::run(void)
 	return;
 }
 
-const char*	ServerManager::ConfigFileException::what(void) const throw()
-{
-	return ("Configuration file: ");
-}
-
 const char*	ServerManager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");
