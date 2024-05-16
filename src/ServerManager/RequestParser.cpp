@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   RequestParser.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/16 15:45:28 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   RequestParser.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/16 16:44:33 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ServerManager::handleRequest(std::string buffer)
 		tokens.push_back(token);
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(buffer);
+		postRequest(buffer, tokens[0]);
 		return ;
 	}
 	if (tokens[0].compare("GET") == 0)

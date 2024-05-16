@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 17:18:52 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:24:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class ServerManager
 		void	bindSocket(void);
 		void	getRequest(std::string file);
 		void	deleteRequest(std::string file);
-		void	postRequest(std::string buffer);
+		void	postRequest(std::string buffer, std::string method);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
 
 		bool	handleClientConnection(void);
