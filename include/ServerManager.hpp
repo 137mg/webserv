@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 16:01:51 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/16 17:18:52 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ class ServerManager
 		int					_listenFd;
 		int					_clientFd;
 		int					_clientMaxBodySize;
-		std::string			_ServerManagerName;
+		std::string			_ServerName;
 		std::string			_root;
 		std::string			_index;
 		bool				_autoIndex;
-		struct sockaddr_in	_ServerManagerAddress;
+		struct sockaddr_in	_ServerAddress;
 		std::string			_buffer;
 		size_t				_requestSize;
 		// location && error pages

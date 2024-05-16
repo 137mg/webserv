@@ -15,7 +15,7 @@
 ServerManager::ServerManager(void)
 {	
 	this->_port = PORT;
-	this->_ServerManagerName = "Webserv";
+	this->_ServerName = "Webserv";
 	this->_root = "";
 	this->_index = "";
 	this->_listenFd = -1;
@@ -42,24 +42,24 @@ ServerManager & ServerManager::operator=(const ServerManager &other)
 		this->_listenFd = other._listenFd;
 		this->_clientFd = other._clientFd;
 		this->_clientMaxBodySize = other._clientMaxBodySize;
-		this->_ServerManagerName = other._ServerManagerName;
+		this->_ServerName = other._ServerName;
 		this->_root = other._root;
 		this->_autoIndex = other._autoIndex;
-		this->_ServerManagerAddress = other._ServerManagerAddress;
+		this->_ServerAddress = other._ServerAddress;
 	}
 	return *this;
 }
 
 void	ServerManager::config(void)
 {
-	this->_ServerManagerAddress.sin_family = AF_INET;
-	this->_ServerManagerAddress.sin_addr.s_addr = INADDR_ANY;
-	this->_ServerManagerAddress.sin_port = htons(PORT);
+	this->_ServerAddress.sin_family = AF_INET;
+	this->_ServerAddress.sin_addr.s_addr = INADDR_ANY;
+	this->_ServerAddress.sin_port = htons(PORT);
 
 	this->createSocket();
 	this->bindSocket();
 	printTimestamp();
-	std::cout << PURPLE << UNDER << this->_ServerManagerName << RESET << " up and running. Listening on port: "
+	std::cout << PURPLE << UNDER << this->_ServerName << RESET << " up and running. Listening on port: "
 		<< UNDER << this->_port << RESET << std::endl;
 	std::cout << "-----------------------------------------------------------------------" << std::endl;
 }
@@ -70,7 +70,7 @@ void	ServerManager::createSocket(void)
 	int	opt;
 
 	// sa.sin_family or AF_INET
-	this->_listenFd = socket(this->_ServerManagerAddress.sin_family , SOCK_STREAM, 0);
+	this->_listenFd = socket(this->_ServerAddress.sin_family , SOCK_STREAM, 0);
 	if (this->_listenFd == -1)
 		throw ServerSocketException();
 	// this allows the socket to reuse a local address even if it is already in use
@@ -82,8 +82,8 @@ void	ServerManager::createSocket(void)
 // Bind the socket to a specific address and port and listen for incoming connections
 void	ServerManager::bindSocket(void)
 {	
-	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_ServerManagerAddress),
-		sizeof(this->_ServerManagerAddress)) != 0)
+	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_ServerAddress),
+		sizeof(this->_ServerAddress)) != 0)
 		throw ServerSocketException();
 
 	if (listen(this->_listenFd, BACKLOG) != 0)

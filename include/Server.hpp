@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 17:17:21 by mgoedkoo         ###   ########.fr       */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/16 17:12:20 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONFIG_HPP
-# define CONFIG_HPP
+#ifndef SERVER_HPP
+# define SERVER_HPP
 
 # include "ServerManager.hpp"
-# include "Server.hpp"
 
-class	Config
+class	Server
 {
 	private:
-		std::ifstream	_ifs;
-		Config(void);
-		Config(const Config& original);
-		Config&			operator=(const Config& original);
+		Server(const Server& original);
+		Server&	operator=(const Server& original);
 	public:
-		Config(const char* filename);
-		~Config(void);
-		class			ConfigFileException : public std::exception
-		{
-			public:
-				const char*	what(void) const throw();
-		};
+		Server(void);
+		~Server(void);
 };
 
 #endif
