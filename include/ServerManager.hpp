@@ -28,6 +28,7 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <vector>
 
 #include "colors.h"
 
@@ -45,8 +46,14 @@ class ServerManager
 		struct sockaddr_in	_ServerAddress;
 		std::string			_buffer;
 		size_t				_requestSize;
+
+		struct pollfd		*_pollFds;
+		int					_pollSize;
+		int 				_pollCount;
 		// location && error pages
-		
+
+		int 				_status;
+
 	public:
 		ServerManager();
 		~ServerManager();
@@ -63,6 +70,11 @@ class ServerManager
 		void	deleteRequest(std::string file);
 		void	postRequest(std::string buffer, std::string method);
 		void	terminalMessage(const std::string &s1, const std::string &s2);
+
+		void	preparePoll(void);
+		void	setUpPoll(void);
+		void	addToPollFds(void);
+		void	delFromPollFds(void);
 
 		bool	handleClientConnection(void);
 		bool	fileAccess(const std::string &path);

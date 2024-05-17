@@ -21,6 +21,9 @@ ServerManager::ServerManager(void)
 	this->_listenFd = -1;
 	this->_clientMaxBodySize = 1;
 	this->_autoIndex = false;
+//	this->_pollFds = new struct pollfd[5];
+	this->_pollCount = 5;
+	this->_pollSize = 0;
 }
 
 ServerManager::~ServerManager(void)
@@ -46,6 +49,9 @@ ServerManager & ServerManager::operator=(const ServerManager &other)
 		this->_root = other._root;
 		this->_autoIndex = other._autoIndex;
 		this->_ServerAddress = other._ServerAddress;
+		this->_pollFds = other._pollFds;
+		this->_pollSize = other._pollSize;
+		this->_pollCount = other._pollCount;
 	}
 	return *this;
 }
@@ -85,8 +91,8 @@ void	ServerManager::bindSocket(void)
 	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_ServerAddress),
 		sizeof(this->_ServerAddress)) != 0)
 		throw ServerSocketException();
-
-	if (listen(this->_listenFd, BACKLOG) != 0)
+	this->_status = listen(this->_listenFd, BACKLOG);
+	if (this->_status != 0)
 		throw ServerSocketException();
 }
 
@@ -100,6 +106,8 @@ void	ServerManager::run(void)
 	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 	if (this->_clientFd == -1)
 		throw ClientSocketException();
+	this->addToPollFds();
+	std::cout << "[Server] Accepted new connection on client socket " << this->_clientFd << "." << std::endl;
 	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 	while (1)
 	{
@@ -112,6 +120,62 @@ void	ServerManager::run(void)
 	return;
 }
 
+void	ServerManager::preparePoll(void)
+{
+	this->_pollSize = 5;
+	this->_pollFds = new struct pollfd[5];
+	if (!this->_pollFds)
+		std::cerr << "The problem is here." << std::endl;
+
+	return;
+}
+
+void	ServerManager::setUpPoll(void)
+{
+	this->_pollFds[0].fd = this->_listenFd;
+	this->_pollFds[0].events = POLLIN;
+	this->_pollCount = 1;
+
+	std::cout << "[Server] Set up poll fd array." << std::endl;
+	while (true) {
+		this->_status = poll(this->_pollFds, this->_pollCount, 1000);
+		if (this->_status == -1) {
+			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
+			throw ServerSocketException();
+		} else if (this->_status == 0) {
+			std::cout << "[Server] Waiting..." << std::endl;
+			continue;
+		}
+		for (int i = 0; i < this->_pollCount; i++) {
+			if ((this->_pollFds[i].revents & POLLIN) != 1) {
+				continue;
+			}
+			std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
+			if (this->_pollFds[i].fd == this->_listenFd) {
+				this->run();
+			} else {
+				std::cout << BLUE << "This is where i need the read for." << std::endl;
+			}
+		}
+	}
+}
+
+void	ServerManager::addToPollFds(void)
+{
+	if (this->_pollCount == this->_pollSize)
+	{
+		this->_pollSize *= 2;
+	}
+	this->_pollFds[this->_pollCount].fd = this->_clientFd;
+	this->_pollFds[this->_pollCount].events = POLLIN;
+	this->_pollCount++;
+
+}
+
+void	ServerManager::delFromPollFds(void)
+{
+
+}
 const char*	ServerManager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");

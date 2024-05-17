@@ -28,7 +28,9 @@ int main(int argc, char** argv)
 		else
 			serverManager.configFile(DEFAULT_PATH);
 		serverManager.config();
-		serverManager.run();
+		serverManager.preparePoll();
+		serverManager.setUpPoll();
+//		serverManager.run();
 	}
 	catch (std::exception& e)
 	{
