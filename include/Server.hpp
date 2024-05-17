@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 18:08:58 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/17 12:31:57 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ typedef struct s_location
 class	Server
 {
 	private:
-		// uint16_t							_port;
-		// uint16_t							_clientMaxBodySize;
-		std::vector<std::string>			_serverNames;
-		std::map<uint16_t, std::string>		_errorPages;
-		std::map<std::string, t_location>	_locations;
+		void								initErrorPages(void);
 	public:
+		uint16_t							port;
+		uint32_t							clientMaxBodySize;
+		std::vector<std::string>			serverNames;
+		std::map<uint16_t, std::string>		errorPages;
+		std::map<std::string, t_location>	locations;
 		Server(void);
 		~Server(void);
 };
