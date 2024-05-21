@@ -3,19 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/17 16:03:27 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/21 15:56:35 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+t_location&	t_location::operator=(const t_location& original)
+{
+	allowedMethods = original.allowedMethods;
+	cgiExtents = original.cgiExtents;
+	cgiPaths = original.cgiPaths;
+	redirect = original.redirect;
+	root = original.root;
+	index = original.index;
+	autoindex = original.autoindex;
+	return (*this);
+}
+
 Server::Server(void)
 {
-	port = 0;
+	port = 8080;
 	clientMaxBodySize = MB;
+	host = "127.0.0.1";
 	initErrorPages();
 }
 

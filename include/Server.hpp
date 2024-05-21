@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/17 12:31:57 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/21 16:00:34 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ typedef struct s_location
 	std::string					redirect;
 	std::string					root;
 	std::string					index;
-	bool						autoindex = false;
+	bool						autoindex;
+	struct s_location&			operator=(const struct s_location& original);
 }	t_location;
 
 class	Server
@@ -33,6 +34,7 @@ class	Server
 	public:
 		uint16_t							port;
 		uint32_t							clientMaxBodySize;
+		std::string							host;
 		std::vector<std::string>			serverNames;
 		std::map<uint16_t, std::string>		errorPages;
 		std::map<std::string, t_location>	locations;
