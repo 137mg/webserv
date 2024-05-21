@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 17:24:42 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/21 15:51:24 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class ServerManager
 		void	preparePoll(void);
 		void	setUpPoll(void);
 		void	addToPollFds(void);
-		void	delFromPollFds(void);
+		void	delFromPollFds(int i);
 
 		bool	handleClientConnection(void);
 		bool	fileAccess(const std::string &path);

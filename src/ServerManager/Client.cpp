@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/16 15:43:56 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/21 15:49:13 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ bool	ServerManager::handleClientConnection(void)
 			continue;
 		else
 		{
-            request_buffer.append(this->_buffer);
+			request_buffer.append(this->_buffer);
 			if (isRequestComplete(request_buffer))
 			{
 				handleRequest(request_buffer);
 				break;
 			}
 		}
-    }
+	}
 	return true;
 }
 
@@ -50,17 +50,17 @@ int ServerManager::readFromSocket(std::string &outbuffer)
 	{
 		printTimestamp();
 		std::cout << GREEN << "Client socket " << RESET << this->_clientFd << RED << " closed " << RESET << "the connection." << std::endl;
-        return -1;
+		return -1;
 	}
 	else
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-        	return 0;
-        else
+			return 0;
+		else
 		{
-            std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-            return -1;
-        }
+			std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+			return -1;
+		}
 	}
 	return bytes_read;
 }

@@ -81,7 +81,7 @@ void	ServerManager::createSocket(void)
 		throw ServerSocketException();
 	// this allows the socket to reuse a local address even if it is already in use
 	opt = 1;
-    if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 		throw ServerSocketException();
 }
 
@@ -109,15 +109,17 @@ void	ServerManager::run(void)
 	this->addToPollFds();
 	std::cout << "[Server] Accepted new connection on client socket " << this->_clientFd << "." << std::endl;
 	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
-	while (1)
-	{
-		if(!this->handleClientConnection())
-			break;
-	}
-	printTimestamp();
-	std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
-	close(this->_clientFd);
-	return;
+	// while (1)
+	// {
+	// 	if(!this->handleClientConnection())
+	// 		break;
+	// 	std::cout << "In the loop" << std::endl;
+	// }
+	// std::cout << "out of the loop" << std::endl;
+	// printTimestamp();
+	// std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
+	// close(this->_clientFd);
+	// return;
 }
 
 void	ServerManager::preparePoll(void)
@@ -126,7 +128,6 @@ void	ServerManager::preparePoll(void)
 	this->_pollFds = new struct pollfd[5];
 	if (!this->_pollFds)
 		std::cerr << "The problem is here." << std::endl;
-
 	return;
 }
 
@@ -138,7 +139,7 @@ void	ServerManager::setUpPoll(void)
 
 	std::cout << "[Server] Set up poll fd array." << std::endl;
 	while (true) {
-		this->_status = poll(this->_pollFds, this->_pollCount, 1000);
+		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
 		if (this->_status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
 			throw ServerSocketException();
@@ -154,7 +155,14 @@ void	ServerManager::setUpPoll(void)
 			if (this->_pollFds[i].fd == this->_listenFd) {
 				this->run();
 			} else {
-				std::cout << BLUE << "This is where i need the read for." << std::endl;
+					if(!this->handleClientConnection())
+					{
+						close(this->_clientFd);
+						this->delFromPollFds(i);
+						printTimestamp();
+						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
+						break;
+					}
 			}
 		}
 	}
@@ -172,10 +180,12 @@ void	ServerManager::addToPollFds(void)
 
 }
 
-void	ServerManager::delFromPollFds(void)
+void	ServerManager::delFromPollFds(int i)
 {
-
+	this->_pollFds[i] = this->_pollFds[i - 1];
+	this->_pollCount--;
 }
+
 const char*	ServerManager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");

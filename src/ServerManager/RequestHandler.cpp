@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   RequestHandler.cpp                                 :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/16 17:02:55 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   RequestHandler.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/21 10:28:59 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	ServerManager::deleteRequest(std::string file)
 		perror("Error deleting file");
 	}
 	std::string response = serveFile("html/files.html", "200 OK", GREEN);
-    write(this->_clientFd, response.c_str(), response.size());
-    terminalMessage("Server response ", response);
+	write(this->_clientFd, response.c_str(), response.size());
+	terminalMessage("Server response ", response);
 }
 
 void	ServerManager::postRequest(std::string buffer, std::string method)
