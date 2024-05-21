@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:03:56 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/21 16:09:33 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 			request_buffer.append(this->_buffer);
 			if (isRequestComplete(request_buffer))
 			{
-				handleRequest(request_buffer);
+				handleRequest(request_buffer, clientFd);
 				break;
 			}
 		}

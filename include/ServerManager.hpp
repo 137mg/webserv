@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:02:49 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/21 16:10:08 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ class ServerManager
 		void	run(void);
 		void	config(void);
 		void	configFile(const char* filename);
-		void	handleRequest(std::string);
+		void	handleRequest(std::string buffer, int clientFd);
 		void	createSocket(void);
 		void	bindSocket(void);
-		void	getRequest(std::string file);
-		void	deleteRequest(std::string file);
-		void	postRequest(std::string buffer, std::string method);
-		void	terminalMessage(const std::string &s1, const std::string &s2);
+		void	getRequest(std::string file, int clientFd);
+		void	deleteRequest(std::string file, int clientFd);
+		void	postRequest(std::string buffer, std::string method, int clientFd);
+		void	terminalMessage(const std::string &s1, const std::string &s2, int clientFd);
 
 		void	preparePoll(void);
 		void	setUpPoll(void);
