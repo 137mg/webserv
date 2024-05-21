@@ -108,7 +108,9 @@ int	ServerManager::run(void)
 	if (clientFd == -1)
 		throw ClientSocketException();
 	this->addToPollFds(clientFd);
-	std::cout << "[Server] Accepted new connection on client socket " << clientFd << "." << std::endl;
+	std::cout << std::endl;
+	printTimestamp();
+	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
 	fcntl(clientFd, F_SETFL, O_NONBLOCK);
 	return clientFd;
 }
@@ -127,39 +129,36 @@ void	ServerManager::setUpPoll(void)
 	this->_pollFds[0].fd = this->_listenFd;
 	this->_pollFds[0].events = POLLIN;
 	this->_pollCount = 1;
-	int			clientFd;
 
-	std::cout << "[Server] Set up poll fd array." << std::endl;
 	while (true)
 	{
 		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
 		if (this->_status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
 			throw ServerSocketException();
-		} else if (this->_status == 0) {
-			std::cout << "[Server] Waiting..." << std::endl;
-			continue;
 		}
+		else if (this->_status == 0)
+			continue;
 		for (int i = 0; i < this->_pollCount; i++)
 		{
-			if ((this->_pollFds[i].revents & POLLIN) != 0) 
+			if ((this->_pollFds[i].revents & POLLIN))
 			{
-				std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
-				if (this->_pollFds[i].fd == this->_listenFd) 
+				if (this->_pollFds[i].fd == this->_listenFd)
+					this->run();
+				else if (!this->handleClientConnection(this->_pollFds[i].fd))
 				{
-					clientFd = this->run();
+					printTimestamp();
+					std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
+					close(this->_pollFds[i].fd);
+					this->delFromPollFds(i);
 				}
-				else
-				{
-					if(!this->handleClientConnection(this->_pollFds[i].fd))
-					{
-						printTimestamp();
-						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
-						this->delFromPollFds(i);
-						close(this->_pollFds[i].fd);
-
-					}
-				}
+			}
+			else if (this->_pollFds[i].revents & (POLLHUP | POLLERR))
+			{
+				printTimestamp();
+				std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
+				close(this->_pollFds[i].fd);
+				this->delFromPollFds(i);
 			}
 		}
 	}
