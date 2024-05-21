@@ -81,7 +81,7 @@ void	ServerManager::createSocket(void)
 		throw ServerSocketException();
 	// this allows the socket to reuse a local address even if it is already in use
 	opt = 1;
-    if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	if (setsockopt(this->_listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 		throw ServerSocketException();
 }
 
@@ -97,27 +97,20 @@ void	ServerManager::bindSocket(void)
 }
 
 // Keep accepting connections while the ServerManager is running
-void	ServerManager::run(void)
+int	ServerManager::run(void)
 {
 	struct sockaddr_storage	client_addr;
 	socklen_t				addr_size;
+	int						clientFd;
 	
 	addr_size = sizeof(client_addr);
-	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
-	if (this->_clientFd == -1)
+	clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+	if (clientFd == -1)
 		throw ClientSocketException();
-	this->addToPollFds();
-	std::cout << "[Server] Accepted new connection on client socket " << this->_clientFd << "." << std::endl;
-	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
-	while (1)
-	{
-		if(!this->handleClientConnection())
-			break;
-	}
-	printTimestamp();
-	std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
-	close(this->_clientFd);
-	return;
+	this->addToPollFds(clientFd);
+	std::cout << "[Server] Accepted new connection on client socket " << clientFd << "." << std::endl;
+	fcntl(clientFd, F_SETFL, O_NONBLOCK);
+	return clientFd;
 }
 
 void	ServerManager::preparePoll(void)
@@ -126,7 +119,6 @@ void	ServerManager::preparePoll(void)
 	this->_pollFds = new struct pollfd[5];
 	if (!this->_pollFds)
 		std::cerr << "The problem is here." << std::endl;
-
 	return;
 }
 
@@ -135,10 +127,12 @@ void	ServerManager::setUpPoll(void)
 	this->_pollFds[0].fd = this->_listenFd;
 	this->_pollFds[0].events = POLLIN;
 	this->_pollCount = 1;
+	int			clientFd;
 
 	std::cout << "[Server] Set up poll fd array." << std::endl;
-	while (true) {
-		this->_status = poll(this->_pollFds, this->_pollCount, 1000);
+	while (true)
+	{
+		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
 		if (this->_status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
 			throw ServerSocketException();
@@ -146,36 +140,49 @@ void	ServerManager::setUpPoll(void)
 			std::cout << "[Server] Waiting..." << std::endl;
 			continue;
 		}
-		for (int i = 0; i < this->_pollCount; i++) {
-			if ((this->_pollFds[i].revents & POLLIN) != 1) {
-				continue;
-			}
-			std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
-			if (this->_pollFds[i].fd == this->_listenFd) {
-				this->run();
-			} else {
-				std::cout << BLUE << "This is where i need the read for." << std::endl;
+		for (int i = 0; i < this->_pollCount; i++)
+		{
+			if ((this->_pollFds[i].revents & POLLIN) != 0) 
+			{
+				std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
+				if (this->_pollFds[i].fd == this->_listenFd) 
+				{
+					clientFd = this->run();
+				}
+				else
+				{
+					if(!this->handleClientConnection(this->_pollFds[i].fd))
+					{
+						printTimestamp();
+						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
+						this->delFromPollFds(i);
+						close(this->_pollFds[i].fd);
+
+					}
+				}
 			}
 		}
 	}
 }
 
-void	ServerManager::addToPollFds(void)
+void	ServerManager::addToPollFds(int clientFd)
 {
 	if (this->_pollCount == this->_pollSize)
 	{
 		this->_pollSize *= 2;
 	}
-	this->_pollFds[this->_pollCount].fd = this->_clientFd;
+	this->_pollFds[this->_pollCount].fd = clientFd;
 	this->_pollFds[this->_pollCount].events = POLLIN;
 	this->_pollCount++;
 
 }
 
-void	ServerManager::delFromPollFds(void)
+void	ServerManager::delFromPollFds(int i)
 {
-
+	this->_pollFds[i] = this->_pollFds[i - 1];
+	this->_pollCount--;
 }
+
 const char*	ServerManager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");

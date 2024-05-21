@@ -6,32 +6,32 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/16 16:44:33 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/21 16:11:25 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
 // handle the request received from the client
-void	ServerManager::handleRequest(std::string buffer)
+void	ServerManager::handleRequest(std::string buffer, int clientFd)
 {
 	std::vector<std::string>	tokens;
 	std::string					token;
 	std::istringstream			iss(buffer);
 	std::string					requestedPath = parseRequest(buffer);
 
-	terminalMessage("Client request ", buffer);
+	terminalMessage("Client request ", buffer, clientFd);
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(buffer, tokens[0]);
+		postRequest(buffer, tokens[0], clientFd);
 		return ;
 	}
 	if (tokens[0].compare("GET") == 0)
-		this->getRequest(tokens[1]);
+		this->getRequest(tokens[1], clientFd);
 	else if (tokens[0].compare("DELETE") == 0)
-		this->deleteRequest(tokens[1]);
+		this->deleteRequest(tokens[1], clientFd);
 	return;
 }
 
