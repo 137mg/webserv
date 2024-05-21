@@ -1,0 +1,31 @@
+<!DOCTYPE>
+<HTML>
+    <HEAD><TITLE>CGI TEST</TITLE></HEAD>
+    <BODY>
+        <H1> CGI test. </H1>
+        <HR/>
+        <H2>POST to CGI test</H2>
+        <P> This form will send a POST request to a CGI resource, which will return a page with user's input</P>
+        <FORM action="/cgi_test/script.pl" method="post">
+            Write some text here -
+            <INPUT type="text" name="input_one"> <BR/>
+            Write more text here -
+            <INPUT type="text" name="input_two"> <BR/>
+            <INPUT type="submit" name="submit">
+        </FORM><BR/>
+        <H2>GET to CGI test</H2>
+        <P>This form will send a GET requuest to a CGI resource, which will return a page with env. variables printed</P>
+        <FORM action="./get-script.pl" method="get">
+            Write some text here -
+            <INPUT type="text" name="get_input"><BR/>
+            <INPUT type="submit" name="submit-button">
+        </FORM><BR/>
+        <H2>Bad syntax CGI test</H2>
+        <P>Let's test CGI response parser with a call to a malformed CGI script</P>
+        <FORM action="./bad-syntax.pl" method="get">
+            Write some text here -
+            <INPUT type="text" name="get_input"><BR/>
+            <INPUT type="submit" name="submit-button">
+        </FORM>
+    </BODY>
+</HTML>
