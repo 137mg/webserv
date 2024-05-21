@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerManager.hpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/21 15:51:24 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerManager.hpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/05/21 16:02:49 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ class ServerManager
 		void	addToPollFds(void);
 		void	delFromPollFds(int i);
 
-		bool	handleClientConnection(void);
+		bool	handleClientConnection(int clientFd);
 		bool	fileAccess(const std::string &path);
 		bool	isRequestComplete(const std::string &request_buffer);
 
-		int		readFromSocket(std::string &outBuffer);
+		int		readFromSocket(std::string &outbuffer, int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
 		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);

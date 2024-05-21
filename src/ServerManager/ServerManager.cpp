@@ -155,12 +155,12 @@ void	ServerManager::setUpPoll(void)
 			if (this->_pollFds[i].fd == this->_listenFd) {
 				this->run();
 			} else {
-					if(!this->handleClientConnection())
+					if(!this->handleClientConnection(this->_pollFds[i].fd))
 					{
-						close(this->_clientFd);
-						this->delFromPollFds(i);
 						printTimestamp();
-						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_clientFd << std::endl;
+						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
+						close(this->_pollFds[i].fd);
+						this->delFromPollFds(i);
 						break;
 					}
 			}

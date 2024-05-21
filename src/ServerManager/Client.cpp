@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Client.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/21 15:49:13 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Client.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/21 16:03:56 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
 // Handle the connection with a client, reading incoming data and processing requests
-bool	ServerManager::handleClientConnection(void)
+bool	ServerManager::handleClientConnection(int clientFd)
 {
     std::string request_buffer;
 	int			bytes_read;
 
     while (1)
 	{
-		bytes_read = readFromSocket(request_buffer);
+		bytes_read = readFromSocket(request_buffer, clientFd);
         if (bytes_read < 0)
         	return false;
 		else if (bytes_read == 0)
@@ -39,17 +39,17 @@ bool	ServerManager::handleClientConnection(void)
 }
 
 // Read data from the client socket into a buffer
-int ServerManager::readFromSocket(std::string &outbuffer)
+int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
-	int		bytes_read = recv(this->_clientFd, buffer, MESSAGE_BUFFER, 0);
+	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
 	
 	if (bytes_read > 0)
 		outbuffer.append(buffer, bytes_read);
 	else if (bytes_read == 0)
 	{
 		printTimestamp();
-		std::cout << GREEN << "Client socket " << RESET << this->_clientFd << RED << " closed " << RESET << "the connection." << std::endl;
+		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
 		return -1;
 	}
 	else
