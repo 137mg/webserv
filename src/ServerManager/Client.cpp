@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/22 13:43:43 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/22 14:22:04 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,37 @@ bool	ServerManager::handleClientConnection(int clientFd)
     std::string request_buffer;
 	int			bytes_read;
 
-    while (1)
+	bytes_read = readFromSocket(request_buffer, clientFd);
+	if (bytes_read < 0)
+		return false;
+	else if (bytes_read == 0)
+		return true;
+	else
 	{
-		bytes_read = readFromSocket(request_buffer, clientFd);
-        if (bytes_read < 0)
-        	return false;
-		else if (bytes_read == 0)
-			continue;
-		else
+		request_buffer.append(this->_buffer);
+		if (isRequestComplete(request_buffer))
 		{
-			request_buffer.append(this->_buffer);
-			if (isRequestComplete(request_buffer))
-			{
-				handleRequest(request_buffer, clientFd);
-				break;
-			}
+			handleRequest(request_buffer, clientFd);
+			return true;
 		}
 	}
+    // while (1)
+	// {
+	// 	bytes_read = readFromSocket(request_buffer, clientFd);
+    //     if (bytes_read < 0)
+    //     	return false;
+	// 	else if (bytes_read == 0)
+	// 		continue;
+	// 	else
+	// 	{
+	// 		request_buffer.append(this->_buffer);
+	// 		if (isRequestComplete(request_buffer))
+	// 		{
+	// 			handleRequest(request_buffer, clientFd);
+	// 			break;
+	// 		}
+	// 	}
+	// }
 	return true;
 }
 
@@ -42,8 +56,9 @@ bool	ServerManager::handleClientConnection(int clientFd)
 int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
-	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
-
+	int		bytes_read;
+	
+	bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER - 1, 0);
 	if (bytes_read <= 0)
 	{
 		if (bytes_read == -1)
