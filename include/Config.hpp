@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/21 17:47:36 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:23:36 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ class	Config
 {
 	private:
 		std::string			_fileContent;
-		t_location			_defaultLocation;
-		size_t				findOpenBracket(size_t begin);
-		size_t				findCloseBracket(size_t begin);
-		void				addServer(size_t begin, size_t end);
+		std::vector<Server>	_servers;
 	public:
-		std::vector<Server>	vServers;
 		Config(const char* filename);
 		~Config(void);
 		void				parseFile(void);

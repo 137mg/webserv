@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/21 15:56:35 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:38:03 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 t_location&	t_location::operator=(const t_location& original)
 {
+	autoindex = original.autoindex;
+	match = original.match;
+	root = original.root;
+	index = original.index;
+	redirect = original.redirect;
 	allowedMethods = original.allowedMethods;
 	cgiExtents = original.cgiExtents;
 	cgiPaths = original.cgiPaths;
-	redirect = original.redirect;
-	root = original.root;
-	index = original.index;
-	autoindex = original.autoindex;
 	return (*this);
 }
 
@@ -29,11 +30,20 @@ Server::Server(void)
 	port = 8080;
 	clientMaxBodySize = MB;
 	host = "127.0.0.1";
+	initDefaultLocation();
 	initErrorPages();
 }
 
 Server::~Server(void)
 {
+}
+
+void	Server::initDefaultLocation(void)
+{
+	defaultLocation.autoindex = false;
+	defaultLocation.match = "/";
+	defaultLocation.root = "html/";
+	defaultLocation.index = "home.html";
 }
 
 void	Server::initErrorPages(void)

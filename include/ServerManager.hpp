@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/16 22:22:00 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/22 16:27:21 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ void	printTimestamp(void);
 #define MESSAGE_BUFFER 40000
 #define PORT 8080
 #define MB 1048576
-#define DEFAULT_PATH "default.conf"
+#define DEFAULT_PATH "config_files/default.conf"
 
 #endif
