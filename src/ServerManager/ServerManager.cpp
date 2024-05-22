@@ -21,13 +21,14 @@ ServerManager::ServerManager(void)
 	this->_listenFd = -1;
 	this->_clientMaxBodySize = 1;
 	this->_autoIndex = false;
-//	this->_pollFds = new struct pollfd[5];
+	this->_pollFds = new struct pollfd[5];
 	this->_pollCount = 5;
 	this->_pollSize = 0;
 }
 
 ServerManager::~ServerManager(void)
 {
+	delete this->_pollFds;
 	if (this->_listenFd != -1)
 		close(this->_listenFd);
 }
@@ -125,7 +126,7 @@ void	ServerManager::run(void)
 void	ServerManager::preparePoll(void)
 {
 	this->_pollSize = 5;
-	this->_pollFds = new struct pollfd[5];
+	//this->_pollFds = new struct pollfd[5];
 	if (!this->_pollFds)
 		std::cerr << "The problem is here." << std::endl;
 	return;
@@ -138,7 +139,8 @@ void	ServerManager::setUpPoll(void)
 	this->_pollCount = 1;
 
 	std::cout << "[Server] Set up poll fd array." << std::endl;
-	while (true) {
+	while (true)
+	{
 		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
 		if (this->_status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
@@ -148,6 +150,7 @@ void	ServerManager::setUpPoll(void)
 			continue;
 		}
 		for (int i = 0; i < this->_pollCount; i++) {
+			std::cout << "this is the this->_pollCount = " << this->_pollCount  << " and i = " << i << std::endl;
 			if ((this->_pollFds[i].revents & POLLIN) != 1) {
 				continue;
 			}
@@ -174,6 +177,7 @@ void	ServerManager::addToPollFds(void)
 	{
 		this->_pollSize *= 2;
 	}
+	std::cout << "this is the this->_pollCount = " << this->_pollCount << std::endl;
 	this->_pollFds[this->_pollCount].fd = this->_clientFd;
 	this->_pollFds[this->_pollCount].events = POLLIN;
 	this->_pollCount++;
@@ -182,7 +186,8 @@ void	ServerManager::addToPollFds(void)
 
 void	ServerManager::delFromPollFds(int i)
 {
-	this->_pollFds[i] = this->_pollFds[i - 1];
+	//std::cout << RED << "this is i = " << i  << "and the fd = " << this->_pollFds[i].fd << std::endl;
+	this->_pollFds[i] = this->_pollFds[this->_pollCount - 1];
 	this->_pollCount--;
 }
 
