@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:38:53 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/22 13:43:43 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,14 @@ int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
 	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
-	
-	if (bytes_read > 0)
-		outbuffer.append(buffer, bytes_read);
-	else if (bytes_read == 0)
+
+	if (bytes_read <= 0)
 	{
-		printTimestamp();
-		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
+		if (bytes_read == -1)
+			std::cerr << RED << BOLD << "recv: reading error " << std::strerror(errno) << RESET << std::endl;
 		return -1;
 	}
-	else
-	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return 0;
-		else
-		{
-			std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-			return -1;
-		}
-	}
+	outbuffer.append(buffer, bytes_read);
 	return bytes_read;
 }
 
