@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/23 12:47:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/23 12:48:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
 	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
-	// int flags = fcntl(clientFd, F_GETFL, 0);
 	
 	if (bytes_read > 0)
 		outbuffer.append(buffer, bytes_read);
