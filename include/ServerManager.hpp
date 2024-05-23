@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/22 16:27:21 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:35:35 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <cerrno>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
