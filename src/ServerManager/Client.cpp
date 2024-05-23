@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/22 11:04:08 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:58:30 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,37 @@ bool	ServerManager::handleClientConnection(int clientFd)
 // Read data from the client socket into a buffer
 int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
-	char	buffer[MESSAGE_BUFFER];
+	char	buffer[MESSAGE_BUFFER] = {0};
 	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
 	
 	if (bytes_read > 0)
 		outbuffer.append(buffer, bytes_read);
-	else if (bytes_read == 0)
+	if (bytes_read == -1)
 	{
-		printTimestamp();
-		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
+		std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+		return 0;
+	}
+	if (bytes_read <= 0)
+	{
+		close(clientFd);
 		return -1;
 	}
-	else
-	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return 0;
-		else
-		{
-			std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-			return -1;
-		}
-	}
+	// else if (bytes_read == 0)
+	// {
+	// 	printTimestamp();
+	// 	std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
+	// 	return -1;
+	// }
+	// else
+	// {
+	// 	if (errno == EAGAIN || errno == EWOULDBLOCK)
+	// 		return 0;
+	// 	else
+	// 	{
+	// 		std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
+	// 		return -1;
+	// 	}
+	// }
 	return bytes_read;
 }
 
