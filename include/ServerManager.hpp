@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/22 11:45:07 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/23 14:32:57 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ class ServerManager
 
 void	printTimestamp(void);
 
-#define MESSAGE_BUFFER 40000
+#define MESSAGE_BUFFER 8000
 #define PORT 8080
 #define DEFAULT_PATH "default.conf"
 

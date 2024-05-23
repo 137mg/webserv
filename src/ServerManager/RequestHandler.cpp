@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:10:41 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/23 14:32:18 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	ServerManager::postRequest(std::string buffer, std::string method, int clie
 {
     CGI cgi;
 	
+	exit(1);
     cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"), method);
     cgi.convertVector();
     cgi.executeScript(buffer);

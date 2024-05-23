@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/23 13:27:45 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/23 14:34:07 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 
     while (1)
 	{
+		std::cout << "Reading..." << std::endl;
 		bytes_read = readFromSocket(request_buffer, clientFd);
         if (bytes_read < 0)
         	return false;
@@ -27,13 +28,14 @@ bool	ServerManager::handleClientConnection(int clientFd)
 			continue;
 		else
 		{
-			request_buffer.append(this->_buffer);
 			if (isRequestComplete(request_buffer))
 			{
 				handleRequest(request_buffer, clientFd);
 				break;
 			}
 		}
+		// std::cout << request_buffer << std::endl;
+		// exit(1);
 	}
 	return true;
 }
