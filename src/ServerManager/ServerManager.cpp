@@ -147,11 +147,11 @@ void	ServerManager::setUpPoll(void)
 	std::cout << "[Server] Set up poll fd array." << std::endl;
 	while (true)
 	{
-		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
-		if (this->_status == -1) {
+		status = poll(this->_pollFds, this->_pollCount, 2000);
+		if (status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
 			throw ServerSocketException();
-		} else if (this->_status == 0) {
+		} else if (status == 0) {
 			std::cout << "[Server] Waiting..." << std::endl;
 			continue;
 		}

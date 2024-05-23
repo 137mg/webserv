@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/23 14:44:24 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:39:31 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ class ServerManager
 
 		char _buffer[MESSAGE_BUFFER];
 		std::map<int, std::string> clientBuffers;
-
-		int 				_status;
 
 	public:
 		ServerManager();

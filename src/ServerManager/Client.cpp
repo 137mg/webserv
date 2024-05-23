@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/23 14:41:33 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:50:59 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,25 @@
 // 	}
 // 	return true;
 // }
+
 bool ServerManager::handleClientConnection(int clientFd)
 {
-    int bytes_read = recv(clientFd, this->_buffer, MESSAGE_BUFFER, 0);
-    if (bytes_read > 0) {
-        this->clientBuffers[clientFd].append(this->_buffer, bytes_read);
-        if (isRequestComplete(this->clientBuffers[clientFd])) {
-            handleRequest(this->clientBuffers[clientFd], clientFd);
-            this->clientBuffers[clientFd].clear(); // Clear the buffer for the next request
-        }
-        return true;
-    } else if (bytes_read == 0) {
-        // Client closed connection
-        return false;
-    }
-    // For non-blocking sockets, a return value of -1 with no error check means we continue polling
-    return true;
+	int bytes_read = recv(clientFd, this->_buffer, MESSAGE_BUFFER, 0);
+	if (bytes_read > 0) {
+		this->clientBuffers[clientFd].append(this->_buffer, bytes_read);
+		if (isRequestComplete(this->clientBuffers[clientFd])) {
+			handleRequest(this->clientBuffers[clientFd], clientFd);
+			this->clientBuffers[clientFd].clear(); // Clear the buffer for the next request
+		}
+		return true;
+	} else if (bytes_read == 0) {
+		// Client closed connection
+		return false;
+	}
+	// For non-blocking sockets, a return value of -1 with no error check means we continue polling
+	return true;
 }
+
 // Read data from the client socket into a buffer
 int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
 {
