@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerManager.hpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:10:08 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerManager.hpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/05/23 14:44:24 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
-#include <vector>
-
+#include <map>
 #include "colors.h"
+
+#define MESSAGE_BUFFER 4096
 
 class ServerManager
 {
@@ -44,13 +45,16 @@ class ServerManager
 		std::string			_index;
 		bool				_autoIndex;
 		struct sockaddr_in	_ServerAddress;
-		std::string			_buffer;
+		//std::string			_buffer;
 		size_t				_requestSize;
 
 		struct pollfd		*_pollFds;
 		int					_pollSize;
 		int 				_pollCount;
 		// location && error pages
+
+		char _buffer[MESSAGE_BUFFER];
+		std::map<int, std::string> clientBuffers;
 
 		int 				_status;
 
@@ -102,8 +106,9 @@ class ServerManager
 
 void	printTimestamp(void);
 
-#define MESSAGE_BUFFER 40000
+// #define MESSAGE_BUFFER 40000
 #define PORT 8080
 #define DEFAULT_PATH "default.conf"
+// #define MESSAGE_BUFFER 4096
 
 #endif

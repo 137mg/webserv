@@ -104,12 +104,18 @@ void	ServerManager::run(void)
 	socklen_t				addr_size;
 	
 	addr_size = sizeof(client_addr);
-	this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+	//this->_clientFd = accept(this->_listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
+	this->_clientFd = accept(this->_listenFd, nullptr, nullptr);
 	if (this->_clientFd == -1)
 		throw ClientSocketException();
+	
+    // Set clientFd to non-blocking
+    int flags = fcntl(this->_clientFd, F_GETFL, 0);
+    fcntl(this->_clientFd, F_SETFL, flags | O_NONBLOCK);
+
 	this->addToPollFds();
 	std::cout << "[Server] Accepted new connection on client socket " << this->_clientFd << "." << std::endl;
-	fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
+	// fcntl(this->_clientFd, F_SETFL, O_NONBLOCK);
 	// while (1)
 	// {
 	// 	if(!this->handleClientConnection())
@@ -151,19 +157,21 @@ void	ServerManager::setUpPoll(void)
 		}
 		for (int i = 0; i < this->_pollCount; i++) {
 			std::cout << "this is the this->_pollCount = " << this->_pollCount  << " and i = " << i << std::endl;
-			if ((this->_pollFds[i].revents & POLLIN) != 1) {
+			if ((this->_pollFds[i].revents & POLLIN) == 0) {
 				continue;
 			}
 			std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
 			if (this->_pollFds[i].fd == this->_listenFd) {
 				this->run();
 			} else {
-					if(!this->handleClientConnection(this->_pollFds[i].fd))
+					int clientFd = this->_pollFds[i].fd;
+					if(!this->handleClientConnection(clientFd))
 					{
 						printTimestamp();
-						std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
-						close(this->_pollFds[i].fd);
+						std::cout << RED << "Closing " << RESET << "client socket " << RESET << clientFd << std::endl;
+						close(clientFd);
 						this->delFromPollFds(i);
+						this->clientBuffers.erase(clientFd);
 						break;
 					}
 			}
