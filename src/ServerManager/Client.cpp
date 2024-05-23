@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/23 12:48:38 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/23 13:27:45 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,6 @@ bool	ServerManager::handleClientConnection(int clientFd)
     std::string request_buffer;
 	int			bytes_read;
 
-	// bytes_read = readFromSocket(request_buffer, clientFd);
-	// if (bytes_read < 0)
-	// 	return false;
-	// else if (bytes_read == 0)
-	// 	return true;
-	// else
-	// {
-	// 	request_buffer.append(this->_buffer);
-	// 	if (isRequestComplete(request_buffer))
-	// 	{
-	// 		handleRequest(request_buffer, clientFd);
-	// 		return true;
-	// 	}
-	// }
     while (1)
 	{
 		bytes_read = readFromSocket(request_buffer, clientFd);
