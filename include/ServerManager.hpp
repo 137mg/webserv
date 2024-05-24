@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/23 14:32:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/24 21:15:31 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,31 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <vector>
+#include <map>
 
 #include "colors.h"
 
 class ServerManager
 {
 	private:
-		uint16_t			_port;
-		int					_listenFd;
-		int					_clientFd;
-		int					_clientMaxBodySize;
-		std::string			_ServerName;
-		std::string			_root;
-		std::string			_index;
-		bool				_autoIndex;
-		struct sockaddr_in	_ServerAddress;
-		std::string			_buffer;
-		size_t				_requestSize;
+		uint16_t					_port;
+		int							_listenFd;
+		int							_clientFd;
+		int							_clientMaxBodySize;
+		std::string					_ServerName;
+		std::string					_root;
+		std::string					_index;
+		bool						_autoIndex;
+		struct sockaddr_in			_ServerAddress;
+		std::string					_buffer;
+		size_t						_requestSize;
 
-		struct pollfd		*_pollFds;
-		int					_pollSize;
-		int 				_pollCount;
-		// location && error pages
-
-		int 				_status;
+		struct pollfd				*_pollFds;
+		int							_pollSize;
+		int 						_pollCount;
+		
+		std::map<int, std::string>	_clientBuffers;
+		int 						_status;
 
 	public:
 		ServerManager();
@@ -76,7 +77,7 @@ class ServerManager
 		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
 
-		bool	handleClientConnection(int clientFd);
+		void	handleClientConnection(int clientFd);
 		bool	fileAccess(const std::string &path);
 		bool	isRequestComplete(const std::string &request_buffer);
 
@@ -102,7 +103,7 @@ class ServerManager
 
 void	printTimestamp(void);
 
-#define MESSAGE_BUFFER 8000
+#define MESSAGE_BUFFER 4096
 #define PORT 8080
 #define DEFAULT_PATH "default.conf"
 
