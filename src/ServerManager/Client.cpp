@@ -6,14 +6,14 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/24 23:27:08 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/24 23:50:01 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
 // Handle the connection with a client, reading incoming data and processing requests
-void	ServerManager::handleClientConnection(int clientFd)
+bool	ServerManager::handleClientConnection(int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
 	int		bytes_read;
@@ -24,12 +24,12 @@ void	ServerManager::handleClientConnection(int clientFd)
 		printTimestamp();
 		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
 		this->_clientBuffers.erase(clientFd);
-		return;
+		return false;
 	}
 	else if (bytes_read < 0)
 	{
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
-		return;
+		return false;
 	}
 	else
 	{
@@ -43,6 +43,7 @@ void	ServerManager::handleClientConnection(int clientFd)
 			this->_clientBuffers.erase(clientFd);
 		}
 	}
+	return true;
 }
 
 bool ServerManager::isRequestComplete(const std::string &request_buffer)

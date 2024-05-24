@@ -146,7 +146,13 @@ void	ServerManager::setUpPoll(void)
 				if (this->_pollFds[i].fd == this->_listenFd)
 					this->run();
 				else
-					this->handleClientConnection(this->_pollFds[i].fd);
+				{
+					if (!this->handleClientConnection(this->_pollFds[i].fd))
+					{
+						this->delFromPollFds(i);
+						break;
+					}
+				}
 			}
 			else if (this->_pollFds[i].revents & (POLLHUP | POLLERR))
 			{

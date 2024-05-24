@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/24 21:15:31 by Julia         ########   odam.nl         */
+/*   Updated: 2024/05/24 23:49:46 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class ServerManager
 		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
 
-		void	handleClientConnection(int clientFd);
+		bool	handleClientConnection(int clientFd);
 		bool	fileAccess(const std::string &path);
 		bool	isRequestComplete(const std::string &request_buffer);
 
