@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:59:10 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/23 15:09:22 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/24 19:23:07 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,57 +35,138 @@ static bool	isWhitespace(char c)
 	return (false);
 }
 
-void	Config::removeWhitespace(std::string& line)
+void	Config::removeWhitespace(void)
 {
 	std::string::iterator	it;
 	std::string::iterator	ite;
 
-	it = line.begin();
-	ite = line.end();
+	it = _line.begin();
+	ite = _line.end();
 	ite = remove_if(it, ite, isWhitespace);
-	line.resize(ite - it);
+	_line.resize(ite - it);
 }
 
 void	Config::parseFile(void)
 {
-	getline(_ifs, _line);
-	while (!_ifs.eof())
+	for (getline(_ifs, _line); !_ifs.eof(); getline(_ifs, _line))
 	{
-		removeWhitespace(_line);
-		if (_line == "[[server]]")
-		{
-			addServer();
+		removeWhitespace();
+		if (!_line.empty())
 			break;
-		}
-		else if (!_line.empty())
-			throw ConfigFileException();
-		getline(_ifs, _line);
 	}
-	removeWhitespace(_line);
-	if (!_line.empty() || _servers.empty())
+	if (_line == "[[server]]")
+		addServer();
+	else
 		throw ConfigFileException();
+}
+
+bool	Config::newTable(Server& server)
+{
+	if (_line[0] != '[')
+		return (false);
+	if (_line == "[[server]]")
+	{
+		addServer();
+		return (true);
+	}
+	if (_line == "[server.error_pages]")
+	{
+		addErrorPages(server);
+		return (true);
+	}
+	if (_line == "[[server.location]]")
+	{
+		addLocation(server);
+		return (true);
+	}
+	throw ConfigFileException();
+	return (false);
 }
 
 void	Config::addServer(void)
 {
-	Server		server;
+	Server	server;
 
-	getline(_ifs, _line);
-	while (!_ifs.eof())
+	for (getline(_ifs, _line);
+		!(_ifs.eof() && _line.empty()); getline(_ifs, _line))
 	{
-		removeWhitespace(_line);
-		if (_line == "[[server]]")
-		{
-			addServer();
+		removeWhitespace();
+		if (_line.empty())
+			continue;
+		if (newTable(server))
 			break;
-		}
-		getline(_ifs, _line);
+		updateServer(server);
 	}
-	// server.checkServer();
+	if (!server.checkServer())
+		throw ConfigFileException();
+	servers.push_front(server);
 }
 
-void	Config::addLocation(void)
+void	Config::addErrorPages(Server& server)
 {
+	for (getline(_ifs, _line);
+		!(_ifs.eof() && _line.empty()); getline(_ifs, _line))
+	{
+		removeWhitespace();
+		if (_line.empty())
+			continue;
+		if (newTable(server))
+			break;
+		updateErrorPages(server);
+	}
+}
+
+void	Config::addLocation(Server& server)
+{
+	t_location	location;
+
+	location = server.defaultLocation;
+	for (getline(_ifs, _line);
+		!(_ifs.eof() && _line.empty()); getline(_ifs, _line))
+	{
+		removeWhitespace();
+		if (_line.empty())
+			continue;
+		if (newTable(server))
+			break;
+		updateLocation(location);
+	}
+	server.locations.push_front(location);
+}
+
+void	Config::updateServer(Server& server)
+{
+	// parsing
+	updateLocation(server.defaultLocation);
+}
+
+void	Config::updateErrorPages(Server& server)
+{
+	size_t		i;
+	int			tmp;
+	uint16_t	code;
+	std::string	key;
+	std::string	value;
+
+	i = _line.find('=');
+	if (i != 3)
+		throw ConfigFileException();
+	key = _line.substr(0, i);
+	value = _line.substr(i + 1);
+	// check access value?
+	tmp = stoi(key);
+	if (tmp < 0 || tmp > 65535)
+		throw ConfigFileException();
+	code = static_cast<uint16_t>(tmp);
+	if (server.errorPages.count(code) == 0)
+		throw ConfigFileException();
+	server.errorPages[code] = value;
+}
+
+void	Config::updateLocation(t_location& location)
+{
+	// parsing
+	(void)location;
 }
 
 const char*	Config::ConfigFileException::what(void) const throw()

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/22 15:34:47 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/24 19:10:36 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_location
 	std::vector<std::string>	allowedMethods;
 	std::vector<std::string>	cgiExtents;
 	std::vector<std::string>	cgiPaths;
-	struct s_location&			operator=(const struct s_location& original);
+	// struct s_location&			operator=(const struct s_location& original);
 }	t_location;
 
 class	Server
@@ -39,10 +39,13 @@ class	Server
 		std::string							host;
 		t_location							defaultLocation;
 		std::vector<std::string>			serverNames;
-		std::vector<t_location>				locations;
+		std::deque<t_location>				locations;
 		std::map<uint16_t, std::string>		errorPages;
 		Server(void);
+		Server(const Server& original);
 		~Server(void);
+		Server&								operator=(const Server& original);
+		bool								checkServer(void);
 };
 
 #endif

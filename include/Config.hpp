@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/23 14:47:21 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:50:34 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,19 @@ class	Config
 	private:
 		std::string			_line;
 		std::ifstream		_ifs;
-		std::vector<Server>	_servers;
+		void				removeWhitespace(void);
+		bool				newTable(Server& server);
+		void				addServer(void);
+		void				addErrorPages(Server& server);
+		void				addLocation(Server& server);
+		void				updateServer(Server& server);
+		void				updateErrorPages(Server& server);
+		void				updateLocation(t_location& location);
 	public:
+		std::deque<Server>	servers;
 		Config(const char* filename);
 		~Config(void);
-		void				removeWhitespace(std::string& line);
 		void				parseFile(void);
-		void				addServer(void);
-		void				addLocation(void);
 		class				ConfigFileException : public std::exception
 		{
 			public:

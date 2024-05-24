@@ -1,26 +1,27 @@
 [[server]]
 
-listen =				8080
-host =					127.0.0.1
-server_names =			localhost
-client_max_body_size =	1M
-auto_index =			false
-cgi_paths =				/usr/bin/python3
-cgi_extents =			.py
+listen =				"8080"
+host =					"127.0.0.1"
+server_names =			"localhost"
+client_max_body_size =	"1M"
+auto_index =			"false"
+cgi_paths =				"/usr/bin/python3"
+cgi_extents =			".py"
 
 	[server.error_pages]
-	404 =				html/PageNotFound.html
+
+	404 =				"html/PageNotFound.html"
 
 	[[server.location]]
 
-	match =				/
-	allowed_methods =	[GET, DELETE]
-	root =				html/
-	index =				home.html
+	match =				"/"
+	allowed_methods =	["GET", "DELETE"]
+	root =				"html/"
+	index =				"home.html"
 
 	[[server.location]]
 
-	match =				/cgi-bin
-	allowed_methods =	POST
-	root =				cgi-bin/
-	index =				upload.py
+	match =				"/cgi-bin"
+	allowed_methods =	"POST"
+	root =				"cgi-bin/"
+	index =				"upload.py"
