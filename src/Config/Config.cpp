@@ -6,7 +6,7 @@
 /*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:59:10 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/24 19:23:07 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/25 12:39:50 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,6 @@ Config::Config(const char* filename) : _ifs(filename)
 Config::~Config(void)
 {
 	_ifs.close();
-}
-
-static bool	isWhitespace(char c)
-{
-	if (std::isspace(c))
-		return (true);
-	return (false);
-}
-
-void	Config::removeWhitespace(void)
-{
-	std::string::iterator	it;
-	std::string::iterator	ite;
-
-	it = _line.begin();
-	ite = _line.end();
-	ite = remove_if(it, ite, isWhitespace);
-	_line.resize(ite - it);
 }
 
 void	Config::parseFile(void)
@@ -95,6 +77,7 @@ void	Config::addServer(void)
 			continue;
 		if (newTable(server))
 			break;
+		parseLine();
 		updateServer(server);
 	}
 	if (!server.checkServer())
@@ -112,6 +95,7 @@ void	Config::addErrorPages(Server& server)
 			continue;
 		if (newTable(server))
 			break;
+		parseLine();
 		updateErrorPages(server);
 	}
 }
@@ -129,44 +113,10 @@ void	Config::addLocation(Server& server)
 			continue;
 		if (newTable(server))
 			break;
+		parseLine();
 		updateLocation(location);
 	}
 	server.locations.push_front(location);
-}
-
-void	Config::updateServer(Server& server)
-{
-	// parsing
-	updateLocation(server.defaultLocation);
-}
-
-void	Config::updateErrorPages(Server& server)
-{
-	size_t		i;
-	int			tmp;
-	uint16_t	code;
-	std::string	key;
-	std::string	value;
-
-	i = _line.find('=');
-	if (i != 3)
-		throw ConfigFileException();
-	key = _line.substr(0, i);
-	value = _line.substr(i + 1);
-	// check access value?
-	tmp = stoi(key);
-	if (tmp < 0 || tmp > 65535)
-		throw ConfigFileException();
-	code = static_cast<uint16_t>(tmp);
-	if (server.errorPages.count(code) == 0)
-		throw ConfigFileException();
-	server.errorPages[code] = value;
-}
-
-void	Config::updateLocation(t_location& location)
-{
-	// parsing
-	(void)location;
 }
 
 const char*	Config::ConfigFileException::what(void) const throw()

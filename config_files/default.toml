@@ -3,10 +3,10 @@
 listen =				"8080"
 host =					"127.0.0.1"
 server_names =			"localhost"
-client_max_body_size =	"1M"
+client_max_body_size =	"1MB"
 auto_index =			"false"
-cgi_paths =				"/usr/bin/python3"
 cgi_extents =			".py"
+cgi_paths =				"/usr/bin/python3"
 
 	[server.error_pages]
 

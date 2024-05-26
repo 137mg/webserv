@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
+#    By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/05/16 17:14:45 by mgoedkoo         ###   ########.fr        #
+#    Updated: 2024/05/26 00:07:50 by mirjam           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGI.cpp							\
 		src/CGI/showUploads.cpp					\
 		src/Config/Config.cpp					\
+		src/Config/ConfigUpdate.cpp				\
+		src/Config/ConfigUtils.cpp				\
 		src/Config/Server.cpp					\
 		src/ServerManager/ConfigFile.cpp		\
 		src/ServerManager/RequestHandler.cpp	\

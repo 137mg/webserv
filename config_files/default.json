@@ -7,8 +7,8 @@
 		"client_max_body_size":	"1M",
 		"error_pages":			{"404":"html/PageNotFound.html"},
 		"auto_index":			"false",
-		"cgi_paths":			"/usr/bin/python3",
 		"cgi_extents":			".py",
+		"cgi_paths":			"/usr/bin/python3",
 		"locations":
 		[
 			{

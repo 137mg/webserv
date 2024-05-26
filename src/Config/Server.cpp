@@ -6,7 +6,7 @@
 /*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/24 19:14:26 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/26 18:06:37 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,51 @@ bool	Server::checkServer(void)
 	std::deque<t_location>::iterator	it2;
 	std::deque<t_location>::iterator	ite;
 
+	if (port == 0)
+		return (false);
+	if (locations.empty())
+		locations.push_back(defaultLocation);
 	ite = locations.end();
 	for (it1 = locations.begin(); it1 != ite; it1++)
 	{
+		if (!checkLocation(*it1))
+			return (false);
 		for (it2 = locations.begin(); it2 != ite; it2++)
 		{
 			if (it1->match == it2->match)
 				return (false);
 		}
 	}
-	if (locations.empty())
-		locations.push_back(defaultLocation);
+	return (true);
+}
+
+bool	Server::checkLocation(t_location location)
+{
+	std::string	path;
+	size_t		size;
+
+	if (location.match[0] != '/')
+		return (false);
+	path = location.root + location.index;
+	if (access(path.c_str(), R_OK) == -1)
+		return (false);
+	size = location.allowedMethods.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		if (!(location.allowedMethods[i] == "GET"
+			|| location.allowedMethods[i] == "POST"
+			|| location.allowedMethods[i] == "DELETE"))
+			return (false);
+	}
+	if (location.cgiExtents.size() != location.cgiPaths.size())
+		return (false);
+	size = location.cgiExtents.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		if (location.cgiExtents[i][0] != '.')
+			return (false);
+		if (access(location.cgiPaths[i].c_str(), X_OK) == -1)
+			return (false);
+	}
 	return (true);
 }
