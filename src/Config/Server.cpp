@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 15:47:22 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:38:10 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,22 @@ void	Server::initErrorPages(void)
 
 bool	Server::checkServer(void)
 {
-	std::deque<t_location>::iterator	it1;
-	std::deque<t_location>::iterator	it2;
-	std::deque<t_location>::iterator	ite;
+	size_t	size;
 
 	if (port == 0)
 		return (false);
+	if (clientMaxBodySize == 0 || clientMaxBodySize > MB * 10)
+		return (false);
 	if (locations.empty())
 		locations.push_back(defaultLocation);
-	ite = locations.end();
-	for (it1 = locations.begin(); it1 != ite; it1++)
+	size = locations.size();
+	for (size_t i = 0; i < size; i++)
 	{
-		if (!checkLocation(*it1))
+		if (!checkLocation(locations[i]))
 			return (false);
-		for (it2 = locations.begin(); it2 != ite; it2++)
+		for (size_t j = 0; j < size; j++)
 		{
-			if (it1 != it2 && it1->match == it2->match)
+			if (i != j && locations[i].match == locations[j].match)
 				return (false);
 		}
 	}

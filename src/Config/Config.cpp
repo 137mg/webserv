@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:59:10 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 16:20:23 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:25:13 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ Config::~Config(void)
 
 void	Config::parseFile(void)
 {
-	size_t	size;
-
 	for (getline(_ifs, _line); !_ifs.eof(); getline(_ifs, _line))
 	{
 		removeWhitespace();
@@ -48,18 +46,10 @@ void	Config::parseFile(void)
 	removeWhitespace();
 	if (!_line.empty() || servers.empty())
 		throw ConfigFileException();
-	size = servers.size();
-	for (size_t i = 0; i < size; i++)
-	{
-		if (!servers[i].checkServer())
-			throw ConfigFileException();
-	}
 }
 
 bool	Config::newTable(Server& server)
 {
-	if (_line[0] != '[')
-		return (false);
 	if (_line == "[[server]]")
 	{
 		addServer();
@@ -75,7 +65,6 @@ bool	Config::newTable(Server& server)
 		addLocation(server);
 		return (true);
 	}
-	throw ConfigFileException();
 	return (false);
 }
 
@@ -93,6 +82,8 @@ void	Config::addServer(void)
 		parseLine();
 		updateServer(server);
 	}
+	if (!server.checkServer())
+		throw ConfigFileException();
 	servers.push_front(server);
 }
 

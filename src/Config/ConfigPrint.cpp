@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigPrint.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:39:49 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 15:43:02 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:42:50 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,21 @@ static void	printLocation(t_location& location)
 
 static void	printServer(Server& server)
 {
-	std::deque<t_location>::iterator	it;
-	std::deque<t_location>::iterator	ite;
-	size_t								size;
+	size_t	size;
 
-	std::cout << server.port << std::endl;
-	std::cout << server.clientMaxBodySize << std::endl;
-	std::cout << server.host << std::endl;
+	std::cout << "port: " << server.port << std::endl;
+	std::cout << "client max body size: " << server.clientMaxBodySize << std::endl;
+	std::cout << "host: " << server.host << std::endl;
+	std::cout << "server names:" << std::endl;
 	size = server.serverNames.size();
-		for (size_t i = 0; i < size; i++)
-			std::cout << server.serverNames[i] << std::endl;
+	for (size_t i = 0; i < size; i++)
+		std::cout << server.serverNames[i] << std::endl;
 	std::cout << std::endl;
-	ite = server.locations.end();
-	for (it = server.locations.begin(); it != ite; it++)
+	size = server.locations.size();
+	for (size_t i = 0; i < size; i++)
 	{
 		std::cout << "---- LOCATION ----" << std::endl;
-		printLocation(*it);
+		printLocation(server.locations[i]);
 		std::cout << std::endl;
 	}
 }
