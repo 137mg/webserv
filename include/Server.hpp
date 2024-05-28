@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 15:47:11 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:31:27 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ typedef struct s_location
 	std::vector<std::string>	cgiPaths;
 }	t_location;
 
-// - check host?
-// - set limit to client_max_body_size
-// - figure out redirects
-// - figure out cgi extents + paths
-// - add "PUT" method?
+// + check host?
+// + figure out redirects
+// + add "PUT" method?
 
 class	Server
 {

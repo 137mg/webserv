@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:36:34 by mirjam            #+#    #+#             */
-/*   Updated: 2024/05/28 15:25:30 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:52:00 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	Config::updateServer(Server& server)
 			server.port = u16;
 		else
 		{
+			if (u16 > 10)
+				throw ConfigFileException();
 			u32 = MB * u16;
 			server.clientMaxBodySize = u32;
 		}
