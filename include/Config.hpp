@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/26 17:05:27 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:43:17 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class	Config
 		Config(const char* filename);
 		~Config(void);
 		void						parseFile(void);
+		void						printServers(void);
 		class						ConfigFileException : public std::exception
 		{
 			public:

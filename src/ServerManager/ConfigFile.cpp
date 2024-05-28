@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigFile.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 17:42:09 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/24 17:58:46 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:42:50 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	ServerManager::configFile(const char* filename)
 	errno = EINVAL;
 	Config	config(filename);
 	config.parseFile();
+	config.printServers();
 	// add servers to ServerManager
 	errno = 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/26 18:06:12 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:47:11 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef struct s_location
 {
-	bool						autoindex;
+	bool						autoIndex;
 	std::string					match;
 	std::string					root;
 	std::string					index;
@@ -25,14 +25,13 @@ typedef struct s_location
 	std::vector<std::string>	allowedMethods;
 	std::vector<std::string>	cgiExtents;
 	std::vector<std::string>	cgiPaths;
-	// struct s_location&			operator=(const struct s_location& original);
 }	t_location;
 
-// 1) check host?
-// 2) set limit to client_max_body_size
-// 3) figure out redirects
-// 4) figure out cgi extents + paths
-// 5) add "PUT" method?
+// - check host?
+// - set limit to client_max_body_size
+// - figure out redirects
+// - figure out cgi extents + paths
+// - add "PUT" method?
 
 class	Server
 {

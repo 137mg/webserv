@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/26 18:06:37 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:47:22 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
-// t_location&	t_location::operator=(const t_location& original)
-// {
-// 	autoindex = original.autoindex;
-// 	match = original.match;
-// 	root = original.root;
-// 	index = original.index;
-// 	redirect = original.redirect;
-// 	allowedMethods = original.allowedMethods;
-// 	cgiExtents = original.cgiExtents;
-// 	cgiPaths = original.cgiPaths;
-// 	return (*this);
-// }
 
 Server::Server(void)
 {
@@ -57,7 +44,7 @@ Server&	Server::operator=(const Server& original)
 
 void	Server::initDefaultLocation(void)
 {
-	defaultLocation.autoindex = false;
+	defaultLocation.autoIndex = false;
 	defaultLocation.match = "/";
 	defaultLocation.root = "html/";
 	defaultLocation.index = "home.html";
@@ -115,7 +102,7 @@ bool	Server::checkServer(void)
 			return (false);
 		for (it2 = locations.begin(); it2 != ite; it2++)
 		{
-			if (it1->match == it2->match)
+			if (it1 != it2 && it1->match == it2->match)
 				return (false);
 		}
 	}

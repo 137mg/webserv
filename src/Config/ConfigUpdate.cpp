@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigUpdate.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:36:34 by mirjam            #+#    #+#             */
-/*   Updated: 2024/05/26 17:05:12 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:25:30 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void	Config::updateErrorPages(Server& server)
 
 void	Config::updateLocation(t_location& location)
 {
-	std::string	keys[] = {"autoindex", "match", "root", "index", "redirect",
+	std::string	keys[] = {"auto_index", "match", "root", "index", "redirect",
 	"allowed_methods", "cgi_extents", "cgi_paths"};
 	size_t	i;
-	
+
 	for (i = 0; i < 8; i++)
 	{
 		if (_key == keys[i])
@@ -75,9 +75,9 @@ void	Config::updateLocation(t_location& location)
 	{
 		case 0:
 			if (_values[0] == "true")
-				location.autoindex = true;
+				location.autoIndex = true;
 			else if (_values[0] == "false")
-				location.autoindex = true;
+				location.autoIndex = false;
 			else
 				throw ConfigFileException();
 			break;
@@ -111,6 +111,7 @@ void	Config::updateVector(std::vector<std::string>& vector)
 {
 	size_t	size;
 
+	vector.clear();
 	size = _values.size();
 	for (size_t i = 0; i < size; i++)
 		vector.push_back(_values[i]);
