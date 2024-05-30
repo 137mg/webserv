@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/30 16:20:03 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/30 18:00:22 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,18 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
-#include <vector>
-#include <map>
 
 #include "colors.h"
+#include "Server.hpp"
 
-class ServerManager
+class	Server;
+
+class	ServerManager
 {
 	private:
+		std::map<uint16_t, std::vector<Server>>	_serverMap;
+		std::vector<uint16_t>		_ports;
+
 		uint16_t					_port;
 		int							_listenFd;
 		int							_clientFd;
