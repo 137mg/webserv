@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ServerManager.hpp                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/05/29 17:02:44 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/05/30 14:15:49 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 #include <string>
 #include <cerrno>
 #include <vector>
+#include <deque>
+#include <map>
+#include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
@@ -105,6 +108,7 @@ void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 8192
 #define PORT 8080
-#define DEFAULT_PATH "default.conf"
+#define MB 1048576
+#define DEFAULT_PATH "config_files/default.toml"
 
 #endif
