@@ -6,91 +6,44 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/23 15:50:59 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:26:13 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
 // Handle the connection with a client, reading incoming data and processing requests
-// bool	ServerManager::handleClientConnection(int clientFd)
-// {
-//     std::string request_buffer;
-// 	int			bytes_read;
-
-//     while (1)
-// 	{
-// 		bytes_read = readFromSocket(request_buffer, clientFd);
-//         if (bytes_read < 0)
-//         	return false;
-// 		else if (bytes_read == 0)
-// 			continue;
-// 		else
-// 		{
-// 			request_buffer.append(this->_buffer);
-// 			if (isRequestComplete(request_buffer))
-// 			{
-// 				handleRequest(request_buffer, clientFd);
-// 				break;
-// 			}
-// 		}
-// 	}
-// 	return true;
-// }
-
-bool ServerManager::handleClientConnection(int clientFd)
+bool	ServerManager::handleClientConnection(int clientFd)
 {
-	int bytes_read = recv(clientFd, this->_buffer, MESSAGE_BUFFER, 0);
-	if (bytes_read > 0) {
-		this->clientBuffers[clientFd].append(this->_buffer, bytes_read);
-		if (isRequestComplete(this->clientBuffers[clientFd])) {
-			handleRequest(this->clientBuffers[clientFd], clientFd);
-			this->clientBuffers[clientFd].clear(); // Clear the buffer for the next request
-		}
-		return true;
-	} else if (bytes_read == 0) {
-		// Client closed connection
+	char	buffer[MESSAGE_BUFFER];
+	int		bytes_read;
+
+	bytes_read = read(clientFd, buffer, MESSAGE_BUFFER);
+	if (bytes_read == 0)
+	{
+		printTimestamp();
+		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
+		this->_clientBuffers.erase(clientFd);
 		return false;
 	}
-	// For non-blocking sockets, a return value of -1 with no error check means we continue polling
-	return true;
-}
-
-// Read data from the client socket into a buffer
-int ServerManager::readFromSocket(std::string &outbuffer, int clientFd)
-{
-	char	buffer[MESSAGE_BUFFER] = {0};
-	int		bytes_read = recv(clientFd, buffer, MESSAGE_BUFFER, 0);
-	
-	if (bytes_read > 0)
-		outbuffer.append(buffer, bytes_read);
-	if (bytes_read == -1)
+	else if (bytes_read < 0)
 	{
-		std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-		return 0;
+		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
+		return false;
 	}
 	if (bytes_read <= 0)
 	{
-		close(clientFd);
-		return -1;
+		// Append the read data to the client's buffer
+        std::string& clientBuffer = this->_clientBuffers[clientFd];
+		clientBuffer.append(buffer, bytes_read);
+		
+		if (isRequestComplete(clientBuffer))
+		{
+			handleRequest(clientBuffer, clientFd);
+			this->_clientBuffers.erase(clientFd);
+		}
 	}
-	// else if (bytes_read == 0)
-	// {
-	// 	printTimestamp();
-	// 	std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
-	// 	return -1;
-	// }
-	// else
-	// {
-	// 	if (errno == EAGAIN || errno == EWOULDBLOCK)
-	// 		return 0;
-	// 	else
-	// 	{
-	// 		std::cerr << RED << BOLD << "recv error " << std::strerror(errno) << RESET << std::endl;
-	// 		return -1;
-	// 	}
-	// }
-	return bytes_read;
+	return true;
 }
 
 bool ServerManager::isRequestComplete(const std::string &request_buffer)

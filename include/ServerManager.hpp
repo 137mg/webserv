@@ -1,5 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
+<<<<<<< HEAD
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -7,6 +8,15 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
 /*   Updated: 2024/05/23 15:39:31 by psadeghi         ###   ########.fr       */
+=======
+/*                                                        ::::::::            */
+/*   ServerManager.hpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/05/30 14:15:49 by juvan-to      ########   odam.nl         */
+>>>>>>> d6c7252520bc1cb02cdf32c9dc104107bf9b97b8
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +35,15 @@
 #include <string>
 #include <cerrno>
 #include <vector>
+#include <deque>
+#include <map>
+#include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <vector>
 #include <map>
+
 #include "colors.h"
 
 #define MESSAGE_BUFFER 4096
@@ -36,25 +51,24 @@
 class ServerManager
 {
 	private:
-		uint16_t			_port;
-		int					_listenFd;
-		int					_clientFd;
-		int					_clientMaxBodySize;
-		std::string			_ServerName;
-		std::string			_root;
-		std::string			_index;
-		bool				_autoIndex;
-		struct sockaddr_in	_ServerAddress;
-		//std::string			_buffer;
-		size_t				_requestSize;
+		uint16_t					_port;
+		int							_listenFd;
+		int							_clientFd;
+		int							_clientMaxBodySize;
+		std::string					_ServerName;
+		std::string					_root;
+		std::string					_index;
+		bool						_autoIndex;
+		struct sockaddr_in			_ServerAddress;
+		std::string					_buffer;
+		size_t						_requestSize;
 
-		struct pollfd		*_pollFds;
-		int					_pollSize;
-		int 				_pollCount;
-		// location && error pages
-
-		char _buffer[MESSAGE_BUFFER];
-		std::map<int, std::string> clientBuffers;
+		struct pollfd				*_pollFds;
+		int							_pollSize;
+		int 						_pollCount;
+		
+		std::map<int, std::string>	_clientBuffers;
+		int 						_status;
 
 	public:
 		ServerManager();
@@ -62,7 +76,7 @@ class ServerManager
 		ServerManager(const ServerManager &other);
 		ServerManager & operator=(const ServerManager &other);
 	
-		void	run(void);
+		int		run(void);
 		void	config(void);
 		void	configFile(const char* filename);
 		void	handleRequest(std::string buffer, int clientFd);
@@ -75,7 +89,7 @@ class ServerManager
 
 		void	preparePoll(void);
 		void	setUpPoll(void);
-		void	addToPollFds(void);
+		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
 
 		bool	handleClientConnection(int clientFd);
@@ -104,9 +118,9 @@ class ServerManager
 
 void	printTimestamp(void);
 
-// #define MESSAGE_BUFFER 40000
+#define MESSAGE_BUFFER 8192
 #define PORT 8080
-#define DEFAULT_PATH "default.conf"
-// #define MESSAGE_BUFFER 4096
+#define MB 1048576
+#define DEFAULT_PATH "config_files/default.toml"
 
 #endif

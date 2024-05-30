@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   FileServer.cpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 16:41:56 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/16 15:44:37 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   FileServer.cpp                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 16:41:56 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/05/21 17:18:10 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ std::string	ServerManager::serveFile(const std::string &path, const std::string 
     std::string fileContents = responseStream.str();
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	response += "Connection: keep-alive\r\n";
+	// response += "Connection: keep-alive\r\n";
 	if (path.find(".css") != std::string::npos)
 		response += "Content-Type: text/css\r\n\r\n";
 	else
