@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/30 14:26:13 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:57:17 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
 		return false;
 	}
-	if (bytes_read <= 0)
+	else
 	{
 		// Append the read data to the client's buffer
-        std::string& clientBuffer = this->_clientBuffers[clientFd];
+		std::string& clientBuffer = this->_clientBuffers[clientFd];
 		clientBuffer.append(buffer, bytes_read);
 		
 		if (isRequestComplete(clientBuffer))
@@ -78,6 +78,6 @@ size_t ServerManager::getRequestSize(std::string request_buffer)
 		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
 		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
 		return totalExpectedSize;
-	} 
+	}
 	return request_buffer.size();
 }

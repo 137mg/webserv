@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   FileServer.cpp                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 16:41:56 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/21 17:18:10 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   FileServer.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 16:41:56 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/30 14:57:25 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string	ServerManager::serveFile(const std::string &path, const std::string 
 	std::stringstream	responseStream;
 	responseStream << fileStream.rdbuf();
 	
-    std::string fileContents = responseStream.str();
+	std::string fileContents = responseStream.str();
 	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
 	// response += "Connection: keep-alive\r\n";

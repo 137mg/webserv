@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/30 14:33:50 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:34:51 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@
 #include <map>
 
 #include "colors.h"
-
-#define MESSAGE_BUFFER 4096
 
 class ServerManager
 {

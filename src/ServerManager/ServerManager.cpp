@@ -131,36 +131,6 @@ void	ServerManager::setUpPoll(void)
 	this->_pollFds[0].events = POLLIN;
 	this->_pollCount = 1;
 
-	// std::cout << "[Server] Set up poll fd array." << std::endl;
-	// while (true)
-	// {
-	// 	int status = poll(this->_pollFds, this->_pollCount, 2000);
-	// 	if (status == -1) {
-	// 		std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
-	// 		throw ServerSocketException();
-	// 	} else if (status == 0) {
-	// 		//std::cout << "[Server] Waiting..." << std::endl;
-	// 		continue;
-	// 	}
-	// 	for (int i = 0; i < this->_pollCount; i++) {
-	// 		std::cout << "this is the this->_pollCount = " << this->_pollCount  << " and i = " << i << std::endl;
-	// 		if ((this->_pollFds[i].revents & POLLIN) == 0) {
-	// 			continue;
-	// 		}
-	// 		std::cout << "[" << this->_pollFds[i].fd << "]" << "Ready for I/O operation." << std::endl;
-	// 		if (this->_pollFds[i].fd == this->_listenFd) {
-	// 			this->run();
-	// 		} else {
-	// 				int clientFd = this->_pollFds[i].fd;
-	// 				if(!this->handleClientConnection(clientFd))
-	// 				{
-	// 					printTimestamp();
-	// 					std::cout << RED << "Closing " << RESET << "client socket " << RESET << clientFd << std::endl;
-	// 					close(clientFd);
-	// 					this->delFromPollFds(i);
-	// 					this->clientBuffers.erase(clientFd);
-	// 					break;
-	// 				}
 	while (true)
 	{
 		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
