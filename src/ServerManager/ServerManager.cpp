@@ -92,8 +92,8 @@ void	ServerManager::bindSocket(void)
 	if (bind(this->_listenFd, reinterpret_cast<struct  sockaddr*>(&this->_ServerAddress),
 		sizeof(this->_ServerAddress)) != 0)
 		throw ServerSocketException();
-	this->_status = listen(this->_listenFd, BACKLOG);
-	if (this->_status != 0)
+	int status = listen(this->_listenFd, BACKLOG);
+	if (status != 0)
 		throw ServerSocketException();
 }
 
@@ -147,12 +147,12 @@ void	ServerManager::setUpPoll(void)
 	std::cout << "[Server] Set up poll fd array." << std::endl;
 	while (true)
 	{
-		status = poll(this->_pollFds, this->_pollCount, 2000);
+		int status = poll(this->_pollFds, this->_pollCount, 2000);
 		if (status == -1) {
 			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
 			throw ServerSocketException();
 		} else if (status == 0) {
-			std::cout << "[Server] Waiting..." << std::endl;
+			//std::cout << "[Server] Waiting..." << std::endl;
 			continue;
 		}
 		for (int i = 0; i < this->_pollCount; i++) {
