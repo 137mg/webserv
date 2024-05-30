@@ -119,7 +119,6 @@ int	ServerManager::run(void)
 void	ServerManager::preparePoll(void)
 {
 	this->_pollSize = 5;
-	//this->_pollFds = new struct pollfd[5];
 	if (!this->_pollFds)
 		std::cerr << "The problem is here." << std::endl;
 	return;
@@ -134,10 +133,8 @@ void	ServerManager::setUpPoll(void)
 	while (true)
 	{
 		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
-		if (this->_status == -1) {
-			std::cerr << RED << "[Server] Poll error: " << std::strerror(errno) << std::endl;
+		if (this->_status == -1)
 			throw ServerSocketException();
-		}
 		else if (this->_status == 0)
 			continue;
 		for (int i = 0; i < this->_pollCount; i++)

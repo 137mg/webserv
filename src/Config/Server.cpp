@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 20:38:10 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/05/30 17:17:25 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,36 +53,36 @@ void	Server::initDefaultLocation(void)
 
 void	Server::initErrorPages(void)
 {
-	errorPages[400] = "";
-	errorPages[401] = "";
+	errorPages[400] = "html/BadRequest.html";
+	errorPages[401] = "html/unauthorized.html";
 	// status code 402 is not in use yet
-	errorPages[403] = "";
+	errorPages[403] = "html/forbidden.html";
 	errorPages[404] = "html/PageNotFound.html";
-	errorPages[405] = "";
-	errorPages[406] = "";
-	errorPages[407] = "";
-	errorPages[408] = "";
-	errorPages[409] = "";
+	errorPages[405] = "html/MethodNotAllowed.html";
+	errorPages[406] = "html/NotAcceptable.html";
+	errorPages[407] = "html/ProxyAuthenticationRequired.html";
+	errorPages[408] = "html/RequestTimeout.html";
+	errorPages[409] = "html/Conflict.html";
 	// status code 410 is for promotional purposes
-	errorPages[411] = "";
+	errorPages[411] = "html/LengthRequired.html";
 	// status code 412 seems out of scope
-	errorPages[413] = "";
-	errorPages[414] = "";
-	errorPages[415] = "";
+	errorPages[413] = "html/PayloadTooLarge.html";
+	errorPages[414] = "html/URITooLong.html";
+	errorPages[415] = "html/UnsupportedMediaType.html";
 	// status codes 416-429 are unnecessary I think
-	errorPages[431] = "";
+	errorPages[431] = "html/RequestHeaderFieldsTooLarge.html";
 	// status code 451 deals with legal stuff, we are anarchists
-	errorPages[500] = "";
-	errorPages[501] = "";
-	errorPages[502] = "";
-	errorPages[503] = "";
-	errorPages[504] = "";
-	errorPages[505] = "";
+	errorPages[500] = "html/InternalServerError.html";
+	errorPages[501] = "html/NotImplemented.html";
+	errorPages[502] = "html/BadGateway.html";
+	errorPages[503] = "html/ServiceUnavailable.html";
+	errorPages[504] = "html/GatewayTimeout.html";
+	errorPages[505] = "html/HTTPVersionNotSupported.html";
 	// status code 506 I don't even begin to understand
-	errorPages[507] = "";
-	errorPages[508] = "";
+	errorPages[507] = "html/InsufficientStorage.html";
+	errorPages[508] = "html/LoopDetected.html";
 	// status code 510 seems out of scope too
-	errorPages[511] = "";
+	errorPages[511] = "html/NetworkAuthenticationRequired.html";
 }
 
 bool	Server::checkServer(void)
