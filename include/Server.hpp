@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 16:14:05 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:51:07 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ class	Server
 		bool								checkServer(void);
 		
 		void	parseRequest(std::string buffer, int clientFd);
-		void	getRequest(std::string file);
-		void	deleteRequest(std::string file);
-		void	postRequest(std::string buffer, std::string method);
+		void	getMethod(std::string file);
+		void	deleteMethod(std::string file);
+		void	postMethod(std::string buffer);
 
 		std::string	getHeader(std::string buffer, std::string key);
 		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);

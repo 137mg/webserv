@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 16:13:28 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:01:21 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static std::string	findPath(const std::string &request)
 		if (start_pos != std::string::npos)
 			path = request.substr(start_pos, end_pos - start_pos);
 	}
-	return path;
+	return (path);
 }
 
 void	Server::parseRequest(std::string buffer, int clientFd)
@@ -33,18 +33,19 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	std::istringstream			iss(buffer);
 	std::string					requestedPath = findPath(buffer);
 
+	// std::cout << std::endl;
+	// std::cout << "---------------- BEGIN BUFFER --------------" << std::endl;
+	// std::cout << buffer;
+	// std::cout << "---------------- END BUFFER -----------------" << std::endl;
+	// std::cout << std::endl;
 	_clientFd = clientFd;
 	terminalMessage("Client request ", buffer, clientFd);
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
-	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
-	{
-		postRequest(buffer, tokens[0]);
-		return ;
-	}
-	if (tokens[0].compare("GET") == 0)
-		getRequest(tokens[1]);
-	else if (tokens[0].compare("DELETE") == 0)
-		deleteRequest(tokens[1]);
-	return;
+	if (tokens[0] == "POST")
+		postMethod(buffer);
+	else if (tokens[0] == "GET")
+		getMethod(tokens[1]);
+	else if (tokens[0] == "DELETE")
+		deleteMethod(tokens[1]);
 }

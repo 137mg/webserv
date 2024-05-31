@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   showUploads.cpp                                    :+:      :+:    :+:   */
+/*   ServerUploads.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 15:27:36 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:16:47 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-// I think server stuff needs to be added here as well
+// I think server variables need to be added here as well
 std::string	getFolderContents(void)
 {
 	std::string		folderContents = "";
@@ -40,17 +40,19 @@ std::string	getFolderContents(void)
 	}
 	else
 		folderContents = "<p>No files uploaded</p>";
-	return folderContents;
+	return (folderContents);
 }
 
 std::string	Server::showUploads(const std::string &path, const std::string &status, const std::string &color)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;
+	std::string			response;
+	std::string			fileContents;
+
 	responseStream << fileStream.rdbuf();
-	
-	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
-	std::string fileContents = responseStream.str();
+	response = "HTTP/1.1 " + color + status + RESET + "\r\n";
+	fileContents = responseStream.str();
 	fileContents += getFolderContents();
 	fileContents += "</ul></div></body></html>";
 	
@@ -58,5 +60,5 @@ std::string	Server::showUploads(const std::string &path, const std::string &stat
 	response += "Connection: keep-alive\r\n";
 	response += "Content-Type: text/html\r\n\r\n";
 	response += fileContents;
-	return response;
+	return (response);
 }

@@ -6,14 +6,14 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 16:14:38 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:02:09 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CGI.hpp"
 
-void	Server::getRequest(std::string file)
+void	Server::getMethod(std::string file)
 {
 	std::string filePath = "";
 	std::string response = "";
@@ -37,7 +37,7 @@ void	Server::getRequest(std::string file)
 	terminalMessage("Server response ", response, _clientFd);
 }
 
-void	Server::deleteRequest(std::string file)
+void	Server::deleteMethod(std::string file)
 {
 	std::string	fullFilePath = "";
 	int			result;
@@ -45,24 +45,22 @@ void	Server::deleteRequest(std::string file)
 	fullFilePath = "cgi-bin/uploads" + file;
 	result = std::remove(fullFilePath.c_str());
 	if (result != 0)
-	{
 		perror("Error deleting file");
-	}
 	std::string response = serveFile("html/files.html", "200 OK", GREEN);
 	write(_clientFd, response.c_str(), response.size());
 	terminalMessage("Server response ", response, _clientFd);
 }
 
-void	Server::postRequest(std::string buffer, std::string method)
+void	Server::postMethod(std::string buffer)
 {
-    CGI cgi;
-	
-    cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"), method);
-    cgi.convertVector();
-    cgi.executeScript(buffer);
-    std::string response = serveFile("html/home.html", "200 OK", GREEN);
-    write(_clientFd, response.c_str(), response.size());
-    terminalMessage("Server response ", response, _clientFd);
+	CGI	cgi;
+
+	cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"), "POST");
+	cgi.convertVector();
+	cgi.executeScript(buffer);
+	std::string response = serveFile("html/home.html", "200 OK", GREEN);
+	write(_clientFd, response.c_str(), response.size());
+	terminalMessage("Server response ", response, _clientFd);
 }
 
 // Returns the value of a specific header
@@ -70,24 +68,22 @@ std::string	Server::getHeader(std::string buffer, std::string key)
 {
 	size_t keyPos = buffer.find(key + ":");
 	
-    if (keyPos == std::string::npos)
+	if (keyPos == std::string::npos)
 	{
-        // Key not found in the buffer
-        return "";
-    }
-
-    // Find the end of the line containing the key
-    size_t endOfLinePos = buffer.find("\r\n", keyPos);
-    if (endOfLinePos == std::string::npos)
+		// Key not found in the buffer
+		return ("");
+	}
+	// Find the end of the line containing the key
+	size_t endOfLinePos = buffer.find("\r\n", keyPos);
+	if (endOfLinePos == std::string::npos)
 	{
-        // End of line not found
-        return "";
-    }
-
-    // Extract the value after the key
-    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
-    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
-    return value;
+		// End of line not found
+		return ("");
+	}
+	// Extract the value after the key
+	size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
+	std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
+	return (value);
 }
 
 std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
@@ -105,5 +101,5 @@ std::string	Server::serveFile(const std::string &path, const std::string &status
 	else
 		response += "Content-Type: text/html\r\n\r\n";
 	response += fileContents;
-	return response;
+	return (response);
 }

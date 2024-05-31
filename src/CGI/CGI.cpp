@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 15:10:51 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:04:20 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	CGI::convertVector(void)
     this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-// I think server stuff needs to be added here as well
+// I think server variables need to be added here as well
 void	CGI::executeScript(std::string cgiContent)
 {
 	int 		fds[2];
