@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 15:44:34 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:04:48 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ class	ServerManager
 		int		run(void);
 		void	config(void);
 		void	configFile(const char* filename);
-		void	handleRequest(std::string buffer, int clientFd);
 		void	createSocket(void);
 		void	bindSocket(void);
 
@@ -83,8 +82,7 @@ class	ServerManager
 		int		readFromSocket(std::string &outbuffer, int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
-		std::string	parseRequest(const std::string &request);
-		Server&		chooseServer(void);
+		void	selectServer(std::string buffer, int clientFd);
 
 		class	ServerSocketException : public std::exception
 		{

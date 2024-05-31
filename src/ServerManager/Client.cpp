@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 14:47:30 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:03:15 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		
 		if (isRequestComplete(clientBuffer))
 		{
-			handleRequest(clientBuffer, clientFd);
+			selectServer(clientBuffer, clientFd);
 			this->_clientBuffers.erase(clientFd);
 		}
 	}

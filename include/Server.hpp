@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 15:31:41 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:14:05 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_location
 class	Server
 {
 	private:
+		int									_clientFd;
 		void								initDefaultLocation(void);
 		void								initErrorPages(void);
 		bool								checkLocation(t_location location);
@@ -50,15 +51,15 @@ class	Server
 		Server&								operator=(const Server& original);
 		bool								checkServer(void);
 		
-		void	getRequest(std::string file, int clientFd);
-		void	deleteRequest(std::string file, int clientFd);
-		void	postRequest(std::string buffer, std::string method, int clientFd);
+		void	parseRequest(std::string buffer, int clientFd);
+		void	getRequest(std::string file);
+		void	deleteRequest(std::string file);
+		void	postRequest(std::string buffer, std::string method);
 
 		std::string	getHeader(std::string buffer, std::string key);
-
-		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);
 		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
-		bool	fileAccess(const std::string &path);
+		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);
+
 };
 
 #endif
