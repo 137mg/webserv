@@ -13,13 +13,13 @@
 		[
 			{
 				"match":			"/",
-				"allowed_methods":	["GET", "DELETE"],
+				"allowed_methods":	"GET",
 				"root":				"html/",
 				"index":			"home.html"
 			},
 			{
 				"match":			"/cgi-bin",
-				"allowed_methods":	"POST",
+				"allowed_methods":	["POST", "DELETE"],
 				"root":				"cgi-bin/",
 				"index":			"upload.py"
 			}
