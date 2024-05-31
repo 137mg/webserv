@@ -6,25 +6,25 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 17:02:09 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:42:13 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CGI.hpp"
 
-void	Server::getMethod(std::string file)
+void	Server::getMethod(std::string file, t_location location)
 {
-	std::string filePath = "";
-	std::string response = "";
+	std::string	filePath;
+	std::string	response;
 
-	if (file.compare("/") == 0)
-		file = "/home.html";
+	if (file == "/")
+		file += location.index;
 	if (file.find(".html") != std::string::npos)
 		filePath = "html" + file;
 	else
 		filePath = file.erase(0, 1);
-	if (filePath.compare("html/files.html") == 0)
+	if (filePath == "html/files.html")
 		response = showUploads(filePath, "200 OK", GREEN);
 	else
 	{
@@ -39,14 +39,13 @@ void	Server::getMethod(std::string file)
 
 void	Server::deleteMethod(std::string file)
 {
-	std::string	fullFilePath = "";
-	int			result;
+	std::string	fullFilePath;
+	std::string	response;
 
 	fullFilePath = "cgi-bin/uploads" + file;
-	result = std::remove(fullFilePath.c_str());
-	if (result != 0)
+	if (std::remove(fullFilePath.c_str()) != 0)
 		perror("Error deleting file");
-	std::string response = serveFile("html/files.html", "200 OK", GREEN);
+	response = serveFile("html/files.html", "200 OK", GREEN);
 	write(_clientFd, response.c_str(), response.size());
 	terminalMessage("Server response ", response, _clientFd);
 }
@@ -84,22 +83,4 @@ std::string	Server::getHeader(std::string buffer, std::string key)
 	size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
 	std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
 	return (value);
-}
-
-std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
-{
-	std::ifstream		fileStream(path);
-	std::stringstream	responseStream;
-	responseStream << fileStream.rdbuf();
-	
-	std::string fileContents = responseStream.str();
-	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
-	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	// response += "Connection: keep-alive\r\n";
-	if (path.find(".css") != std::string::npos)
-		response += "Content-Type: text/css\r\n\r\n";
-	else
-		response += "Content-Type: text/html\r\n\r\n";
-	response += fileContents;
-	return (response);
 }

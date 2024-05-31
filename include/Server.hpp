@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 16:51:07 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:37:59 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,17 @@ typedef struct s_location
 class	Server
 {
 	private:
-		int									_clientFd;
-		void								initDefaultLocation(void);
-		void								initErrorPages(void);
-		bool								checkLocation(t_location location);
+		int			_clientFd;
+		void		initDefaultLocation(void);
+		void		initErrorPages(void);
+		bool		checkLocation(t_location location);
+		void		getMethod(std::string file, t_location location);
+		void		deleteMethod(std::string file);
+		void		postMethod(std::string buffer);
+		std::string	getHeader(std::string buffer, std::string key);
+		std::string	serveFile(std::string path, std::string status, std::string color);
+		std::string	showUploads(std::string path, std::string status, std::string color);
+
 	public:
 		uint16_t							port;
 		uint32_t							clientMaxBodySize;
@@ -50,16 +57,7 @@ class	Server
 		~Server(void);
 		Server&								operator=(const Server& original);
 		bool								checkServer(void);
-		
-		void	parseRequest(std::string buffer, int clientFd);
-		void	getMethod(std::string file);
-		void	deleteMethod(std::string file);
-		void	postMethod(std::string buffer);
-
-		std::string	getHeader(std::string buffer, std::string key);
-		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
-		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);
-
+		void								parseRequest(std::string buffer, int clientFd);
 };
 
 #endif

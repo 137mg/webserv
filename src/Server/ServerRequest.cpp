@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 17:01:21 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:42:44 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	if (tokens[0] == "POST")
 		postMethod(buffer);
 	else if (tokens[0] == "GET")
-		getMethod(tokens[1]);
+		getMethod(tokens[1], locations[0]);
 	else if (tokens[0] == "DELETE")
 		deleteMethod(tokens[1]);
 }

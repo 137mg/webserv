@@ -15,13 +15,13 @@ cgi_paths =				"/usr/bin/python3"
 	[[server.location]]
 
 	match =				"/"
-	allowed_methods =	["GET", "DELETE"]
+	allowed_methods =	"GET"
 	root =				"html/"
 	index =				"home.html"
 
 	[[server.location]]
 
 	match =				"/cgi-bin"
-	allowed_methods =	"POST"
+	allowed_methods =	["POST", "DELETE"]
 	root =				"cgi-bin/"
 	index =				"upload.py"
