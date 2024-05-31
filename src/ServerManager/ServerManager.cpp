@@ -13,14 +13,9 @@
 #include "ServerManager.hpp"
 
 ServerManager::ServerManager(void)
-{	
-	this->_port = PORT;
+{
 	this->_ServerName = "Webserv";
-	this->_root = "";
-	this->_index = "";
 	this->_listenFd = -1;
-	this->_clientMaxBodySize = 1;
-	this->_autoIndex = false;
 	this->_pollFds = new struct pollfd[5];
 	this->_pollCount = 5;
 	this->_pollSize = 0;
@@ -33,44 +28,21 @@ ServerManager::~ServerManager(void)
 		close(this->_listenFd);
 }
 
-ServerManager::ServerManager(const ServerManager &other)
-{
-	*this = other;
-}
-
-ServerManager & ServerManager::operator=(const ServerManager &other)
-{
-	if (this != &other)
-	{
-		this->_port = other._port;
-		this->_listenFd = other._listenFd;
-		this->_clientFd = other._clientFd;
-		this->_clientMaxBodySize = other._clientMaxBodySize;
-		this->_ServerName = other._ServerName;
-		this->_root = other._root;
-		this->_autoIndex = other._autoIndex;
-		this->_ServerAddress = other._ServerAddress;
-		this->_pollFds = other._pollFds;
-		this->_pollSize = other._pollSize;
-		this->_pollCount = other._pollCount;
-	}
-	return *this;
-}
-
+// uses the first port in the list of ports now, needs to change once we add multiple ports!
 void	ServerManager::config(void)
 {
 	this->_ServerAddress.sin_family = AF_INET;
 	this->_ServerAddress.sin_addr.s_addr = INADDR_ANY;
-	this->_ServerAddress.sin_port = htons(PORT);
+	this->_ServerAddress.sin_port = htons(_ports[0]);
 
 	this->createSocket();
 	this->bindSocket();
 	printTimestamp();
 	std::cout << PURPLE << UNDER << this->_ServerName << RESET << " up and running. Listening on port: "
-		<< UNDER << this->_port << RESET << std::endl;
+		<< UNDER << _ports[0] << RESET << std::endl;
 	std::cout << "-----------------------------------------------------------------------" << std::endl;
 }
-
+ 
 // Create a socket for the ServerManager to listen for incoming connections
 void	ServerManager::createSocket(void)
 {
@@ -121,7 +93,6 @@ void	ServerManager::preparePoll(void)
 	this->_pollSize = 5;
 	if (!this->_pollFds)
 		std::cerr << "The problem is here." << std::endl;
-	return;
 }
 
 void	ServerManager::setUpPoll(void)

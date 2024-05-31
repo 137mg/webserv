@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/30 18:00:22 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:13:04 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,33 +40,26 @@ class	Server;
 class	ServerManager
 {
 	private:
+		std::vector<uint16_t>					_ports;
 		std::map<uint16_t, std::vector<Server>>	_serverMap;
-		std::vector<uint16_t>		_ports;
 
-		uint16_t					_port;
-		int							_listenFd;
-		int							_clientFd;
-		int							_clientMaxBodySize;
-		std::string					_ServerName;
-		std::string					_root;
-		std::string					_index;
-		bool						_autoIndex;
-		struct sockaddr_in			_ServerAddress;
-		std::string					_buffer;
-		size_t						_requestSize;
+		std::string								_ServerName;
+		int										_listenFd;
+		int										_clientFd;
+		struct sockaddr_in						_ServerAddress;
+		std::string								_buffer;
+		size_t									_requestSize;
 
-		struct pollfd				*_pollFds;
-		int							_pollSize;
-		int 						_pollCount;
+		struct pollfd							*_pollFds;
+		int										_pollSize;
+		int 									_pollCount;
 		
-		std::map<int, std::string>	_clientBuffers;
-		int 						_status;
+		std::map<int, std::string>				_clientBuffers;
+		int										_status;
 
 	public:
-		ServerManager();
-		~ServerManager();
-		ServerManager(const ServerManager &other);
-		ServerManager & operator=(const ServerManager &other);
+		ServerManager(void);
+		~ServerManager(void);
 	
 		int		run(void);
 		void	config(void);
@@ -111,7 +104,6 @@ class	ServerManager
 void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 8192
-#define PORT 8080
 #define MB 1048576
 #define DEFAULT_PATH "config_files/default.toml"
 

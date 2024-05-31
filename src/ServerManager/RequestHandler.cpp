@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/30 14:26:20 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:02:40 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,29 @@ void	ServerManager::postRequest(std::string buffer, std::string method, int clie
     std::string response = serveFile("html/home.html", "200 OK", GREEN);
     write(clientFd, response.c_str(), response.size());
     terminalMessage("Server response ", response, clientFd);
+}
+
+// Returns the value of a specific header
+std::string	ServerManager::getHeader(std::string buffer, std::string key)
+{
+	size_t keyPos = buffer.find(key + ":");
+	
+    if (keyPos == std::string::npos)
+	{
+        // Key not found in the buffer
+        return "";
+    }
+
+    // Find the end of the line containing the key
+    size_t endOfLinePos = buffer.find("\r\n", keyPos);
+    if (endOfLinePos == std::string::npos)
+	{
+        // End of line not found
+        return "";
+    }
+
+    // Extract the value after the key
+    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
+    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
+    return value;
 }

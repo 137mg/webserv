@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   RequestParser.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/05/21 16:11:25 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   RequestParser.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/05/31 15:02:35 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,4 @@ std::string	ServerManager::parseRequest(const std::string &request)
 			path = request.substr(start_pos, end_pos - start_pos);
 	}
 	return path;
-}
-
-// Returns the value of a specific header
-std::string	ServerManager::getHeader(std::string buffer, std::string key)
-{
-	size_t keyPos = buffer.find(key + ":");
-	
-    if (keyPos == std::string::npos)
-	{
-        // Key not found in the buffer
-        return "";
-    }
-
-    // Find the end of the line containing the key
-    size_t endOfLinePos = buffer.find("\r\n", keyPos);
-    if (endOfLinePos == std::string::npos)
-	{
-        // End of line not found
-        return "";
-    }
-
-    // Extract the value after the key
-    size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
-    std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
-    return value;
 }

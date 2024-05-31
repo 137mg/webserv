@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
-#                                                    +#+                       #
-#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/05/30 14:17:37 by juvan-to      ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
+#    Updated: 2024/05/31 14:56:09 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRC =	src/CGI/CGI.cpp							\
 		src/Config/ConfigPrint.cpp				\
 		src/Config/ConfigUpdate.cpp				\
 		src/Config/ConfigUtils.cpp				\
-		src/Config/Server.cpp					\
+		src/Server/Server.cpp					\
 		src/ServerManager/ConfigFile.cpp		\
 		src/ServerManager/RequestHandler.cpp	\
 		src/ServerManager/RequestParser.cpp		\

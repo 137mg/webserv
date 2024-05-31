@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/30 14:57:17 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/05/31 14:47:30 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ bool	ServerManager::handleClientConnection(int clientFd)
 bool ServerManager::isRequestComplete(const std::string &request_buffer)
 {
 	size_t	headerEnd;
-	size_t totalExpectedSize;
-	size_t contentLengthPos;
+	size_t	totalExpectedSize;
+	size_t	contentLengthPos;
 
 	headerEnd = request_buffer.find("\r\n\r\n");
 	if (headerEnd == std::string::npos)
