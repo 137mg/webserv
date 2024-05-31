@@ -6,11 +6,11 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 14:39:42 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:27:36 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Server.hpp"
 
 // I think server stuff needs to be added here as well
 std::string	getFolderContents(void)
@@ -43,7 +43,7 @@ std::string	getFolderContents(void)
 	return folderContents;
 }
 
-std::string	ServerManager::showUploads(const std::string &path, const std::string &status, const std::string &color)
+std::string	Server::showUploads(const std::string &path, const std::string &status, const std::string &color)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;

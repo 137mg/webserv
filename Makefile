@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/05/31 14:56:09 by mgoedkoo         ###   ########.fr        #
+#    Updated: 2024/05/31 15:44:57 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,19 +19,18 @@ OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGI.cpp							\
-		src/CGI/showUploads.cpp					\
 		src/Config/Config.cpp					\
 		src/Config/ConfigPrint.cpp				\
 		src/Config/ConfigUpdate.cpp				\
 		src/Config/ConfigUtils.cpp				\
 		src/Server/Server.cpp					\
+		src/Server/ServerRequest.cpp			\
+		src/Server/ServerUploads.cpp			\
 		src/ServerManager/ConfigFile.cpp		\
-		src/ServerManager/RequestHandler.cpp	\
 		src/ServerManager/RequestParser.cpp		\
 		src/ServerManager/ServerManager.cpp		\
-		src/ServerManager/Logger.cpp			\
-		src/ServerManager/FileServer.cpp		\
 		src/ServerManager/Client.cpp			\
+		src/Logger.cpp							\
 		src/main.cpp
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 RM := rm -rf

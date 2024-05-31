@@ -6,13 +6,19 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 15:02:35 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:46:02 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
-// handle the request received from the client
+// placeholder
+Server&	ServerManager::chooseServer(void)
+{
+	return (_serverMap[_ports[0]][0]);
+}
+
+// changed a bit, need to change a lot more!
 void	ServerManager::handleRequest(std::string buffer, int clientFd)
 {
 	std::vector<std::string>	tokens;
@@ -23,15 +29,18 @@ void	ServerManager::handleRequest(std::string buffer, int clientFd)
 	terminalMessage("Client request ", buffer, clientFd);
 	while (std::getline(iss, token, ' '))
 		tokens.push_back(token);
+	
+	Server server = chooseServer();
+
 	if (requestedPath.find("cgi-bin/upload.py") != std::string::npos)
 	{
-		postRequest(buffer, tokens[0], clientFd);
+		server.postRequest(buffer, tokens[0], clientFd);
 		return ;
 	}
 	if (tokens[0].compare("GET") == 0)
-		this->getRequest(tokens[1], clientFd);
+		server.getRequest(tokens[1], clientFd);
 	else if (tokens[0].compare("DELETE") == 0)
-		this->deleteRequest(tokens[1], clientFd);
+		server.deleteRequest(tokens[1], clientFd);
 	return;
 }
 

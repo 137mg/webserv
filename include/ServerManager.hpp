@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 15:13:04 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:44:34 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
+#include <ctime>
 #include <cstring>
 #include <string>
 #include <cerrno>
@@ -67,10 +71,6 @@ class	ServerManager
 		void	handleRequest(std::string buffer, int clientFd);
 		void	createSocket(void);
 		void	bindSocket(void);
-		void	getRequest(std::string file, int clientFd);
-		void	deleteRequest(std::string file, int clientFd);
-		void	postRequest(std::string buffer, std::string method, int clientFd);
-		void	terminalMessage(const std::string &s1, const std::string &s2, int clientFd);
 
 		void	preparePoll(void);
 		void	setUpPoll(void);
@@ -78,16 +78,13 @@ class	ServerManager
 		void	delFromPollFds(int i);
 
 		bool	handleClientConnection(int clientFd);
-		bool	fileAccess(const std::string &path);
 		bool	isRequestComplete(const std::string &request_buffer);
 
 		int		readFromSocket(std::string &outbuffer, int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
-		std::string	showUploads(const std::string &path, const std::string &status, const std::string &color);
-		std::string	serveFile(const std::string &path, const std::string &status, const std::string &color);
 		std::string	parseRequest(const std::string &request);
-		std::string	getHeader(std::string buffer, std::string key);
+		Server&		chooseServer(void);
 
 		class	ServerSocketException : public std::exception
 		{
@@ -101,6 +98,7 @@ class	ServerManager
 		};
 };
 
+void	terminalMessage(const std::string &s1, const std::string &s2, int clientFd);
 void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 8192

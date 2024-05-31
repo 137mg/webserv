@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestHandler.cpp                                 :+:      :+:    :+:   */
+/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 15:02:40 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:32:23 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Server.hpp"
 #include "CGI.hpp"
 
-void	ServerManager::getRequest(std::string file, int clientFd)
+void	Server::getRequest(std::string file, int clientFd)
 {
 	std::string filePath = "";
 	std::string response = "";
@@ -37,7 +37,7 @@ void	ServerManager::getRequest(std::string file, int clientFd)
 	terminalMessage("Server response ", response, clientFd);
 }
 
-void	ServerManager::deleteRequest(std::string file, int clientFd)
+void	Server::deleteRequest(std::string file, int clientFd)
 {
 	std::string	fullFilePath = "";
 	int			result;
@@ -53,7 +53,7 @@ void	ServerManager::deleteRequest(std::string file, int clientFd)
 	terminalMessage("Server response ", response, clientFd);
 }
 
-void	ServerManager::postRequest(std::string buffer, std::string method, int clientFd)
+void	Server::postRequest(std::string buffer, std::string method, int clientFd)
 {
     CGI cgi;
 	
@@ -66,7 +66,7 @@ void	ServerManager::postRequest(std::string buffer, std::string method, int clie
 }
 
 // Returns the value of a specific header
-std::string	ServerManager::getHeader(std::string buffer, std::string key)
+std::string	Server::getHeader(std::string buffer, std::string key)
 {
 	size_t keyPos = buffer.find(key + ":");
 	
@@ -88,4 +88,28 @@ std::string	ServerManager::getHeader(std::string buffer, std::string key)
     size_t valueStartPos = keyPos + key.length() + 2; // Skip ": " after the key
     std::string value = buffer.substr(valueStartPos, endOfLinePos - valueStartPos);
     return value;
+}
+
+std::string	Server::serveFile(const std::string &path, const std::string &status, const std::string &color)
+{
+	std::ifstream		fileStream(path);
+	std::stringstream	responseStream;
+	responseStream << fileStream.rdbuf();
+	
+	std::string fileContents = responseStream.str();
+	std::string response = "HTTP/1.1 " + color + status + RESET + "\r\n";
+	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
+	// response += "Connection: keep-alive\r\n";
+	if (path.find(".css") != std::string::npos)
+		response += "Content-Type: text/css\r\n\r\n";
+	else
+		response += "Content-Type: text/html\r\n\r\n";
+	response += fileContents;
+	return response;
+}
+
+bool	Server::fileAccess(const std::string &path)
+{
+	std::ifstream fileStream(path);
+	return fileStream.good();
 }
