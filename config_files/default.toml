@@ -25,3 +25,31 @@ cgi_paths =				"/usr/bin/python3"
 	allowed_methods =	["POST", "DELETE"]
 	root =				"cgi-bin/"
 	index =				"upload.py"
+
+[[server]]
+
+listen =				"2020"
+host =					"127.0.0.1"
+server_names =			"localhost"
+client_max_body_size =	"1MB"
+auto_index =			"false"
+cgi_extents =			".py"
+cgi_paths =				"/usr/bin/python3"
+
+	[server.error_pages]
+
+	404 =				"html/PageNotFound.html"
+
+	[[server.location]]
+
+	match =				"/"
+	allowed_methods =	"GET"
+	root =				"html/"
+	index =				"home.html"
+
+	[[server.location]]
+
+	match =				"/cgi-bin"
+	allowed_methods =	["POST", "DELETE"]
+	root =				"cgi-bin/"
+	index =				"upload.py"

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/03 17:48:14 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 00:34:39 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,10 @@ size_t ServerManager::getRequestSize(std::string request_buffer)
 	return request_buffer.size();
 }
 
-void ServerManager::send_413_response(int clientFd)
+void	ServerManager::closeClientConnection(unsigned long i)
 {
-    std::string	response =
-        "HTTP/1.1 413 Payload Too Large\r\n"
-        "Content-Length: 0\r\n"
-        "Connection: close\r\n"
-        "\r\n";
-    write(clientFd, response.c_str(), response.size());
-    close(clientFd);
+	printTimestamp();
+    std::cout << RED << "Closing " << RESET << "client socket " << RESET << _pollFdsVector[i].fd << std::endl;
+    close(_pollFdsVector[i].fd);
+    delFromPollFds(i);
 }
