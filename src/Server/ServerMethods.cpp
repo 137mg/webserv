@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 17:42:13 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 15:08:09 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	Server::deleteMethod(std::string file)
 	std::string	response;
 
 	fullFilePath = "cgi-bin/uploads" + file;
+	// need to decide what to do with delete error!
 	if (std::remove(fullFilePath.c_str()) != 0)
 		perror("Error deleting file");
 	response = serveFile("html/files.html", "200 OK", GREEN);
