@@ -19,7 +19,6 @@ ServerManager::ServerManager(void)
 
 ServerManager::~ServerManager(void)
 {
-	// delete this->_pollFds;
 	for (std::vector<int>::size_type i = 0; i < this->_listenFds.size(); i++)
 	{
 		if (this->_listenFds[i] != -1)
