@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/03 15:45:10 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/03 16:54:39 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class	ServerManager
 		bool	isRequestComplete(const std::string &request_buffer);
 
 		int		readFromSocket(std::string &outbuffer, int clientFd);
+		void	send_413_response(int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
