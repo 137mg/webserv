@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/03 14:08:34 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 17:17:30 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ class	ServerManager
 		std::map<uint16_t, std::vector<Server>>	_serverMap;
 
 		std::string								_ServerName;
-		int										_listenFd;
+		std::vector<int>						_listenFds;
+		//int										_listenFds;
 		int										_clientFd;
 		struct sockaddr_in						_ServerAddress;
 		std::string								_buffer;
@@ -65,11 +66,11 @@ class	ServerManager
 		ServerManager(void);
 		~ServerManager(void);
 	
-		int		run(void);
+		int		run(int listenFd);
 		void	config(void);
 		void	configFile(const char* filename);
-		void	createSocket(void);
-		void	bindSocket(void);
+		int		createSocket(void);
+		void	bindSocket(int sockfd);
 
 		void	setUpPoll(void);
 		void	addToPollFds(int clientFd);
