@@ -15,9 +15,6 @@
 ServerManager::ServerManager(void)
 {
 	this->_ServerName = "Webserv";
-	// this->_pollFds = new struct pollfd[5];
-	this->_pollCount = 5;
-	this->_pollSize = 0;
 }
 
 ServerManager::~ServerManager(void)
@@ -96,7 +93,6 @@ int	ServerManager::newClientConnection(int listenFd)
 
 void	ServerManager::setUpPoll(void)
 {	
-	this->_pollCount = _listenFds.size();
 	for (size_t i = 0; i < _listenFds.size(); ++i)
 	{
 		pollfd pfd;
@@ -145,26 +141,14 @@ void ServerManager::handleSocketEvents(void)
 void	ServerManager::addToPollFds(int clientFd)
 {
 	pollfd newPollFd;
-
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
 	this->_pollFdsVector.push_back(newPollFd);
-
-	// if (this->_pollCount == this->_pollSize)
-	// {
-	// 	this->_pollSize *= 2;
-	// }
-	// this->_pollFds[this->_pollCount].fd = clientFd;
-	// this->_pollFds[this->_pollCount].events = POLLIN;
-	this->_pollCount++;
-
 }
 
 void	ServerManager::delFromPollFds(int i)
 {
 	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
-
-	this->_pollCount--;
 }
 
 const char*	ServerManager::ServerSocketException::what(void) const throw()

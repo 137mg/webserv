@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/04 00:34:44 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/04 00:41:13 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ class	ServerManager
 
 		// struct pollfd							*_pollFds;
 		std::vector<pollfd>						_pollFdsVector;
-		int										_pollSize;
-		int 									_pollCount;
 		
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
