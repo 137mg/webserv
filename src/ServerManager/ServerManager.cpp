@@ -88,15 +88,9 @@ int	ServerManager::run(void)
 	return clientFd;
 }
 
-void	ServerManager::preparePoll(void)
-{
-	this->_pollSize = 5;
-	if (!this->_pollFds)
-		std::cerr << "The problem is here." << std::endl;
-}
-
 void	ServerManager::setUpPoll(void)
 {
+	this->_pollSize = 5;
 	this->_pollFds[0].fd = this->_listenFd;
 	this->_pollFds[0].events = POLLIN;
 	this->_pollCount = 1;

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 16:03:15 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:12:18 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		this->_clientBuffers.erase(clientFd);
 		return false;
 	}
+	// still need to decide between exception and error page or the like!
 	else if (bytes_read < 0)
 	{
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;

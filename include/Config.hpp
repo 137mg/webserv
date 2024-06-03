@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 15:43:17 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:39:20 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "ServerManager.hpp"
 # include "Server.hpp"
+
+// check host, locations, allowed methods, cgi settings, etc.
 
 class	Config
 {

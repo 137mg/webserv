@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/31 16:04:48 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:08:34 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ class	ServerManager
 		void	createSocket(void);
 		void	bindSocket(void);
 
-		void	preparePoll(void);
 		void	setUpPoll(void);
 		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
