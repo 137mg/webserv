@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/04 00:41:13 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/04 00:55:57 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ class	ServerManager
 		std::map<uint16_t, std::vector<Server>>	_serverMap;
 
 		std::string								_ServerName;
-		std::vector<int>						_listenFds;
-		//int										_listenFds;
+		int										_listenFd;
 		int										_clientFd;
 		struct sockaddr_in						_ServerAddress;
 		std::string								_buffer;
