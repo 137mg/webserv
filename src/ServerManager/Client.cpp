@@ -6,12 +6,46 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 00:46:35 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/04 14:31:51 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 #include "Server.hpp"
+
+std::string serveFile(const std::string& path, const std::string& status, std::string color)
+{
+    std::ifstream fileStream(path);
+    if (!fileStream.is_open()) {
+        // Handle file not found or unable to open error
+        return "HTTP/1.1 500 Internal Server Error\r\n"
+               "Content-Type: text/html\r\n"
+               "Content-Length: 44\r\n\r\n"
+               "<html><body>500 Internal Server Error</body></html>";
+    }
+
+    std::stringstream responseStream;
+    std::string fileContents;
+    std::string response;
+
+    responseStream << fileStream.rdbuf();
+    fileContents = responseStream.str();
+
+	response = "HTTP/1.1 " + status + "\r\n";
+    response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
+    response += "Content-Type: text/html\r\n\r\n";
+    response += fileContents;
+
+    return response;
+	std::cout << color << std::endl;
+}
+
+void send413Response(int clientFd)
+{
+	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large", RED);
+    write(clientFd, response.c_str(), response.length());
+	terminalMessage("Server response ", response, clientFd);
+}
 
 // Handle the connection with a client, reading incoming data and processing requests
 bool	ServerManager::handleClientConnection(int clientFd)
@@ -40,9 +74,10 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		// please dont look at the next 10 lines too closely uwu
 		if (clientBuffer.size() > 1048576)
 		{
-			selectServer(clientBuffer, clientFd);
+			send413Response(clientFd);
             this->_clientBuffers.erase(clientFd);
-			return false;
+            close(clientFd);
+            return false;
 		}
 		else if (isRequestComplete(clientBuffer))
 		{
