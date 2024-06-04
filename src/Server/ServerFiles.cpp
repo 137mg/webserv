@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 14:33:27 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 15:38:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ std::string	Server::showUploads(std::string path, std::string status, std::strin
 	return (response);
 }
 
-std::string	Server::serveFile(std::string path, std::string status, std::string color)
+std::string	Server::serveFile(std::string path, std::string status)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;
@@ -73,9 +73,9 @@ std::string	Server::serveFile(std::string path, std::string status, std::string 
 	responseStream << fileStream.rdbuf();
 	fileContents = responseStream.str();
 
-	response = "HTTP/1.1 " + color + status + RESET + "\r\n";
+	response = "HTTP/1.1 " + status + "\r\n";
 	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	// response += "Connection: keep-alive\r\n";
+	response += "Connection: keep-alive\r\n";
 	if (path.find(".css") != std::string::npos)
 		response += "Content-Type: text/css\r\n\r\n";
 	else
