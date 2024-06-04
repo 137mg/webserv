@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/03 17:51:46 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 15:05:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,32 @@ static std::string	findPath(const std::string &request)
 	return (path);
 }
 
+std::string serveFile2(const std::string& path, const std::string& status)
+{
+    std::ifstream		fileStream(path);
+	std::stringstream	responseStream;
+	std::string			fileContents;
+	std::string			response;
+
+	responseStream << fileStream.rdbuf();
+	fileContents = responseStream.str();
+
+	response = "HTTP/1.1 " + status + "\r\n";
+	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
+	response += "Content-Type: text/html\r\n\r\n";
+	response += fileContents;
+	return (response);
+}
+
+void Server::send413Response(int clientFd)
+{
+	std::string response = serveFile2("html/PayloadTooLarge.html", "413 Payload Too Large");
+    write(clientFd, response.c_str(), response.length());
+	printTimestamp();
+	std::cout << RESET << YELLOW << "Server response " << RESET
+			<< "to socket " << clientFd << "	HTTP/1.1 " << RED <<  "413 Payload Too Large" << RESET << std::endl;
+}
+
 void	Server::parseRequest(std::string buffer, int clientFd)
 {
 	std::vector<std::string>	tokens;
@@ -42,9 +68,7 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	terminalMessage("Client request ", buffer, clientFd);
 	if (buffer.size() > 1048576)
 	{
-		std::string	response = serveFile("html/PayloadTooLarge.hmtl", "413 Payload Too Large", RED);
-		write(_clientFd, response.c_str(), response.size());
-		terminalMessage("Server response ", response, _clientFd);
+		send413Response(clientFd);
 		return;
 	}
 	while (std::getline(iss, token, ' '))

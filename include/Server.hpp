@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/03 17:51:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 14:34:14 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class	Server
 		void		getMethod(std::string file, t_location location);
 		void		deleteMethod(std::string file);
 		void		postMethod(std::string buffer);
+		void		send413Response(int clientFd);
 		std::string	getHeader(std::string buffer, std::string key);
 		std::string	serveFile(std::string path, std::string status, std::string color);
 		std::string	showUploads(std::string path, std::string status, std::string color);
