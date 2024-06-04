@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 15:40:43 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 15:57:18 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	// std::cout << "---------------- END BUFFER -----------------" << std::endl;
 	// std::cout << std::endl;
 	_clientFd = clientFd;
-	terminalMessage("Client request ", buffer, clientFd);
+	clientMessage("Client request ", buffer, clientFd);
 	if (buffer.size() > 1048576)
 	{
 		send413Response(clientFd);
