@@ -15,14 +15,10 @@
 ServerManager::ServerManager(void)
 {
 	this->_ServerName = "Webserv";
-	this->_pollFds = new struct pollfd[5];
-	this->_pollCount = 5;
-	this->_pollSize = 0;
 }
 
 ServerManager::~ServerManager(void)
 {
-	delete this->_pollFds;
 	for (std::vector<int>::size_type i = 0; i < this->_listenFds.size(); i++)
 	{
 		if (this->_listenFds[i] != -1)
@@ -33,7 +29,8 @@ ServerManager::~ServerManager(void)
 // uses the first port in the list of ports now, needs to change once we add multiple ports!
 void	ServerManager::config(void)
 {
-	for (std::vector<uint16_t>::size_type i = 0; i != _ports.size(); i++) {
+	for (std::vector<uint16_t>::size_type i = 0; i != _ports.size(); i++)
+	{
 		this->_ServerAddress.sin_family = AF_INET;
 		this->_ServerAddress.sin_addr.s_addr = INADDR_ANY;
 		this->_ServerAddress.sin_port = htons(_ports[i]);
@@ -75,8 +72,7 @@ void	ServerManager::bindSocket(int sockfd)
 		throw ServerSocketException();
 }
 
-// Keep accepting connections while the ServerManager is running
-int	ServerManager::run(int listenFd)
+int	ServerManager::newClientConnection(int listenFd)
 {
 	struct sockaddr_storage	client_addr;
 	socklen_t				addr_size;
@@ -96,61 +92,62 @@ int	ServerManager::run(int listenFd)
 
 void	ServerManager::setUpPoll(void)
 {	
-	this->_pollCount = _listenFds.size();
-	for (size_t i = 0; i < _listenFds.size(); ++i) {
-		this->_pollFds[i].fd = _listenFds[i];
-		this->_pollFds[i].events = POLLIN;
+	for (size_t i = 0; i < _listenFds.size(); ++i)
+	{
+		pollfd pfd;
+		pfd.fd = _listenFds[i];
+		pfd.events = POLLIN;
+		_pollFdsVector.push_back(pfd);
 	}
+	this->monitorSockets();
+}
 
+void	ServerManager::monitorSockets(void)
+{
 	while (true)
 	{
-		this->_status = poll(this->_pollFds, this->_pollCount, 2000);
+		this->_status = poll(this->_pollFdsVector.data(), this->_pollFdsVector.size(), 2000);
 		if (this->_status == -1)
 			throw ServerSocketException();
 		else if (this->_status == 0)
 			continue;
-		for (int i = 0; i < this->_pollCount; i++)
+		handleSocketEvents();	
+	}
+}
+
+void ServerManager::handleSocketEvents(void)
+{
+	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
+	{
+		if ((this->_pollFdsVector[i].revents & POLLIN))
 		{
-			if ((this->_pollFds[i].revents & POLLIN))
+			if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFdsVector[i].fd) != _listenFds.end()) 
+				this->newClientConnection(this->_pollFdsVector[i].fd);
+			else
 			{
-				if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFds[i].fd) != _listenFds.end()) 
-					this->run(this->_pollFds[i].fd);
-				else
+				if (!this->handleClientConnection(this->_pollFdsVector[i].fd))
 				{
-					if (!this->handleClientConnection(this->_pollFds[i].fd))
-					{
-						this->delFromPollFds(i);
-						break;
-					}
+					this->delFromPollFds(i);
+					break;
 				}
 			}
-			else if (this->_pollFds[i].revents & (POLLHUP | POLLERR))
-			{
-				printTimestamp();
-				std::cout << RED << "Closing " << RESET << "client socket " << RESET << this->_pollFds[i].fd << std::endl;
-				close(this->_pollFds[i].fd);
-				this->delFromPollFds(i);
-			}
 		}
+		else if (this->_pollFdsVector[i].revents & (POLLHUP | POLLERR))
+			this->closeClientConnection(i);
 	}
 }
 
 void	ServerManager::addToPollFds(int clientFd)
 {
-	if (this->_pollCount == this->_pollSize)
-	{
-		this->_pollSize *= 2;
-	}
-	this->_pollFds[this->_pollCount].fd = clientFd;
-	this->_pollFds[this->_pollCount].events = POLLIN;
-	this->_pollCount++;
-
+	pollfd newPollFd;
+	newPollFd.fd = clientFd;
+	newPollFd.events = POLLIN;
+	this->_pollFdsVector.push_back(newPollFd);
 }
 
 void	ServerManager::delFromPollFds(int i)
 {
-	this->_pollFds[i] = this->_pollFds[i - 1];
-	this->_pollCount--;
+	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
 }
 
 const char*	ServerManager::ServerSocketException::what(void) const throw()

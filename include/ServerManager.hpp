@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/03 17:17:30 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:49:48 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ class	ServerManager
 		std::string								_buffer;
 		size_t									_requestSize;
 
-		struct pollfd							*_pollFds;
-		int										_pollSize;
-		int 									_pollCount;
+		// struct pollfd							*_pollFds;
+		std::vector<pollfd>						_pollFdsVector;
 		
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
@@ -66,7 +65,7 @@ class	ServerManager
 		ServerManager(void);
 		~ServerManager(void);
 	
-		int		run(int listenFd);
+		int		newClientConnection(int listenFd);
 		void	config(void);
 		void	configFile(const char* filename);
 		int		createSocket(void);
@@ -79,10 +78,13 @@ class	ServerManager
 		bool	handleClientConnection(int clientFd);
 		bool	isRequestComplete(const std::string &request_buffer);
 
-		int		readFromSocket(std::string &outbuffer, int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
+		
+		void	closeClientConnection(unsigned long i);
+		void	monitorSockets(void);
+		void	handleSocketEvents(void);
 
 		class	ServerSocketException : public std::exception
 		{
