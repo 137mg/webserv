@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 15:57:18 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 16:52:50 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ void Server::send413Response(int clientFd)
 {
 	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large");
     write(clientFd, response.c_str(), response.length());
-	printTimestamp();
-	std::cout << RESET << YELLOW << "Server response " << RESET
-			<< "to socket " << clientFd << "	HTTP/1.1 " << RED <<  "413 Payload Too Large" << RESET << std::endl;
+	serverMessage(response, clientFd, RED);
 }
 
 void	Server::parseRequest(std::string buffer, int clientFd)
@@ -48,7 +46,7 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	// std::cout << "---------------- END BUFFER -----------------" << std::endl;
 	// std::cout << std::endl;
 	_clientFd = clientFd;
-	clientMessage("Client request ", buffer, clientFd);
+	clientMessage(buffer, clientFd);
 	if (buffer.size() > 1048576)
 	{
 		send413Response(clientFd);
