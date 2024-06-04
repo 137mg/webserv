@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.hpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/04 15:38:16 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/06/04 18:10:55 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_location
 }	t_location;
 
 // check host?
+// check server names?
 // figure out redirects
 
 class	Server
