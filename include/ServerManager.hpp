@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerManager.hpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/03 14:08:34 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerManager.hpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/04 00:57:11 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ class	ServerManager
 		std::map<uint16_t, std::vector<Server>>	_serverMap;
 
 		std::string								_ServerName;
-		int										_listenFd;
+		std::vector<int>						_listenFds;
+		//int										_listenFds;
 		int										_clientFd;
 		struct sockaddr_in						_ServerAddress;
 		std::string								_buffer;
 		size_t									_requestSize;
 
-		struct pollfd							*_pollFds;
-		int										_pollSize;
-		int 									_pollCount;
+		// struct pollfd							*_pollFds;
+		std::vector<pollfd>						_pollFdsVector;
 		
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
@@ -65,11 +65,11 @@ class	ServerManager
 		ServerManager(void);
 		~ServerManager(void);
 	
-		int		run(void);
+		int		newClientConnection(int listenFd);
 		void	config(void);
 		void	configFile(const char* filename);
-		void	createSocket(void);
-		void	bindSocket(void);
+		int		createSocket(void);
+		void	bindSocket(int sockfd);
 
 		void	setUpPoll(void);
 		void	addToPollFds(int clientFd);
@@ -78,10 +78,13 @@ class	ServerManager
 		bool	handleClientConnection(int clientFd);
 		bool	isRequestComplete(const std::string &request_buffer);
 
-		int		readFromSocket(std::string &outbuffer, int clientFd);
 		size_t	getRequestSize(std::string request_buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
+		
+		void	closeClientConnection(unsigned long i);
+		void	monitorSockets(void);
+		void	handleSocketEvents(void);
 
 		class	ServerSocketException : public std::exception
 		{

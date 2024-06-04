@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigFile.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 17:42:09 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/03 13:38:45 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/03 17:15:20 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ServerManager::configFile(const char* filename)
 	errno = EINVAL;
 	Config	config(filename);
 	config.parseFile();
-	// config.printServers();
+	//config.printServers();
 	errno = 0;
 	size = config.servers.size();
 	for (size_t i = 0; i < size; i++)
