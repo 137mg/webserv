@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Logger.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 14:41:06 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 15:44:10 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Logger.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/18 14:41:06 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/04 16:50:26 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
-void	terminalMessage(const std::string &s1, const std::string &s2, int clientFd)
+void	clientMessage(const std::string &message, int clientFd)
 {
 	size_t		position;
 	std::string	header;
-	std::size_t	found = s1.find("Client");
 
-	position = std::string(s2).find('\n');
-	header = std::string(s2).substr(0, position);
-	
+	position = std::string(message).find('\n');
+	header = std::string(message).substr(0, position);
 	printTimestamp();
-	if (found != std::string::npos)
-		std::cout << RESET << GREEN << s1 << RESET << "from socket " << clientFd << "	" << header << std::endl;
-	else
-		std::cout << RESET << YELLOW << s1 << RESET << "to socket " << clientFd << "	" << header << std::endl;
+	std::cout << RESET << GREEN << "Client request " << RESET << "from socket " << clientFd << "	" << header << std::endl;
+}
+
+void	serverMessage(const std::string &message, int clientFd, std::string color)
+{
+	size_t spacePos = message.find(' ');
+    std::string httpVersion = message.substr(0, spacePos);
+    size_t nextPos = message.find('\n', spacePos + 1);
+    std::string responseCode = message.substr(spacePos + 1, nextPos - spacePos - 1);
+
+	printTimestamp();
+	std::cout << RESET << YELLOW << "Server response " << RESET
+			<< "to socket " << clientFd << "	" << httpVersion << " "
+			<< color << responseCode << RESET << std::endl;
 }
 
 void	printTimestamp(void)

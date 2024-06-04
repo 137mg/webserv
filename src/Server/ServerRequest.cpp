@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/03 17:51:46 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 16:54:16 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	// std::cout << "---------------- END BUFFER -----------------" << std::endl;
 	// std::cout << std::endl;
 	_clientFd = clientFd;
-	terminalMessage("Client request ", buffer, clientFd);
+	clientMessage(buffer, clientFd);
 	if (buffer.size() > 1048576)
 	{
-		std::string	response = serveFile("html/PayloadTooLarge.hmtl", "413 Payload Too Large", RED);
-		write(_clientFd, response.c_str(), response.size());
-		terminalMessage("Server response ", response, _clientFd);
+		send413Response(clientFd);
 		return;
 	}
 	while (std::getline(iss, token, ' '))

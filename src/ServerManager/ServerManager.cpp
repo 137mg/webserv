@@ -127,7 +127,7 @@ void ServerManager::handleSocketEvents(void)
 			{
 				if (!this->handleClientConnection(this->_pollFdsVector[i].fd))
 				{
-					this->delFromPollFds(i);
+					closeClientConnection(i);
 					break;
 				}
 			}
