@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 14:49:02 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 16:55:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ bool	ServerManager::handleClientConnection(int clientFd)
 	{
 		std::string& clientBuffer = this->_clientBuffers[clientFd];
 		clientBuffer.append(buffer, bytes_read);
-		// please dont look at the next 10 lines too closely uwu
 		if (clientBuffer.size() > 1048576)
 		{
 			selectServer(clientBuffer, clientFd);

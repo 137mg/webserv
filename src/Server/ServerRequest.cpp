@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:52:50 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 16:54:16 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@ static std::string	findPath(const std::string &request)
 			path = request.substr(start_pos, end_pos - start_pos);
 	}
 	return (path);
-}
-
-void Server::send413Response(int clientFd)
-{
-	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large");
-    write(clientFd, response.c_str(), response.length());
-	serverMessage(response, clientFd, RED);
 }
 
 void	Server::parseRequest(std::string buffer, int clientFd)

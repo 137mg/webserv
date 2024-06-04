@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 15:38:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/04 16:54:24 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,11 @@ std::string	Server::serveFile(std::string path, std::string status)
 		response += "Content-Type: text/html\r\n\r\n";
 	response += fileContents;
 	return (response);
+}
+
+void Server::send413Response(int clientFd)
+{
+	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large");
+    write(clientFd, response.c_str(), response.length());
+	serverMessage(response, clientFd, RED);
 }
