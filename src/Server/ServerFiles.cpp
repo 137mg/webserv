@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerFiles.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:54:24 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerFiles.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/04 17:47:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ std::string	Server::serveFile(std::string path, std::string status)
 
 void Server::send413Response(int clientFd)
 {
-	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large");
+	std::string response = serveFile("html/error_pages/PayloadTooLarge.html", "413 Payload Too Large");
     write(clientFd, response.c_str(), response.length());
 	serverMessage(response, clientFd, RED);
 }

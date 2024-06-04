@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/04 17:23:36 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:46:57 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	Server::getMethod(std::string file, t_location location)
 		if (access(filePath.c_str(), R_OK) == 0)
 			response = serveFile(filePath, "200 OK");
 		else
-			response = serveFile("html/PageNotFound.html", "404 Not Found");		
+			response = serveFile("html/error_pages/PageNotFound.html", "404 Not Found");		
 	}
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);

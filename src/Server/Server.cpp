@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/30 17:17:25 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:45:48 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,36 +53,36 @@ void	Server::initDefaultLocation(void)
 
 void	Server::initErrorPages(void)
 {
-	errorPages[400] = "html/BadRequest.html";
-	errorPages[401] = "html/unauthorized.html";
+	errorPages[400] = "html/error_pages/BadRequest.html";
+	errorPages[401] = "html/error_pages/unauthorized.html";
 	// status code 402 is not in use yet
-	errorPages[403] = "html/forbidden.html";
-	errorPages[404] = "html/PageNotFound.html";
-	errorPages[405] = "html/MethodNotAllowed.html";
-	errorPages[406] = "html/NotAcceptable.html";
-	errorPages[407] = "html/ProxyAuthenticationRequired.html";
-	errorPages[408] = "html/RequestTimeout.html";
-	errorPages[409] = "html/Conflict.html";
+	errorPages[403] = "html/error_pages/forbidden.html";
+	errorPages[404] = "html/error_pages/PageNotFound.html";
+	errorPages[405] = "html/error_pages/MethodNotAllowed.html";
+	errorPages[406] = "html/error_pages/NotAcceptable.html";
+	errorPages[407] = "html/error_pages/ProxyAuthenticationRequired.html";
+	errorPages[408] = "html/error_pages/RequestTimeout.html";
+	errorPages[409] = "html/error_pages/Conflict.html";
 	// status code 410 is for promotional purposes
-	errorPages[411] = "html/LengthRequired.html";
+	errorPages[411] = "html/error_pages/LengthRequired.html";
 	// status code 412 seems out of scope
-	errorPages[413] = "html/PayloadTooLarge.html";
-	errorPages[414] = "html/URITooLong.html";
-	errorPages[415] = "html/UnsupportedMediaType.html";
+	errorPages[413] = "html/error_pages/PayloadTooLarge.html";
+	errorPages[414] = "html/error_pages/URITooLong.html";
+	errorPages[415] = "html/error_pages/UnsupportedMediaType.html";
 	// status codes 416-429 are unnecessary I think
-	errorPages[431] = "html/RequestHeaderFieldsTooLarge.html";
+	errorPages[431] = "html/error_pages/RequestHeaderFieldsTooLarge.html";
 	// status code 451 deals with legal stuff, we are anarchists
-	errorPages[500] = "html/InternalServerError.html";
-	errorPages[501] = "html/NotImplemented.html";
-	errorPages[502] = "html/BadGateway.html";
-	errorPages[503] = "html/ServiceUnavailable.html";
-	errorPages[504] = "html/GatewayTimeout.html";
-	errorPages[505] = "html/HTTPVersionNotSupported.html";
+	errorPages[500] = "html/error_pages/InternalServerError.html";
+	errorPages[501] = "html/error_pages/NotImplemented.html";
+	errorPages[502] = "html/error_pages/BadGateway.html";
+	errorPages[503] = "html/error_pages/ServiceUnavailable.html";
+	errorPages[504] = "html/error_pages/GatewayTimeout.html";
+	errorPages[505] = "html/error_pages/HTTPVersionNotSupported.html";
 	// status code 506 I don't even begin to understand
-	errorPages[507] = "html/InsufficientStorage.html";
-	errorPages[508] = "html/LoopDetected.html";
+	errorPages[507] = "html/error_pages/InsufficientStorage.html";
+	errorPages[508] = "html/error_pages/LoopDetected.html";
 	// status code 510 seems out of scope too
-	errorPages[511] = "html/NetworkAuthenticationRequired.html";
+	errorPages[511] = "html/error_pages/NetworkAuthenticationRequired.html";
 }
 
 bool	Server::checkServer(void)
