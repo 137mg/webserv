@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/03 15:08:09 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:23:36 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	Server::getMethod(std::string file, t_location location)
 	else
 	{
 		if (access(filePath.c_str(), R_OK) == 0)
-			response = serveFile(filePath, "200 OK", GREEN);
+			response = serveFile(filePath, "200 OK");
 		else
-			response = serveFile("html/PageNotFound.html", "404 Not Found", RED);		
+			response = serveFile("html/PageNotFound.html", "404 Not Found");		
 	}
 	write(_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response ", response, _clientFd);
+	serverMessage(response, _clientFd, GREEN);
 }
 
 void	Server::deleteMethod(std::string file)
@@ -46,9 +46,9 @@ void	Server::deleteMethod(std::string file)
 	// need to decide what to do with delete error!
 	if (std::remove(fullFilePath.c_str()) != 0)
 		perror("Error deleting file");
-	response = serveFile("html/files.html", "200 OK", GREEN);
+	response = serveFile("html/files.html", "200 OK");
 	write(_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response ", response, _clientFd);
+	serverMessage(response, _clientFd, GREEN);
 }
 
 void	Server::postMethod(std::string buffer)
@@ -58,9 +58,9 @@ void	Server::postMethod(std::string buffer)
 	cgi.initEnvp(this->getHeader(buffer, "Content-Type"), this->getHeader(buffer, "Content-Length"), "POST");
 	cgi.convertVector();
 	cgi.executeScript(buffer);
-	std::string response = serveFile("html/home.html", "200 OK", GREEN);
+	std::string response = serveFile("html/home.html", "200 OK");
 	write(_clientFd, response.c_str(), response.size());
-	terminalMessage("Server response ", response, _clientFd);
+	serverMessage(response, _clientFd, GREEN);
 }
 
 // Returns the value of a specific header

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/04 00:57:11 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/04 17:07:49 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ class	ServerManager
 		};
 };
 
-void	terminalMessage(const std::string &s1, const std::string &s2, int clientFd);
+void	serverMessage(const std::string &message, int clientFd, std::string color);
+void	clientMessage(const std::string &message, int clientFd);
 void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 8192
