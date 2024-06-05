@@ -1,56 +1,90 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerRequest.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:54:16 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/05 15:35:03 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-static std::string	findPath(const std::string &request)
+// need to decide what error to throw when needed variable is not found!
+static std::string	getValue(std::string request, std::string key)
 {
-	std::string	path = "";
-	size_t		start_pos = request.find(" ") + 1; // Find the position of the first space after the request method (e.g., "GET")
+	std::string	value;
+	size_t		startLine;
+	size_t		startValue;
+	size_t		endLine;
 	
-	if (start_pos != std::string::npos)
-	{
-		size_t end_pos = request.find(" ", start_pos); // Find the position of the next space after the start position
-		if (start_pos != std::string::npos)
-			path = request.substr(start_pos, end_pos - start_pos);
-	}
-	return (path);
+	startLine = request.find(key + ": ");
+	if (startLine == std::string::npos)
+		return ("");
+	endLine = request.find("\r\n", startLine);
+	if (endLine == std::string::npos)
+		return ("");
+	startValue = startLine + key.length() + 2;
+	value = request.substr(startValue, endLine - startValue);
+	return (value);
 }
 
-void	Server::parseRequest(std::string buffer, int clientFd)
+t_header	Server::parseRequest(void)
 {
-	std::vector<std::string>	tokens;
-	std::string					token;
-	std::istringstream			iss(buffer);
-	std::string					requestedPath = findPath(buffer);
+	std::istringstream	iss(_request);
+	t_header			header;
 
-	// std::cout << std::endl;
-	// std::cout << "---------------- BEGIN BUFFER --------------" << std::endl;
-	// std::cout << buffer;
-	// std::cout << "---------------- END BUFFER -----------------" << std::endl;
-	// std::cout << std::endl;
+	std::getline(iss, header.method, ' ');
+	std::getline(iss, header.file, ' ');
+	std::getline(iss, header.protocol, '\r');
+	if (header.method == "POST")
+	{
+		header.contentLength = getValue(_request, "Content-Length");
+		header.contentType = getValue(_request, "Content-Type");
+	}
+	return (header);
+}
+
+t_location Server::selectLocation(void)
+{
+	t_location	location;
+	size_t		size;
+	size_t		length;
+
+	size = locations.size();
+	length = 0;
+	for (size_t i = 0; i < size; i++)
+	{
+		if (_header.file.find(locations[i].match) != std::string::npos)
+		{
+			if (locations[i].match.length() > length)
+			{
+				location = locations[i];
+				length = locations[i].match.length();
+			}
+		}
+	}
+	return (location);
+}
+
+void	Server::handleRequest(std::string request, int clientFd)
+{
 	_clientFd = clientFd;
-	clientMessage(buffer, clientFd);
-	if (buffer.size() > 1048576)
+	_request = request;
+	_header = parseRequest();
+	_location = selectLocation();
+	clientMessage(_request, clientFd);
+	if (_request.size() > 1048576)
 	{
 		send413Response(clientFd);
 		return;
 	}
-	while (std::getline(iss, token, ' '))
-		tokens.push_back(token);
-	if (tokens[0] == "POST")
-		postMethod(buffer);
-	else if (tokens[0] == "GET")
-		getMethod(tokens[1], locations[0]);
-	else if (tokens[0] == "DELETE")
-		deleteMethod(tokens[1]);
+	if (_header.method == "GET")
+		getMethod();
+	else if (_header.method == "DELETE")
+		deleteMethod();
+	else if (_header.method == "POST")
+		postMethod();
 }

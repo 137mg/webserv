@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/04 18:10:55 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:34:30 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 # define SERVER_HPP
 
 # include "ServerManager.hpp"
+
+typedef struct s_header
+{
+	std::string	method;
+	std::string	file;
+	std::string	protocol;
+	std::string	contentLength;
+	std::string	contentType;
+}	t_header;
 
 typedef struct s_location
 {
@@ -29,20 +38,25 @@ typedef struct s_location
 
 // check host?
 // check server names?
+// check if root location exists?
 // figure out redirects
 
 class	Server
 {
 	private:
 		int			_clientFd;
+		std::string	_request;
+		t_header	_header;
+		t_location	_location;
 		void		initDefaultLocation(void);
 		void		initErrorPages(void);
 		bool		checkLocation(t_location location);
-		void		getMethod(std::string file, t_location location);
-		void		deleteMethod(std::string file);
-		void		postMethod(std::string buffer);
+		t_location	selectLocation(void);
+		t_header	parseRequest(void);
+		void		getMethod(void);
+		void		deleteMethod(void);
+		void		postMethod(void);
 		void		send413Response(int clientFd);
-		std::string	getHeader(std::string buffer, std::string key);
 		std::string	serveFile(std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);
 
@@ -59,7 +73,7 @@ class	Server
 		~Server(void);
 		Server&								operator=(const Server& original);
 		bool								checkServer(void);
-		void								parseRequest(std::string buffer, int clientFd);
+		void								handleRequest(std::string request, int clientFd);
 };
 
 #endif
