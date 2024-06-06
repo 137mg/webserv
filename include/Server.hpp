@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/05 15:34:30 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/06 12:07:58 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ class	Server
 		void		deleteMethod(void);
 		void		postMethod(void);
 		void		send413Response(int clientFd);
-		std::string	serveFile(std::string path, std::string status);
+		void		sendErrorResponse(int clientFd, int errorCode, std::string status);
+		void		runCGI(std::string filepath, std::string buffer);
+		std::string	serveFile(const std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);
 
 	public:

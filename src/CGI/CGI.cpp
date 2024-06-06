@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/05/31 17:04:20 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.cpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/05 13:42:35 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	CGI::initEnvp(std::string content, std::string contentLength, std::string m
 	this->_envpVector.push_back("REMOTE_ADDR=127.0.0.1");
 	this->_envpVector.push_back("REMOTE_HOST=localhost");
 	this->_envpVector.push_back(fullMethod);
-	this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/upload.py");
-	this->_envpVector.push_back("SCRIPT_NAME=upload.py");
+	// this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/hello.py");
+	// this->_envpVector.push_back("SCRIPT_NAME=hello.py");
 	this->_envpVector.push_back("SERVER_NAME=Webserv");
 	this->_envpVector.push_back(fullPort);
 	this->_envpVector.push_back("SERVER_PROTOCOL=HTTP/1.1");
@@ -88,12 +88,11 @@ void	CGI::convertVector(void)
 }
 
 // I think server variables need to be added here as well
-void	CGI::executeScript(std::string cgiContent)
+void	CGI::executeScript(std::string file, std::string cgiContent)
 {
 	int 		fds[2];
     pid_t 		pid;
 
-    this->convertVector();
     pipe(fds);
     pid = fork();
     if (pid == 0)
@@ -102,8 +101,9 @@ void	CGI::executeScript(std::string cgiContent)
         dup2(fds[0], STDIN_FILENO);
         close(fds[0]);
 
-        const char *args[] = {"./cgi-bin/upload.py", nullptr};
-        execve("./cgi-bin/upload.py", const_cast<char **>(args), this->getEnvp());
+        const char *args[] = {file.c_str(), nullptr};
+        execve(file.c_str(), const_cast<char **>(args), this->getEnvp());
+		perror("execve failed"); 
         exit(EXIT_FAILURE);
     }
     else

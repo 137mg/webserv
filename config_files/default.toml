@@ -8,29 +8,35 @@ auto_index =			"false"
 
 	[server.error_pages]
 
-	400 = "html/error_pages/BadRequest.html"
-	401 = "html/error_pages/unauthorized.html"
-	403 = "html/error_pages/forbidden.html"
-	404 = "html/error_pages/PageNotFound.html"
-	405 = "html/error_pages/MethodNotAllowed.html"
-	406 = "html/error_pages/NotAcceptable.html"
-	407 = "html/error_pages/ProxyAuthenticationRequired.html"
-	408 = "html/error_pages/RequestTimeout.html"
-	409 = "html/error_pages/Conflict.html"
-	411 = "html/error_pages/LengthRequired.html"
-	413 = "html/error_pages/PayloadTooLarge.html"
-	414 = "html/error_pages/URITooLong.html"
-	415 = "html/error_pages/UnsupportedMediaType.html"
-	431 = "html/error_pages/RequestHeaderFieldsTooLarge.html"
-	500 = "html/error_pages/InternalServerError.html"
-	501 = "html/error_pages/NotImplemented.html"
-	502 = "html/error_pages/BadGateway.html"
-	503 = "html/error_pages/ServiceUnavailable.html"
-	504 = "html/error_pages/GatewayTimeout.html"
-	505 = "html/error_pages/HTTPVersionNotSupported.html"
-	507 = "html/error_pages/InsufficientStorage.html"
-	508 = "html/error_pages/LoopDetected.html"
-	511 = "html/error_pages/NetworkAuthenticationRequired.html"
+	404 =				"html/error_pages/PageNotFound.html"
+
+	[[server.location]]
+
+	match =				"/"
+	allowed_methods =	"GET"
+	root =				"html/"
+	index =				"home.html"
+
+	[[server.location]]
+
+	match =				"/cgi-bin"
+	allowed_methods =	["POST", "DELETE"]
+	root =				"cgi-bin/"
+	index =				"upload.py"
+
+[[server]]
+
+listen =				"8080"
+host =					"127.0.0.1"
+server_names =			"blah"
+client_max_body_size =	"1MB"
+auto_index =			"false"
+cgi_extents =			".py"
+cgi_paths =				"/usr/bin/python3"
+
+	[server.error_pages]
+
+	404 =				"html/error_pages/PageNotFound.html"
 
 	[[server.location]]
 

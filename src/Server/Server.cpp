@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/04 17:45:48 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:03:35 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ void	Server::initErrorPages(void)
 	errorPages[400] = "html/error_pages/BadRequest.html";
 	errorPages[401] = "html/error_pages/unauthorized.html";
 	// status code 402 is not in use yet
-	errorPages[403] = "html/error_pages/forbidden.html";
+	errorPages[403] = "html/error_pages/Forbidden.html";
 	errorPages[404] = "html/error_pages/PageNotFound.html";
-	errorPages[405] = "html/error_pages/MethodNotAllowed.html";
-	errorPages[406] = "html/error_pages/NotAcceptable.html";
-	errorPages[407] = "html/error_pages/ProxyAuthenticationRequired.html";
-	errorPages[408] = "html/error_pages/RequestTimeout.html";
-	errorPages[409] = "html/error_pages/Conflict.html";
+	errorPages[405] = "html/MethodNotAllowed.html";
+	errorPages[406] = "html/NotAcceptable.html";
+	errorPages[407] = "html/ProxyAuthenticationRequired.html";
+	errorPages[408] = "html/RequestTimeout.html";
+	errorPages[409] = "html/Conflict.html";
 	// status code 410 is for promotional purposes
 	errorPages[411] = "html/error_pages/LengthRequired.html";
 	// status code 412 seems out of scope
 	errorPages[413] = "html/error_pages/PayloadTooLarge.html";
-	errorPages[414] = "html/error_pages/URITooLong.html";
-	errorPages[415] = "html/error_pages/UnsupportedMediaType.html";
+	errorPages[414] = "html/URITooLong.html";
+	errorPages[415] = "html/UnsupportedMediaType.html";
 	// status codes 416-429 are unnecessary I think
 	errorPages[431] = "html/error_pages/RequestHeaderFieldsTooLarge.html";
 	// status code 451 deals with legal stuff, we are anarchists
