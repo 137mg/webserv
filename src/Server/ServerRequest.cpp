@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerRequest.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:54:16 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/06 11:49:15 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,6 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 		getMethod(tokens[1], locations[0]);
 	else if (tokens[0] == "DELETE")
 		deleteMethod(tokens[1]);
+	// else
+	// 	sendErrorResponse(clientFd, 400, "400 Bad Request");
 }

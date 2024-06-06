@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.hpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/04 15:38:16 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/06/06 11:49:44 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ class	Server
 		void		deleteMethod(std::string file);
 		void		postMethod(std::string buffer);
 		void		send413Response(int clientFd);
+		void		sendErrorResponse(int clientFd, int errorCode, std::string status);
 		std::string	getHeader(std::string buffer, std::string key);
-		std::string	serveFile(std::string path, std::string status);
+		std::string	serveFile(const std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);
 
 	public:
