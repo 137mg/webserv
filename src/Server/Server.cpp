@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 12:03:35 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:53:53 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ Server::~Server(void)
 
 Server&	Server::operator=(const Server& original)
 {
+	if (this == &original)
+		return (*this);
+	_clientFd = original._clientFd;
+	_request = original._request;
+	_header = original._header;
+	_location = original._location;
 	port = original.port;
 	clientMaxBodySize = original.clientMaxBodySize;
 	host = original.host;

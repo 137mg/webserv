@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGI.hpp                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/05 13:09:33 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGI.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 14:52:49 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/06 14:02:34 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,14 @@ class CGI
 	private:
 		char						**_envp;
 		std::vector<std::string>	_envpVector;
+		Server						_server;
 	
 	public:
-		CGI();
-		~CGI();
-		CGI(const CGI &other);
-		CGI & operator=(const CGI &other);
-
-		void		initEnvp(std::string content, std::string contentLength, std::string method);
-		void		convertVector(void);
-		void		executeScript(std::string file, std::string cgiContent);
-		char		**getEnvp(void) const;
+		CGI(const Server& server);
+		~CGI(void);
+		void	initEnvp(const t_header& header);
+		void	convertVector(void);
+		void	executeScript(std::string file, std::string cgiContent);
 };
 
 #endif
