@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 14:12:11 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/06 14:32:30 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ typedef struct s_location
 
 // check host?
 // check server names?
-// check if root location exists?
+// check if "/" location exists?
 // figure out redirects
+// implement autoIndex, allowedMethods, cgiExtents, cgiPaths
 
 class	Server
 {
