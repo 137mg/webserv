@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/06 12:40:04 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerRequest.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/06 14:32:04 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	Server::handleRequest(std::string request, int clientFd)
 	_request = request;
 	_header = parseRequest();
 	_location = selectLocation();
+	std::cout << request << std::endl;
 	clientMessage(_request, clientFd);
 	if (_request.size() > 1048576)
 	{
@@ -87,4 +88,10 @@ void	Server::handleRequest(std::string request, int clientFd)
 		deleteMethod();
 	else if (_header.method == "POST")
 		postMethod();
+	else
+	{
+		std::string response = serveFile("html/error_pages/Forbidden.html", "403 Forbidden");
+		write(_clientFd, response.c_str(), response.length());
+		serverMessage(response, _clientFd, RED);
+	}
 }

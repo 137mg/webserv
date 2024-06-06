@@ -17,12 +17,23 @@
 		<a href="/tests.html">Tests</a>
 	</div>
 
+	
 	<div class ="block form-block">
-		<form enctype = "multipart/form-data" class="form" action="/cgi-bin/upload.py" method="post">
-			<h2>Upload a file</h2>
-			<input type="file" value="" class="form-item file-input" id="filename" name="filename"><br>
-			<input type="submit" value="Submit" class="form-item submit-btn">
-		</form>
+		<input type="button" id="putRequestButton" value="Send PUT request (invalid method)" class="form-item submit-btn">
 	</div>
+
+    <script>
+        function putRequest(url)
+		{
+            fetch(url, {
+                method: 'PUT'
+            })
+        }
+
+        document.getElementById('putRequestButton').addEventListener('click', function() {
+            putRequest('http://localhost:8080');
+        });
+    </script>
+
 </body>
 </html>
