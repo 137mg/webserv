@@ -104,7 +104,7 @@ void	ServerManager::setUpPoll(void)
 
 void	ServerManager::monitorSockets(void)
 {
-	while (true)
+	while (RUNNING)
 	{
 		this->_status = poll(this->_pollFdsVector.data(), this->_pollFdsVector.size(), 2000);
 		if (this->_status == -1)

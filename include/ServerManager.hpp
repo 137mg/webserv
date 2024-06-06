@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 11:51:19 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:03:32 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,12 @@
 #include <fcntl.h>
 #include <poll.h>
 
+#include <csignal>
+
 #include "colors.h"
 #include "Server.hpp"
+extern volatile bool RUNNING;
+
 
 class	Server;
 
@@ -85,6 +89,8 @@ class	ServerManager
 		void	closeClientConnection(unsigned long i);
 		void	monitorSockets(void);
 		void	handleSocketEvents(void);
+
+		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception
 		{
