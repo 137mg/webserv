@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 11:49:44 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:51:13 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ class	Server
 		void		initDefaultLocation(void);
 		void		initErrorPages(void);
 		bool		checkLocation(t_location location);
-		void		getMethod(std::string file, t_location location);
+		void		getMethod(std::string file, t_location location, std::string buffer);
 		void		deleteMethod(std::string file);
 		void		postMethod(std::string buffer);
 		void		send413Response(int clientFd);
 		void		sendErrorResponse(int clientFd, int errorCode, std::string status);
+		void		runCGI(std::string filepath, std::string buffer);
 		std::string	getHeader(std::string buffer, std::string key);
 		std::string	serveFile(const std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);

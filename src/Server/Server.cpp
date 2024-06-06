@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/30 17:17:25 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Server.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 17:13:40 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/05 14:23:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	Server::initErrorPages(void)
 	errorPages[400] = "html/BadRequest.html";
 	errorPages[401] = "html/unauthorized.html";
 	// status code 402 is not in use yet
-	errorPages[403] = "html/forbidden.html";
-	errorPages[404] = "html/PageNotFound.html";
+	errorPages[403] = "html/error_pages/Forbidden.html";
+	errorPages[404] = "html/error_pages/PageNotFound.html";
 	errorPages[405] = "html/MethodNotAllowed.html";
 	errorPages[406] = "html/NotAcceptable.html";
 	errorPages[407] = "html/ProxyAuthenticationRequired.html";
@@ -66,7 +66,7 @@ void	Server::initErrorPages(void)
 	// status code 410 is for promotional purposes
 	errorPages[411] = "html/LengthRequired.html";
 	// status code 412 seems out of scope
-	errorPages[413] = "html/PayloadTooLarge.html";
+	errorPages[413] = "html/error_pages/PayloadTooLarge.html";
 	errorPages[414] = "html/URITooLong.html";
 	errorPages[415] = "html/UnsupportedMediaType.html";
 	// status codes 416-429 are unnecessary I think

@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/06 11:49:15 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:51:38 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	Server::parseRequest(std::string buffer, int clientFd)
 	if (tokens[0] == "POST")
 		postMethod(buffer);
 	else if (tokens[0] == "GET")
-		getMethod(tokens[1], locations[0]);
+		getMethod(tokens[1], locations[0], buffer);
 	else if (tokens[0] == "DELETE")
 		deleteMethod(tokens[1]);
 	// else

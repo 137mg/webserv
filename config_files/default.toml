@@ -10,7 +10,7 @@ cgi_paths =				"/usr/bin/python3"
 
 	[server.error_pages]
 
-	404 =				"html/PageNotFound.html"
+	404 =				"html/error_pages/PageNotFound.html"
 
 	[[server.location]]
 
@@ -38,7 +38,7 @@ cgi_paths =				"/usr/bin/python3"
 
 	[server.error_pages]
 
-	404 =				"html/PageNotFound.html"
+	404 =				"html/error_pages/PageNotFound.html"
 
 	[[server.location]]
 

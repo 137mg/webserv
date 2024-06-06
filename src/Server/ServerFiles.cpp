@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/06 11:49:03 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:51:52 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ std::string	Server::serveFile(const std::string path, std::string status)
 
 void Server::send413Response(int clientFd)
 {
-	std::string response = serveFile("html/PayloadTooLarge.html", "413 Payload Too Large");
-	write(clientFd, response.c_str(), response.length());
+	std::string response = serveFile("html/error_pages/PayloadTooLarge.html", "413 Payload Too Large");
+    write(clientFd, response.c_str(), response.length());
 	serverMessage(response, clientFd, RED);
 }
 
