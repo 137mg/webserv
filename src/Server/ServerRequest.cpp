@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/06 14:32:04 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/07 15:23:09 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	Server::handleRequest(std::string request, int clientFd)
 	_request = request;
 	_header = parseRequest();
 	_location = selectLocation();
-	std::cout << request << std::endl;
 	clientMessage(_request, clientFd);
 	if (_request.size() > 1048576)
 	{
