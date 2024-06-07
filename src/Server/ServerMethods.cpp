@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/07 15:39:12 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/07 17:49:04 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	Server::getMethod(void)
 				response = serveFile(filePath, "200 OK");
 		}
 		else
-			response = serveFile("html/error_pages/PageNotFound.html", "404 Not Found");		
+		{
+			sendErrorResponse(_clientFd, 404);
+			return;
+		}
 	}
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
@@ -89,9 +92,5 @@ void	Server::runCGI(std::string filepath)
 		serverMessage(response, _clientFd, GREEN);
 	}
 	else
-	{
-		response = serveFile("html/error_pages/Forbidden.html", "403 Forbidden");
-		write(_clientFd, response.c_str(), response.size());
-		serverMessage(response, _clientFd, GREEN);
-	}
+		sendErrorResponse(_clientFd, 403);
 }
