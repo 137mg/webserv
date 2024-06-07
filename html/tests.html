@@ -19,20 +19,29 @@
 
 	
 	<div class ="block form-block">
-		<input type="button" id="putRequestButton" value="Send PUT request (invalid method)" class="form-item submit-btn">
+		<input type="button" onclick='putRequest("http://localhost:8080")' value="Send forbidden method (PUT)" class="form-item submit-btn">
 	</div>
 
     <script>
-        function putRequest(url)
+		function putRequest(url)
 		{
-            fetch(url, {
-                method: 'PUT'
-            })
-        }
-
-        document.getElementById('putRequestButton').addEventListener('click', function() {
-            putRequest('http://localhost:8080');
-        });
+			fetch(url, {
+            method: 'PUT'
+			})
+			.then(response =>
+			{
+				if (response.ok) {
+					window.location.reload();
+				}
+				else {
+					return response.text().then(text => {
+						document.open();
+						document.write(text);
+						document.close();
+					});
+				}
+			});
+		}
     </script>
 
 </body>
