@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 14:12:11 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Server.hpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/07 17:41:55 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ typedef struct s_location
 	std::vector<std::string>	cgiPaths;
 }	t_location;
 
+typedef struct errorPageInfo
+{
+    std::string path;
+    std::string message;
+}	t_errorPageInfo;
+
 // check host?
 // check server names?
 // check if root location exists?
@@ -57,7 +63,7 @@ class	Server
 		void		deleteMethod(void);
 		void		postMethod(void);
 		void		send413Response(int clientFd);
-		void		sendErrorResponse(int clientFd, int errorCode, std::string status);
+		void		sendErrorResponse(int clientFd, int errorCode);
 		void		runCGI(std::string filepath);
 		std::string	serveFile(const std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);
@@ -70,6 +76,7 @@ class	Server
 		std::vector<std::string>			serverNames;
 		std::deque<t_location>				locations;
 		std::map<uint16_t, std::string>		errorPages;
+		std::map<uint16_t, std::string>		errorMessages;
 		Server(void);
 		Server(const Server& original);
 		~Server(void);

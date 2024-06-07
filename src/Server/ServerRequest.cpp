@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/07 16:48:56 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/07 17:42:26 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,5 @@ void	Server::handleRequest(std::string request, int clientFd)
 	else if (_header.method == "POST")
 		postMethod();
 	else
-	{
-		std::string response = serveFile("html/error_pages/MethodNotAllowed.html", "405 Method Not Allowed");
-		write(_clientFd, response.c_str(), response.length());
-		serverMessage(response, _clientFd, RED);
-	}
+		sendErrorResponse(_clientFd, 405);
 }

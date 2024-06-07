@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 13:53:53 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Server.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 17:13:40 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/07 17:41:41 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ Server&	Server::operator=(const Server& original)
 	serverNames = original.serverNames;
 	locations = original.locations;
 	errorPages = original.errorPages;
+	errorMessages = original.errorMessages;
 	return (*this);
 }
 
@@ -64,7 +65,7 @@ void	Server::initErrorPages(void)
 	// status code 402 is not in use yet
 	errorPages[403] = "html/error_pages/Forbidden.html";
 	errorPages[404] = "html/error_pages/PageNotFound.html";
-	errorPages[405] = "html/MethodNotAllowed.html";
+	errorPages[405] = "html/error_pages/MethodNotAllowed.html";
 	errorPages[406] = "html/NotAcceptable.html";
 	errorPages[407] = "html/ProxyAuthenticationRequired.html";
 	errorPages[408] = "html/RequestTimeout.html";
@@ -89,6 +90,30 @@ void	Server::initErrorPages(void)
 	errorPages[508] = "html/error_pages/LoopDetected.html";
 	// status code 510 seems out of scope too
 	errorPages[511] = "html/error_pages/NetworkAuthenticationRequired.html";
+
+	errorMessages[400] = "400 Bad Request";
+	errorMessages[401] = "401 Unauthorized";
+	errorMessages[403] = "403 Forbidden";
+	errorMessages[404] = "404 Not Found";
+	errorMessages[405] = "405 Method Not Allowed";
+	errorMessages[406] = "406 Not Acceptable";
+	errorMessages[407] = "407 Proxy Authentication Required";
+	errorMessages[408] = "408 Request Timeout";
+	errorMessages[409] = "409 Conflict";
+	errorMessages[411] = "411 Length Required";
+	errorMessages[413] = "413 Payload Too Large";
+	errorMessages[414] = "414 URI Too Long";
+	errorMessages[415] = "415 Unsupported Media Type";
+	errorMessages[431] = "431 Request Header Fields Too Large";
+	errorMessages[500] = "500 Internal Server Error";
+	errorMessages[501] = "501 Not Implemented";
+	errorMessages[502] = "502 Bad Gateway";
+	errorMessages[503] = "503 Service Unavailable";
+	errorMessages[504] = "504 Gateway Timeout";
+	errorMessages[505] = "505 HTTP Version Not Supported";
+	errorMessages[507] = "507 Insufficient Storage";
+	errorMessages[508] = "508 Loop Detected";
+	errorMessages[511] = "511 Network Authentication Required";
 }
 
 bool	Server::checkServer(void)

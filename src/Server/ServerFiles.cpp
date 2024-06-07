@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/06 14:10:31 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/07 17:42:20 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ void Server::send413Response(int clientFd)
 	serverMessage(response, clientFd, RED);
 }
 
-void Server::sendErrorResponse(int clientFd, int errorCode, std::string status)
+void Server::sendErrorResponse(int clientFd, int errorCode)
 {
-	std::string response = serveFile(errorPages[errorCode], status);
+	std::string response = serveFile(errorPages[errorCode], errorMessages[errorCode]);
 	write(clientFd, response.c_str(), response.length());
 	serverMessage(response, clientFd, RED);
 }
