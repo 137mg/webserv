@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/06 12:40:04 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerRequest.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/07 17:42:26 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,6 @@ void	Server::handleRequest(std::string request, int clientFd)
 		deleteMethod();
 	else if (_header.method == "POST")
 		postMethod();
+	else
+		sendErrorResponse(_clientFd, 405);
 }

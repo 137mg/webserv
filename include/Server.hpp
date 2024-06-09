@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/06 14:32:30 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:47:43 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ typedef struct s_location
 	std::vector<std::string>	cgiPaths;
 }	t_location;
 
+typedef struct errorPageInfo
+{
+    std::string path;
+    std::string message;
+}	t_errorPageInfo;
+
 // check host?
 // check server names?
 // check if "/" location exists?
@@ -58,7 +64,7 @@ class	Server
 		void		deleteMethod(void);
 		void		postMethod(void);
 		void		send413Response(int clientFd);
-		void		sendErrorResponse(int clientFd, int errorCode, std::string status);
+		void		sendErrorResponse(int clientFd, int errorCode);
 		void		runCGI(std::string filepath);
 		std::string	serveFile(const std::string path, std::string status);
 		std::string	showUploads(std::string path, std::string status, std::string color);
@@ -71,6 +77,7 @@ class	Server
 		std::vector<std::string>			serverNames;
 		std::deque<t_location>				locations;
 		std::map<uint16_t, std::string>		errorPages;
+		std::map<uint16_t, std::string>		errorMessages;
 		Server(void);
 		Server(const Server& original);
 		~Server(void);
