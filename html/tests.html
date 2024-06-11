@@ -33,7 +33,8 @@
 				if (response.ok) {
 					window.location.reload();
 				}
-				else {
+				else
+				{
 					return response.text().then(text => {
 						document.open();
 						document.write(text);
