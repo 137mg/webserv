@@ -34,7 +34,11 @@
 				}
 				else
 				{
-					console.error('Failed to delete file');
+					return response.text().then(text => {
+						document.open();
+						document.write(text);
+						document.close();
+					});
 				}
         	})
 		}
