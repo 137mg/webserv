@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/11 15:52:54 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:32:21 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,6 @@
 # define SERVER_HPP
 
 # include "ServerManager.hpp"
-
-typedef struct s_header
-{
-	std::string	method;
-	std::string	file;
-	std::string	protocol;
-	std::string	contentLength;
-	std::string	contentType;
-}	t_header;
 
 typedef struct s_location
 {
@@ -59,7 +50,6 @@ class	Server
 		void		initErrorPages(void);
 		bool		checkLocation(t_location location);
 		t_location	selectLocation(void);
-		t_header	parseRequest(void);
 		void		getMethod(void);
 		void		deleteMethod(void);
 		void		postMethod(void);
@@ -82,7 +72,7 @@ class	Server
 		~Server(void);
 		Server&								operator=(const Server& original);
 		bool								checkServer(void);
-		void								handleRequest(std::string request, int clientFd);
+		void								handleRequest(t_header header, std::string request, int clientFd);
 };
 
 #endif

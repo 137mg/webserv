@@ -26,10 +26,9 @@ ServerManager::~ServerManager(void)
 	}
 }
 
-// uses the first port in the list of ports now, needs to change once we add multiple ports!
 void	ServerManager::config(void)
 {
-	for (std::vector<uint16_t>::size_type i = 0; i != _ports.size(); i++)
+	for (size_t i = 0; i != _ports.size(); i++)
 	{
 		this->_ServerAddress.sin_family = AF_INET;
 		this->_ServerAddress.sin_addr.s_addr = INADDR_ANY;
