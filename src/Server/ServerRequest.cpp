@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 15:59:33 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:48:09 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	Server::handleRequest(std::string request, int clientFd)
 	_header = parseRequest();
 	_location = selectLocation();
 	clientMessage(_request, clientFd);
-	if (_request.size() > 1048576)
+	if (_request.size() > clientMaxBodySize)
 	{
 		sendErrorResponse(413);
 		return;
