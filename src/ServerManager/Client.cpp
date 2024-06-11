@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Client.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:55:13 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/11 12:54:21 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		if (clientBuffer.size() > 1048576)
 		{
 			selectServer(clientBuffer, clientFd);
-            this->_clientBuffers.erase(clientFd);
-            return false;
+			this->_clientBuffers.erase(clientFd);
+			return false;
 		}
 		else if (isRequestComplete(clientBuffer))
 		{

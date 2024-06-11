@@ -104,7 +104,7 @@ void	ServerManager::setUpPoll(void)
 
 void	ServerManager::monitorSockets(void)
 {
-	while (true)
+	while (RUNNING)
 	{
 		this->_status = poll(this->_pollFdsVector.data(), this->_pollFdsVector.size(), 2000);
 		if (this->_status == -1)
@@ -115,9 +115,10 @@ void	ServerManager::monitorSockets(void)
 	}
 }
 
+// Here where should I check the RUNNING? in each of them?
 void ServerManager::handleSocketEvents(void)
 {
-	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
+	for (unsigned long i = 0; i < this->_pollFdsVector.size() && RUNNING; i++)
 	{
 		if ((this->_pollFdsVector[i].revents & POLLIN))
 		{
