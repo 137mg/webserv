@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerFiles.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/07 17:42:20 by Julia         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerFiles.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/11 15:05:07 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,9 @@ std::string	Server::serveFile(const std::string path, std::string status)
 	return (response);
 }
 
-void Server::send413Response(int clientFd)
-{
-	std::string response = serveFile("html/error_pages/PayloadTooLarge.html", "413 Payload Too Large");
-    write(clientFd, response.c_str(), response.length());
-	serverMessage(response, clientFd, RED);
-}
-
-void Server::sendErrorResponse(int clientFd, int errorCode)
+void Server::sendErrorResponse(int errorCode)
 {
 	std::string response = serveFile(errorPages[errorCode], errorMessages[errorCode]);
-	write(clientFd, response.c_str(), response.length());
-	serverMessage(response, clientFd, RED);
+	write(_clientFd, response.c_str(), response.length());
+	serverMessage(response, _clientFd, RED);
 }

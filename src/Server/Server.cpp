@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/11 12:52:46 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:57:40 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	Server::initDefaultLocation(void)
 {
 	defaultLocation.autoIndex = false;
 	defaultLocation.match = "/";
-	defaultLocation.root = "html/";
-	defaultLocation.index = "home.html";
+	defaultLocation.root = "./";
 	defaultLocation.allowedMethods.push_back("GET");
 }
 
@@ -147,9 +146,15 @@ bool	Server::checkLocation(t_location location)
 
 	if (location.match[0] != '/')
 		return (false);
-	path = location.root + location.index;
-	if (access(path.c_str(), R_OK) == -1)
-		return (false);
+	if (!location.autoIndex)
+	{
+		path = location.root + location.match;
+		if (path.back() != '/')
+			path += "/";
+		path += location.index;
+		if (access(path.c_str(), R_OK) == -1)
+			return (false);
+	}
 	size = location.allowedMethods.size();
 	for (size_t i = 0; i < size; i++)
 	{

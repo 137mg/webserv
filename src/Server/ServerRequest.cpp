@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerRequest.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 11:17:12 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:04:31 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	Server::handleRequest(std::string request, int clientFd)
 	clientMessage(_request, clientFd);
 	if (_request.size() > 1048576)
 	{
-		send413Response(clientFd);
+		sendErrorResponse(413);
 		return;
 	}
 	if (_header.method == "GET")
@@ -88,5 +88,5 @@ void	Server::handleRequest(std::string request, int clientFd)
 	else if (_header.method == "POST")
 		postMethod();
 	else
-		sendErrorResponse(_clientFd, 405);
+		sendErrorResponse(405);
 }
