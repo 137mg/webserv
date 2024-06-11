@@ -6,18 +6,25 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/06 15:04:14 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/11 11:16:10 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerManager.hpp"
 
-volatile bool RUNNING = true;
+volatile bool RUNNING;
+// int RUNNING;
 
 void	signalHandler(int signum)
 {
 	RUNNING = false;
 	std::cout << "Interrupt signal (" << signum << ") received.\n";
+}
+
+void	setUpSignals()
+{
+	RUNNING = true;
+	signal(SIGINT, signalHandler);
 }
 
 int main(int argc, char** argv)
@@ -29,7 +36,7 @@ int main(int argc, char** argv)
 		std::cerr << "Error: too many arguments" << std::endl;
 		return (1);
 	}
-	signal(SIGINT, signalHandler);
+	setUpSignals();
 	try
 	{
 		if (argc == 2)

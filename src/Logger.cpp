@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Logger.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/18 14:41:06 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/04 16:50:26 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Logger.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 14:41:06 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/11 11:00:00 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	clientMessage(const std::string &message, int clientFd)
 void	serverMessage(const std::string &message, int clientFd, std::string color)
 {
 	size_t spacePos = message.find(' ');
-    std::string httpVersion = message.substr(0, spacePos);
-    size_t nextPos = message.find('\n', spacePos + 1);
-    std::string responseCode = message.substr(spacePos + 1, nextPos - spacePos - 1);
+	std::string httpVersion = message.substr(0, spacePos);
+	size_t nextPos = message.find('\n', spacePos + 1);
+	std::string responseCode = message.substr(spacePos + 1, nextPos - spacePos - 1);
 
 	printTimestamp();
 	std::cout << RESET << YELLOW << "Server response " << RESET

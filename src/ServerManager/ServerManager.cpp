@@ -117,7 +117,7 @@ void	ServerManager::monitorSockets(void)
 
 void ServerManager::handleSocketEvents(void)
 {
-	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
+	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++ && RUNNING)
 	{
 		if ((this->_pollFdsVector[i].revents & POLLIN))
 		{
