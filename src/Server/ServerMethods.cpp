@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/07 17:49:04 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/11 13:44:19 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,27 @@ void	Server::getMethod(void)
 
 void	Server::deleteMethod(void)
 {
-	std::string	fullFilePath;
+	std::string	filePath;
 	std::string	response;
 
-	fullFilePath = "cgi-bin/uploads" + _header.file;
-	// need to decide what to do with delete error!
-	if (std::remove(fullFilePath.c_str()) != 0)
-		perror("Error deleting file");
-	response = serveFile("html/files.html", "200 OK");
-	write(_clientFd, response.c_str(), response.size());
-	serverMessage(response, _clientFd, GREEN);
+	filePath = _header.file;
+	if (!filePath.empty())
+		filePath = filePath.substr(1);
+	if (access(filePath.c_str(), F_OK) == 0)
+	{
+		if (access(filePath.c_str(), W_OK) == 0)
+		{
+			if (std::remove(filePath.c_str()) != 0)
+				perror("Error deleting file");
+			response = serveFile("html/files.html", "200 OK");
+			write(_clientFd, response.c_str(), response.size());
+			serverMessage(response, _clientFd, GREEN);
+		}
+		else
+			sendErrorResponse(_clientFd, 403);
+	}
+	else
+		sendErrorResponse(_clientFd, 404);
 }
 
 void	Server::postMethod(void)
