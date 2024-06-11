@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigUtils.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:36:02 by mirjam            #+#    #+#             */
-/*   Updated: 2024/05/26 00:16:53 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/11 16:18:24 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	Config::parseLine(void)
 	for (i = 0; i < _values.size(); i++)
 	{
 		size = _values[i].size();
-		if (size == 0 || _values[i][0] != '\"' || _values[i].find('\"', 1) != size - 1)
+		if (size < 3 || _values[i][0] != '\"' || _values[i].find('\"', 1) != size - 1)
 			throw ConfigFileException();
 		_values[i] = _values[i].substr(1, size - 2);
 	}
