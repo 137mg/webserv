@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 15:04:31 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:59:33 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ t_location Server::selectLocation(void)
 
 void	Server::handleRequest(std::string request, int clientFd)
 {
+	size_t	size;
+
 	_clientFd = clientFd;
 	_request = request;
 	_header = parseRequest();
@@ -81,12 +83,19 @@ void	Server::handleRequest(std::string request, int clientFd)
 		sendErrorResponse(413);
 		return;
 	}
-	if (_header.method == "GET")
-		getMethod();
-	else if (_header.method == "DELETE")
-		deleteMethod();
-	else if (_header.method == "POST")
-		postMethod();
-	else
-		sendErrorResponse(405);
+	size = _location.allowedMethods.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		if (_header.method == _location.allowedMethods[i])
+		{
+			if (_header.method == "GET")
+				getMethod();
+			else if (_header.method == "DELETE")
+				deleteMethod();
+			else if (_header.method == "POST")
+				postMethod();
+			return;
+		}
+	}
+	sendErrorResponse(405);
 }

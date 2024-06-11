@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/11 15:19:05 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:52:54 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ typedef struct errorPageInfo
 
 // check host?
 // check server names?
-// check if "/" location exists?
+// check locations more thoroughly?
 // figure out redirects
-// implement autoIndex, allowedMethods, cgiExtents, cgiPaths
+// implement autoIndex, cgiExtents, cgiPaths
 
 class	Server
 {
