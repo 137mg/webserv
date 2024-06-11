@@ -20,7 +20,9 @@
 	<script>
 		function deleteFile(filename)
 		{
-			fetch(filename,
+			const filePath = "cgi-bin/uploads/" + filename;
+
+			fetch(filePath,
 			{
 				method: 'DELETE'
 			})
