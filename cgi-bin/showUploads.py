@@ -19,19 +19,39 @@ print("<!DOCTYPE html> \
 	<a href='/upload.html'>Upload</a> \
 	<a href='/cgi-bin/showUploads.py'>Files</a> \
 	<a href='/tests.html'>Tests</a> \
-	</div>")
-
-print("<script type='text/javascript' src='../js/showUploads.js'></script> \
+	</div>\
+	  <script>\
+	  function deleteFile(filename) {\
+	const filePath = 'uploads/' + filename;\
+	fetch(filePath,\
+	{\
+		method: 'DELETE'\
+	})\
+	.then(response =>\
+	{\
+		if (response.ok)\
+		{\
+			window.location.reload();\
+		}\
+		else\
+		{\
+			return response.text().then(text => {\
+				document.open();\
+				document.write(text);\
+				document.close();\
+			});\
+		}\
+	})\
+}</script>\
 	<div class ='block form-block files-block'> \
-		<h2>Uploaded files</h2> \
-		<ul> \
-")
+		<h2>Uploaded files</h2><ul>")
 
 cwd = os.getcwd()
 sub_dir = 'cgi-bin/uploads'
 upload_dir = os.path.join(cwd, sub_dir)
 
 if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
+	count = 0
 	for filename in os.listdir(upload_dir):
 		line = "<div class='entry'><button class='delete-button'"
 		line += "value='"
@@ -42,6 +62,9 @@ if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
 		line += filename
 		line += "</p><br></div>"
 		print(line)
+		count += 1
+	if count == 0:
+		print("<p>No files uploaded</p>")
 else:
 	print("<p>No files uploaded</p>")
 
