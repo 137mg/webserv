@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import cgi, os, sys
+import os
 
 
 print("<!DOCTYPE html> \
@@ -27,12 +27,19 @@ print("<script type='text/javascript' src='../js/showUploads.js'></script> \
 		<ul> \
 ")
 
-line = "<div class='entry'><button class='delete-button' value='hey'onclick='deleteFile(this.value)'>Delete</button><p>hey</p><br></div>"
-print(line)
-# cwd = os.getcwd()
-# sub_dir = 'cgi-bin/uploads'
+cwd = os.getcwd()
+sub_dir = 'cgi-bin/uploads'
+upload_dir = os.path.join(cwd, sub_dir)
 
-# print(f"Current directory: {cwd}")
-# print(f"Sub directory: {sub_dir}")
+for filename in os.listdir(upload_dir):
+	line = "<div class='entry'><button class='delete-button'"
+	line += "value='"
+	line += filename
+	line += "'onclick='deleteFile(\""
+	line += filename
+	line += "\")'>Delete</button><p>"
+	line += filename
+	line += "</p><br></div>"
+	print(line)
 
 print("</ul></div></body></html>")

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 16:52:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/12 17:31:40 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ void	Server::deleteMethod(void)
 	std::string	response;
 
 	filePath = _location.root + _header.file;
+	
+	// std::cout << "file: " << _header.file << std::endl;
+	// std::cout << "path: " << filePath << std::endl;
+	
 	if (access(filePath.c_str(), F_OK) == 0)
 	{
 		if (access(filePath.c_str(), W_OK) == 0)

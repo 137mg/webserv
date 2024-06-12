@@ -1,6 +1,6 @@
 function deleteFile(filename)
 {
-	const filePath = "cgi-bin/uploads/" + filename;
+	const filePath = "uploads/" + filename;
 
 	fetch(filePath,
 	{
