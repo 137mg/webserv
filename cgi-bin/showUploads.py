@@ -31,15 +31,18 @@ cwd = os.getcwd()
 sub_dir = 'cgi-bin/uploads'
 upload_dir = os.path.join(cwd, sub_dir)
 
-for filename in os.listdir(upload_dir):
-	line = "<div class='entry'><button class='delete-button'"
-	line += "value='"
-	line += filename
-	line += "'onclick='deleteFile(\""
-	line += filename
-	line += "\")'>Delete</button><p>"
-	line += filename
-	line += "</p><br></div>"
-	print(line)
+if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
+	for filename in os.listdir(upload_dir):
+		line = "<div class='entry'><button class='delete-button'"
+		line += "value='"
+		line += filename
+		line += "'onclick='deleteFile(\""
+		line += filename
+		line += "\")'>Delete</button><p>"
+		line += filename
+		line += "</p><br></div>"
+		print(line)
+else:
+	print("<p>No files uploaded</p>")
 
 print("</ul></div></body></html>")
