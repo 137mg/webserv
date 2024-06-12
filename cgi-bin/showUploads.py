@@ -2,7 +2,6 @@
 
 import os
 
-
 print("<!DOCTYPE html> \
 <html> \
 <head> \
