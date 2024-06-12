@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 17:31:40 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/12 17:52:51 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ void	Server::getMethod(void)
 			filePath += _location.index;
 		// else the contents of the directory need to be shown
 	}
-	// if (filePath == "./html/files.html")
-	// 	response = showUploads(filePath, "200 OK", GREEN);
-	// else
-	// {
 	if (access(filePath.c_str(), R_OK) == 0)
 	{
 		if (_header.file.find(".py") != std::string::npos)
@@ -44,7 +40,6 @@ void	Server::getMethod(void)
 		sendErrorResponse(404);
 		return;
 	}
-	// }
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
 }
@@ -55,10 +50,6 @@ void	Server::deleteMethod(void)
 	std::string	response;
 
 	filePath = _location.root + _header.file;
-	
-	// std::cout << "file: " << _header.file << std::endl;
-	// std::cout << "path: " << filePath << std::endl;
-	
 	if (access(filePath.c_str(), F_OK) == 0)
 	{
 		if (access(filePath.c_str(), W_OK) == 0)
