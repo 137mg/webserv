@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.hpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 14:52:49 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 11:16:57 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.hpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/12 16:04:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ class CGI
 	public:
 		CGI(const Server& server);
 		~CGI(void);
-		void	initEnvp(const t_header& header);
-		void	convertVector(void);
-		void	executeScript(std::string file, std::string cgiContent);
+		void		initEnvp(const t_header& header);
+		void		convertVector(void);
+		std::string	executeScript(std::string file, std::string cgiContent, int clientFd);
 };
 
 #endif

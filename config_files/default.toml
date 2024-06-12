@@ -1,6 +1,6 @@
 [[server]]
 
-listen =				"8080"
+listen =				"8082"
 host =					"127.0.0.1"
 server_names =			"localhost"
 client_max_body_size =	"1MB"
@@ -36,7 +36,7 @@ client_max_body_size =	"1MB"
 
 [[server]]
 
-listen =				"2020"
+listen =				"2022"
 host =					"127.0.0.1"
 server_names =			"localhost"
 client_max_body_size =	"1MB"

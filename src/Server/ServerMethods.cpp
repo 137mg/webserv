@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 15:21:24 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerMethods.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/12 16:27:03 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,26 @@ void	Server::getMethod(void)
 			filePath += _location.index;
 		// else the contents of the directory need to be shown
 	}
-	if (filePath == "./html/files.html")
-		response = showUploads(filePath, "200 OK", GREEN);
-	else
+	// if (filePath == "./html/files.html")
+	// 	response = showUploads(filePath, "200 OK", GREEN);
+	// else
+	// {
+	if (access(filePath.c_str(), R_OK) == 0)
 	{
-		if (access(filePath.c_str(), R_OK) == 0)
+		if (_header.file.find(".py") != std::string::npos)
 		{
-			if (_header.file.find(".py") != std::string::npos)
-			{
-				runCGI(filePath);
-				return;
-			}
-			else
-				response = serveFile(filePath, "200 OK");
-		}
-		else
-		{
-			sendErrorResponse(404);
+			runCGI(filePath);
 			return;
 		}
+		else
+			response = serveFile(filePath, "200 OK");
 	}
+	else
+	{
+		sendErrorResponse(404);
+		return;
+	}
+	// }
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
 }
@@ -81,7 +81,7 @@ void	Server::postMethod(void)
 	filePath = _location.root + _header.file;
 	cgi.initEnvp(_header);
 	cgi.convertVector();
-	cgi.executeScript(filePath, _request);
+	cgi.executeScript(filePath, _request, _clientFd);
 	response = serveFile("html/home.html", "200 OK");
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
@@ -96,10 +96,11 @@ void	Server::runCGI(std::string filePath)
 	cgi.convertVector();
 	if (access(filePath.c_str(), X_OK) == 0)
 	{
-		cgi.executeScript(filePath, _request);
-		response = serveFile("html/home.html", "200 OK");
-		write(_clientFd, response.c_str(), response.size());
-		serverMessage(response, _clientFd, GREEN);
+		cgi.executeScript(filePath, _request, _clientFd);
+		// response = serveFile("html/home.html", "200 OK");
+		// std::cout << response << std::endl;
+		// write(_clientFd, response.c_str(), response.size());
+		// serverMessage(response, _clientFd, GREEN);
 	}
 	else
 		sendErrorResponse(403);

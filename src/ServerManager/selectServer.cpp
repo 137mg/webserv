@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   selectServer.cpp                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 17:44:51 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   selectServer.cpp                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/12 14:25:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ t_header	ServerManager::parseRequest(std::string request)
 	i = header.host.find(":");
 	portStr = header.host.substr(i + 1);
 	header.host.erase(i);
-	std::cout << header.host << std::endl;
 	header.port = static_cast<uint16_t>(stoi(portStr));
 	if (header.method == "POST")
 	{
