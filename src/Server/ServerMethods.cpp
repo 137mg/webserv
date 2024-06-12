@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 16:27:03 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/12 16:52:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,6 @@ void	Server::runCGI(std::string filePath)
 	if (access(filePath.c_str(), X_OK) == 0)
 	{
 		cgi.executeScript(filePath, _request, _clientFd);
-		// response = serveFile("html/home.html", "200 OK");
-		// std::cout << response << std::endl;
-		// write(_clientFd, response.c_str(), response.size());
-		// serverMessage(response, _clientFd, GREEN);
 	}
 	else
 		sendErrorResponse(403);

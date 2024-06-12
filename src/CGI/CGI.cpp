@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 16:27:42 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/12 16:59:28 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,14 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
         return "";
     }
 
-    if (pid == 0) {
-    // 자식 프로세스
-        close(fds[0]); // 읽기 끝 닫기
+    if (pid == 0)
+	{
+        close(fds[0]); // close read end
 
-        // 표준 입력을 부모 프로세스에서 전달한 내용으로 리디렉션
+        // redirect standard input to content passed by the parent process
         int pipeStdin[2];
-        if (pipe(pipeStdin) == -1) {
+        if (pipe(pipeStdin) == -1)
+		{
             perror("pipe failed");
             exit(EXIT_FAILURE);
         }
@@ -121,40 +122,42 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
             exit(EXIT_FAILURE);
         }
 
-        if (innerPid == 0) { // 손자 프로세스
-            close(pipeStdin[1]); // 쓰기 끝 닫기
-            dup2(pipeStdin[0], STDIN_FILENO); // 표준 입력 리디렉션
-            close(pipeStdin[0]); // 원본 파일 디스크립터 닫기
+        if (innerPid == 0) // grandchild process
+		{
+            close(pipeStdin[1]); // close write end
+            dup2(pipeStdin[0], STDIN_FILENO); // redirect std input
+            close(pipeStdin[0]); // close original file descriptor
 
-            dup2(fds[1], STDOUT_FILENO); // 표준 출력을 파이프로 리디렉션
-            close(fds[1]); // 원본 파일 디스크립터 닫기
+            dup2(fds[1], STDOUT_FILENO); // redirect std output to a pipe
+            close(fds[1]); // close original file descriptor
 
             const char *args[] = {file.c_str(), nullptr};
             execve(file.c_str(), const_cast<char **>(args), this->_envp);
             perror("execve failed");
             exit(EXIT_FAILURE);
-        } else {
-            close(pipeStdin[0]); // 읽기 끝 닫기
-            write(pipeStdin[1], cgiContent.c_str(), cgiContent.size()); // CGI 콘텐츠 쓰기
-            close(pipeStdin[1]); // 쓰기 끝 닫기
-            waitpid(innerPid, nullptr, 0); // 손자 프로세스가 끝나기를 기다림
+        }
+		else
+		{
+            close(pipeStdin[0]); // close read end
+            write(pipeStdin[1], cgiContent.c_str(), cgiContent.size());
+            close(pipeStdin[1]); // close write end
+            waitpid(innerPid, nullptr, 0); // wait for grandchild process to finish
             exit(EXIT_SUCCESS);
         }
-    } else {
-        // 부모 프로세스
-        close(fds[1]); // 쓰기 끝 닫기
+    }
+	else
+	{
+        close(fds[1]); // close write end
 
-        while ((bytesRead = read(fds[0], buffer, sizeof(buffer) - 1)) > 0) {
+        while ((bytesRead = read(fds[0], buffer, sizeof(buffer) - 1)) > 0)
+		{
             buffer[bytesRead] = '\0';
             httpResponse += buffer;
         }
 
-        close(fds[0]); // 읽기 끝 닫기
-        waitpid(pid, nullptr, 0); // 자식 프로세스가 끝나기를 기다림
+        close(fds[0]); // close read end
+        waitpid(pid, nullptr, 0);
     }
 	buildHttpResponse(httpResponse, clientFd);
 	return (httpResponse);
-	httpResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-	write(clientFd, httpResponse.c_str(), httpResponse.size());
-	serverMessage(httpResponse, clientFd, GREEN);
 }
