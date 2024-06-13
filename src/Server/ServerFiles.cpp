@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerFiles.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 17:55:52 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerFiles.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/13 14:31:09 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,13 @@ std::string	Server::serveFile(const std::string path, std::string status)
 	return (response);
 }
 
-void Server::sendErrorResponse(int errorCode)
+// placeholder
+std::string	Server::showDirectoryListing(const std::string path)
+{
+	return (serveFile(path, "200 OK"));
+}
+
+void	Server::sendErrorResponse(int errorCode)
 {
 	std::string response = serveFile(errorPages[errorCode], errorMessages[errorCode]);
 	write(_clientFd, response.c_str(), response.length());

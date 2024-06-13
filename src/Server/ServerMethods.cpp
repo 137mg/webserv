@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerMethods.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 17:52:51 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/13 14:18:38 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,27 @@ void	Server::getMethod(void)
 	std::string	response;
 
 	filePath = _location.root + _header.file;
-	if (filePath.back() == '/')
-	{
-		if (!_location.autoIndex)
-			filePath += _location.index;
-		// else the contents of the directory need to be shown
-	}
-	if (access(filePath.c_str(), R_OK) == 0)
-	{
-		if (_header.file.find(".py") != std::string::npos)
-		{
-			runCGI(filePath);
-			return;
-		}
-		else
-			response = serveFile(filePath, "200 OK");
-	}
-	else
+	if (filePath.back() == '/' && !_location.index.empty())
+		filePath += _location.index;
+	if (access(filePath.c_str(), R_OK) != 0 || (filePath.back() == '/' && !_location.autoIndex))
 	{
 		sendErrorResponse(404);
 		return;
 	}
+	if (_header.file.find(".py") != std::string::npos)
+	{
+		runCGI(filePath);
+		return;
+	}
+	if (filePath.back() == '/')
+		response = showDirectoryListing(filePath);
+	else
+		response = serveFile(filePath, "200 OK");
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
 }
 
+// still need to decide what to do with delete error
 void	Server::deleteMethod(void)
 {
 	std::string	filePath;

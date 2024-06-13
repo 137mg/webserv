@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.hpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/12 17:55:24 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/06/13 14:14:54 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct errorPageInfo
 // check server names?
 // check locations more thoroughly?
 // figure out redirects
-// implement autoIndex, cgiExtents, cgiPaths
+// implement cgiExtents, cgiPaths
 
 class	Server
 {
@@ -56,6 +56,7 @@ class	Server
 		void		sendErrorResponse(int errorCode);
 		void		runCGI(std::string filePath);
 		std::string	serveFile(const std::string path, std::string status);
+		std::string	showDirectoryListing(const std::string path);
 
 	public:
 		uint16_t							port;

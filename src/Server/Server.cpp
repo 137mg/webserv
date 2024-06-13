@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 17:13:40 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/12 14:14:04 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/06/13 14:24:12 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	Server::initDefaultLocation(void)
 {
 	defaultLocation.autoIndex = false;
 	defaultLocation.match = "/";
-	defaultLocation.root = "./";
+	defaultLocation.root = ".";
 	defaultLocation.allowedMethods.push_back("GET");
 }
 
