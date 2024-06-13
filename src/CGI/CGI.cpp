@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 16:59:28 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/13 16:21:30 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	CGI::initEnvp(const t_header& header)
 	std::string	fullMethod = "REQUEST_METHOD=" + header.method;
 	std::string	fullPort = "SERVER_PORT=" + std::to_string(_server.port);
 	std::string	fullProtocol = "SERVER_PROTOCOL=" + header.protocol;
+    std::string directoryPathEnv = "INPUT=" + header.file;
 	
 	this->_envpVector.push_back(fullContent);
 	this->_envpVector.push_back(fullContentLen);
@@ -46,6 +47,7 @@ void	CGI::initEnvp(const t_header& header)
 	this->_envpVector.push_back(fullAddress);
 	this->_envpVector.push_back("REMOTE_HOST=localhost");
 	this->_envpVector.push_back(fullMethod);
+	this->_envpVector.push_back(directoryPathEnv);
 	// this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/hello.py");
 	// this->_envpVector.push_back("SCRIPT_NAME=hello.py");
 	this->_envpVector.push_back("SERVER_NAME=Webserv");

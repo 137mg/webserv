@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/03 17:54:18 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/06/13 14:38:46 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRC =	src/CGI/CGI.cpp							\
 		src/Config/ConfigUpdate.cpp				\
 		src/Config/ConfigUtils.cpp				\
 		src/Server/Server.cpp					\
-		src/Server/ServerFiles.cpp				\
+		src/Server/Response.cpp				\
 		src/Server/ServerMethods.cpp			\
 		src/Server/ServerRequest.cpp			\
 		src/ServerManager/ConfigFile.cpp		\

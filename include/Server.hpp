@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 14:14:54 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Server.hpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/13 14:59:00 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class	Server
 		void		postMethod(void);
 		void		sendErrorResponse(int errorCode);
 		void		runCGI(std::string filePath);
-		std::string	serveFile(const std::string path, std::string status);
+		std::string	buildResponse(const std::string path, std::string status);
 		std::string	showDirectoryListing(const std::string path);
 
 	public:
