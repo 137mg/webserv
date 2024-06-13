@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Response.cpp                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/13 16:18:12 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Response.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/13 17:35:40 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,15 @@ std::string	Server::buildResponse(const std::string path, std::string status)
 	return (response);
 }
 
-// placeholder
-std::string	Server::showDirectoryListing(const std::string path)
+void	Server::sendRedirectResponse(void)
 {
-	runCGI("./cgi-bin/directoryListing.py");
-	return (path);
+	std::string	response;
+
+	response = "HTTP/1.1 301 Moved Permanently\r\n";
+	response += "Location: " + _location.redirect + "\r\n";
+	response += "Connection: keep-alive\r\n\r\n";
+	write(_clientFd, response.c_str(), response.length());
+	serverMessage(response, _clientFd, BLUE);
 }
 
 void	Server::sendErrorResponse(int errorCode)

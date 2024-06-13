@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerMethods.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/13 16:20:33 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/13 17:08:39 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@ void	Server::getMethod(void)
 	}
 	if (filePath.back() == '/')
 	{
-		response = showDirectoryListing(filePath);
+		runCGI("./cgi-bin/directoryListing.py");
 		return;
 	}
-	else
-		response = buildResponse(filePath, "200 OK");
+	response = buildResponse(filePath, "200 OK");
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
 }

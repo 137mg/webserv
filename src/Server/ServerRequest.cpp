@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 15:20:39 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:12:59 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	if (_location.match.empty())
 	{
 		sendErrorResponse(404);
+		return;
+	}
+	if (!_location.redirect.empty())
+	{
+		sendRedirectResponse();
 		return;
 	}
 	if (!_header.contentLength.empty() && stoul(_header.contentLength) > clientMaxBodySize)

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:47:13 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:14:21 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ class	Server
 		void		deleteMethod(void);
 		void		postMethod(void);
 		void		sendErrorResponse(int errorCode);
+		void		sendRedirectResponse(void);
 		void		runCGI(std::string filePath);
 		std::string	buildResponse(const std::string path, std::string status);
-		std::string	showDirectoryListing(const std::string path);
 
 	public:
 		uint16_t							port;
