@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 13:43:03 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 15:20:39 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,16 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 {
 	size_t	size;
 
+	clientMessage(request, clientFd);
 	_clientFd = clientFd;
 	_request = request;
 	_header = header;
 	_location = selectLocation();
-	clientMessage(_request, clientFd);
+	if (_location.match.empty())
+	{
+		sendErrorResponse(404);
+		return;
+	}
 	if (!_header.contentLength.empty() && stoul(_header.contentLength) > clientMaxBodySize)
 	{
 		sendErrorResponse(413);

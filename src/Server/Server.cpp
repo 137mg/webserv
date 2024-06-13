@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 14:24:12 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:30:47 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ bool	Server::checkLocation(t_location location)
 
 	if (location.match[0] != '/')
 		return (false);
-	if (!location.autoIndex)
+	if (!location.index.empty())
 	{
 		path = location.root + location.match;
 		if (path.back() != '/')

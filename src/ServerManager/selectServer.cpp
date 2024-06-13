@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   selectServer.cpp                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 17:32:23 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   selectServer.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/13 15:43:26 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static std::string	getValue(std::string request, std::string key)
 	return (value);
 }
 
+// what if Host variable does not take the form of "host:port"?
 t_header	ServerManager::parseRequest(std::string request)
 {
 	std::istringstream	iss(request);
@@ -54,17 +55,32 @@ t_header	ServerManager::parseRequest(std::string request)
 	return (header);
 }
 
-// still needs to handle server names!
 void	ServerManager::selectServer(std::string buffer, int clientFd)
 {
 	t_header			header;
 	uint16_t			port;
 	std::vector<Server>	serverList;
 	Server				server;
+	size_t				i;
+	size_t				j;
 
 	header = parseRequest(buffer);
 	port = header.port;
 	serverList = _serverMap[port];
-	server = serverList[0];
+	for (i = 0; i < serverList.size(); i++)
+	{
+		for (j = 0; j < serverList[i].serverNames.size(); j++)
+		{
+			if (header.host == serverList[i].serverNames[j])
+			{
+				server = serverList[i];
+				break;
+			}
+		}
+		if (j != serverList[i].serverNames.size())
+			break;
+	}
+	if (i == serverList.size())
+		server = serverList[0];
 	server.handleRequest(header, buffer, clientFd);
 }
