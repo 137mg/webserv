@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/11 17:35:16 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:29:16 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ class	ServerManager
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
 
+		std::map<int, time_t> 					_clientActivityMap;
+		const int								_timeout;
+
 	public:
 		ServerManager(void);
 		~ServerManager(void);
@@ -102,6 +105,7 @@ class	ServerManager
 		void	closeClientConnection(unsigned long i);
 		void	monitorSockets(void);
 		void	handleSocketEvents(void);
+		void	checkForTimeouts(void);
 
 		//void	signalHandler(int signum);
 
