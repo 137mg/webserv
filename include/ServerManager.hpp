@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 13:29:16 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:47:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,10 @@
 #include <csignal>
 
 #include "colors.h"
+#include "structs.hpp"
+#include "Server.hpp"
 
 extern volatile bool RUNNING;
-
-typedef struct s_header
-{
-	std::string	method;
-	std::string	file;
-	std::string	protocol;
-	std::string	host;
-	uint16_t	port;
-	std::string	contentLength;
-	std::string	contentType;
-}	t_header;
-
-#include "Server.hpp"
 
 class	Server;
 

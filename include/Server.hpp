@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:39:34 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:47:13 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 # define SERVER_HPP
 
 # include "ServerManager.hpp"
-
-typedef struct s_location
-{
-	bool						autoIndex;
-	std::string					match;
-	std::string					root;
-	std::string					index;
-	std::string					redirect;
-	std::vector<std::string>	allowedMethods;
-	std::vector<std::string>	cgiExtents;
-	std::vector<std::string>	cgiPaths;
-}	t_location;
-
-typedef struct errorPageInfo
-{
-    std::string path;
-    std::string message;
-}	t_errorPageInfo;
 
 // check host?
 // implement cgiExtents + cgiPaths
