@@ -19,8 +19,7 @@ if os.path.exists(dir) and os.path.isdir(dir):
 		if os.path.isdir(full_path):
 			print("<a href='" + directory_path_raw + link + "/" + "'>" + name + "/</a>")
 		elif os.path.isfile(full_path):
-			link = "/" + name
-			print("<a href='" + link + "'>" + name + "</a>")
+			print("<a href='" + directory_path_raw + link + "'>" + name + "</a>")
 		print("<br>")
 else:
 	print("Directory not found")
