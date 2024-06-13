@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 17:14:21 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 18:06:02 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define SERVER_HPP
 
 # include "ServerManager.hpp"
-
-// check host?
-// implement cgiExtents + cgiPaths
 
 class	Server
 {
