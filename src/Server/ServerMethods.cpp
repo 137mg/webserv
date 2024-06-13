@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerMethods.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 17:08:39 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 21:49:56 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,18 @@ void	Server::getMethod(void)
 		sendErrorResponse(404);
 		return;
 	}
-	if (_header.file.find(".py") != std::string::npos)
-	{
-		runCGI(filePath);
-		return;
-	}
 	if (filePath.back() == '/')
 	{
 		runCGI("./cgi-bin/directoryListing.py");
 		return;
+	}
+	for (size_t i = 0; i < _location.cgiExtents.size(); i++)
+	{
+		if (_header.file.find(_location.cgiExtents[i]) != std::string::npos)
+		{
+			runCGI(filePath);
+			return;
+		}
 	}
 	response = buildResponse(filePath, "200 OK");
 	write(_clientFd, response.c_str(), response.size());
@@ -69,7 +72,15 @@ void	Server::postMethod(void)
 	std::string filePath;
 	
 	filePath = _location.root + _header.file;
-	runCGI(filePath);
+	for (size_t i = 0; i < _location.cgiExtents.size(); i++)
+	{
+		if (_header.file.find(_location.cgiExtents[i]) != std::string::npos)
+		{
+			runCGI(filePath);
+			return;
+		}
+	}
+	sendErrorResponse(415);
 }
 
 void	Server::runCGI(std::string filePath)

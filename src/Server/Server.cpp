@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:30:47 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/13 21:43:01 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	Server::initErrorPages(void)
 	// status code 412 seems out of scope
 	errorPages[413] = "html/error_pages/PayloadTooLarge.html"; // handled
 	errorPages[414] = "html/URITooLong.html";
-	errorPages[415] = "html/UnsupportedMediaType.html";
+	errorPages[415] = "html/error_pages/UnsupportedMediaType.html"; // handled
 	// status codes 416-429 are unnecessary I think
 	errorPages[431] = "html/error_pages/RequestHeaderFieldsTooLarge.html";
 	// status code 451 deals with legal stuff, we are anarchists
