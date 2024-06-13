@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 14:18:38 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerMethods.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/13 16:20:33 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@ void	Server::getMethod(void)
 		return;
 	}
 	if (filePath.back() == '/')
+	{
 		response = showDirectoryListing(filePath);
+		return;
+	}
 	else
-		response = serveFile(filePath, "200 OK");
+		response = buildResponse(filePath, "200 OK");
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
 }
 
-// still need to decide what to do with delete error
 void	Server::deleteMethod(void)
 {
 	std::string	filePath;
@@ -52,7 +54,7 @@ void	Server::deleteMethod(void)
 		{
 			if (std::remove(filePath.c_str()) != 0)
 				perror("Error deleting file");
-			response = serveFile("html/files.html", "200 OK");
+			response = buildResponse("html/files.html", "200 OK");
 			write(_clientFd, response.c_str(), response.size());
 			serverMessage(response, _clientFd, GREEN);
 		}
@@ -65,17 +67,10 @@ void	Server::deleteMethod(void)
 
 void	Server::postMethod(void)
 {
-	CGI			cgi(*this);
-	std::string	filePath;
-	std::string	response;
-
+	std::string filePath;
+	
 	filePath = _location.root + _header.file;
-	cgi.initEnvp(_header);
-	cgi.convertVector();
-	cgi.executeScript(filePath, _request, _clientFd);
-	response = serveFile("html/home.html", "200 OK");
-	write(_clientFd, response.c_str(), response.size());
-	serverMessage(response, _clientFd, GREEN);
+	runCGI(filePath);
 }
 
 void	Server::runCGI(std::string filePath)

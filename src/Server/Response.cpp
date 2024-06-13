@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerFiles.cpp                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 14:31:09 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Response.cpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/13 16:18:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-std::string	Server::serveFile(const std::string path, std::string status)
+std::string	Server::buildResponse(const std::string path, std::string status)
 {
 	std::ifstream		fileStream(path);
 	std::stringstream	responseStream;
@@ -36,12 +36,13 @@ std::string	Server::serveFile(const std::string path, std::string status)
 // placeholder
 std::string	Server::showDirectoryListing(const std::string path)
 {
-	return (serveFile(path, "200 OK"));
+	runCGI("./cgi-bin/directoryListing.py");
+	return (path);
 }
 
 void	Server::sendErrorResponse(int errorCode)
 {
-	std::string response = serveFile(errorPages[errorCode], errorMessages[errorCode]);
+	std::string response = buildResponse(errorPages[errorCode], errorMessages[errorCode]);
 	write(_clientFd, response.c_str(), response.length());
 	serverMessage(response, _clientFd, RED);
 }

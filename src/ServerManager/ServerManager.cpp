@@ -12,7 +12,7 @@
 
 #include "ServerManager.hpp"
 
-ServerManager::ServerManager(void)
+ServerManager::ServerManager(void) : _timeout(60)
 {
 	this->_ServerName = "Webserv";
 }
@@ -82,6 +82,7 @@ int	ServerManager::newClientConnection(int listenFd)
 	if (clientFd == -1)
 		throw ClientSocketException();
 	this->addToPollFds(clientFd);
+	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
 	std::cout << std::endl;
 	printTimestamp();
 	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
@@ -101,6 +102,20 @@ void	ServerManager::setUpPoll(void)
 	this->monitorSockets();
 }
 
+void ServerManager::checkForTimeouts(void) {
+	time_t now = std::time(nullptr);
+	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++) {
+		int clientFd = this->_pollFdsVector[i].fd;
+		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end()) {
+			if (now - _clientActivityMap[clientFd] > this->_timeout) {
+				std::cout << RED <<"Client " << clientFd << " timed out."  << RESET << std::endl;
+				closeClientConnection(i);
+				i--; // Adjust index after erasing the element
+			}
+		}
+	}
+}
+
 void	ServerManager::monitorSockets(void)
 {
 	while (RUNNING)
@@ -108,13 +123,15 @@ void	ServerManager::monitorSockets(void)
 		this->_status = poll(this->_pollFdsVector.data(), this->_pollFdsVector.size(), 2000);
 		if (this->_status == -1)
 			throw ServerSocketException();
-		else if (this->_status == 0)
+		else if (this->_status == 0) {
+			checkForTimeouts();
 			continue;
+		}
 		handleSocketEvents();	
+		checkForTimeouts();
 	}
 }
 
-// Here where should I check the RUNNING? in each of them?
 void ServerManager::handleSocketEvents(void)
 {
 	for (unsigned long i = 0; i < this->_pollFdsVector.size() && RUNNING; i++)
@@ -130,6 +147,7 @@ void ServerManager::handleSocketEvents(void)
 					closeClientConnection(i);
 					break;
 				}
+				_clientActivityMap[this->_pollFdsVector[i].fd] = std::time(nullptr); // Update the last activity time
 			}
 		}
 		else if (this->_pollFdsVector[i].revents & (POLLHUP | POLLERR))
