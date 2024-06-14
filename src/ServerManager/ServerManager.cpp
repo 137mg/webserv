@@ -108,7 +108,7 @@ void ServerManager::checkForTimeouts(void) {
 		int clientFd = this->_pollFdsVector[i].fd;
 		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end()) {
 			if (now - _clientActivityMap[clientFd] > this->_timeout) {
-				std::cout << RED <<"Client " << clientFd << " timed out."  << RESET << std::endl;
+				std::cout << RED <<"Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
 				closeClientConnection(i);
 				i--; // Adjust index after erasing the element
 			}

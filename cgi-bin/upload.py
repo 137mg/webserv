@@ -17,6 +17,7 @@ if 'filename' in form:
     fileitem = form['filename']
     if fileitem.filename:
         filename = os.path.basename(fileitem.filename)
+        filename = filename.replace(' ', '%20')
         with open(os.path.join(upload_dir, filename), 'wb') as file:
             file.write(fileitem.file.read())
 
