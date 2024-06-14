@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 16:46:31 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:43:10 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,35 +60,28 @@ void	Server::initDefaultLocation(void)
 void	Server::initErrorPages(void)
 {
 	errorPages[400] = "html/error_pages/BadRequest.html"; // handled
-	errorPages[401] = "html/error_pages/unauthorized.html";
-	// status code 402 is not in use yet
+	// errorPages[401] = "html/error_pages/unauthorized.html";
 	errorPages[403] = "html/error_pages/Forbidden.html"; // handled
 	errorPages[404] = "html/error_pages/PageNotFound.html"; // handled
 	errorPages[405] = "html/error_pages/MethodNotAllowed.html"; // handled
-	errorPages[406] = "html/NotAcceptable.html";
-	errorPages[407] = "html/ProxyAuthenticationRequired.html"; //No need to handle
-	errorPages[408] = "html/RequestTimeout.html"; // handled (?!)
-	errorPages[409] = "html/Conflict.html";
-	// status code 410 is for promotional purposes
-	errorPages[411] = "html/error_pages/LengthRequired.html";
-	// status code 412 seems out of scope
+	// errorPages[406] = "html/NotAcceptable.html";
+	// errorPages[407] = "html/ProxyAuthenticationRequired.html";
+	errorPages[408] = "html/RequestTimeout.html"; // handled but page should be deleted
+	// errorPages[409] = "html/Conflict.html";
+	errorPages[411] = "html/error_pages/LengthRequired.html"; // handled
 	errorPages[413] = "html/error_pages/PayloadTooLarge.html"; // handled
-	errorPages[414] = "html/URITooLong.html";
+	// errorPages[414] = "html/URITooLong.html";
 	errorPages[415] = "html/error_pages/UnsupportedMediaType.html"; // handled
-	// status codes 416-429 are unnecessary I think
-	errorPages[431] = "html/error_pages/RequestHeaderFieldsTooLarge.html";
-	// status code 451 deals with legal stuff, we are anarchists
+	// errorPages[431] = "html/error_pages/RequestHeaderFieldsTooLarge.html";
 	errorPages[500] = "html/error_pages/InternalServerError.html";
-	errorPages[501] = "html/error_pages/NotImplemented.html";
-	errorPages[502] = "html/error_pages/BadGateway.html"; // No need to handle it
-	errorPages[503] = "html/error_pages/ServiceUnavailable.html";
-	errorPages[504] = "html/error_pages/GatewayTimeout.html"; // No need to handle it
-	errorPages[505] = "html/error_pages/HTTPVersionNotSupported.html";
-	// status code 506 I don't even begin to understand
-	errorPages[507] = "html/error_pages/InsufficientStorage.html";
-	errorPages[508] = "html/error_pages/LoopDetected.html";
-	// status code 510 seems out of scope too
-	errorPages[511] = "html/error_pages/NetworkAuthenticationRequired.html";
+	// errorPages[501] = "html/error_pages/NotImplemented.html";
+	// errorPages[502] = "html/error_pages/BadGateway.html";
+	// errorPages[503] = "html/error_pages/ServiceUnavailable.html";
+	// errorPages[504] = "html/error_pages/GatewayTimeout.html";
+	errorPages[505] = "html/error_pages/HTTPVersionNotSupported.html"; // handled
+	// errorPages[507] = "html/error_pages/InsufficientStorage.html";
+	// errorPages[508] = "html/error_pages/LoopDetected.html";
+	// errorPages[511] = "html/error_pages/NetworkAuthenticationRequired.html";
 
 	errorMessages[400] = "400 Bad Request";
 	errorMessages[401] = "401 Unauthorized";

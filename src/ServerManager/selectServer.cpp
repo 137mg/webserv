@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 15:53:17 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:27:45 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,6 @@ static t_header	parseRequest(std::string request)
 	return (header);
 }
 
-static bool	checkHeader(t_header header)
-{
-	if (header.method.empty() || header.file.empty() || header.protocol.empty())
-		return (false);
-	if (header.host.empty() || header.port == 0)
-		return (false);
-	if (header.method == "POST" && (header.contentLength.empty() || header.contentType.empty()))
-		return (false);
-	return (true);
-}
-
 void	ServerManager::selectServer(std::string buffer, int clientFd)
 {
 	t_header			header;
@@ -75,13 +64,10 @@ void	ServerManager::selectServer(std::string buffer, int clientFd)
 	size_t				j;
 
 	header = parseRequest(buffer);
-	if (!checkHeader(header))
-	{
-		buffer.clear();
-		if (header.port == 0)
-			header.port = _ports[0];
-	}
-	port = header.port;
+	if (header.port == 0)
+		port = _ports[0];
+	else
+		port = header.port;
 	serverList = _serverMap[port];
 	for (i = 0; i < serverList.size(); i++)
 	{

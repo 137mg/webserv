@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 15:42:34 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:34:09 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ t_location Server::selectLocation(void)
 	return (location);
 }
 
+static bool	checkHeader(t_header header)
+{
+	if (header.method.empty() || header.file.empty() || header.protocol.empty())
+		return (false);
+	if (header.host.empty() || header.port == 0)
+		return (false);
+	if (header.method == "POST" && header.contentType.empty())
+		return (false);
+	return (true);
+}
+
 void	Server::handleRequest(t_header header, std::string request, int clientFd)
 {
 	size_t	size;
@@ -43,9 +54,19 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	_request = request;
 	_header = header;
 	_location = selectLocation();
-	if (request.empty())
+	if (_header.method == "POST" && _header.contentLength.empty())
+	{
+		sendErrorResponse(411);
+		return;
+	}
+	if (!checkHeader(_header))
 	{
 		sendErrorResponse(400);
+		return;
+	}
+	if (header.protocol != "HTTP/1.1")
+	{
+		sendErrorResponse(505);
 		return;
 	}
 	if (_location.match.empty())
