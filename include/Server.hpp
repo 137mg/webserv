@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 18:01:29 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:03:24 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class	Server
 		Server&								operator=(const Server& original);
 		void								checkServer(void);
 		void								handleRequest(t_header header, std::string request, int clientFd);
-		class								SizeTooLargeException : public std::exception
+		class								StandardValuesException : public std::exception
 		{
 			public:
 				const char*	what(void) const throw();

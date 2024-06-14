@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 17:43:10 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:09:50 by mirjam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ void	Server::checkServer(void)
 	size_t	size;
 
 	if (clientMaxBodySize > MB * 10)
-		throw SizeTooLargeException();
+		throw StandardValuesException();
+	if (host != "127.0.0.1")
+		throw StandardValuesException();
 	if (locations.empty())
 		locations.push_back(defaultLocation);
 	size = locations.size();
@@ -150,7 +152,7 @@ void	Server::checkLocation(t_location location)
 		if (!(location.allowedMethods[i] == "GET"
 			|| location.allowedMethods[i] == "POST"
 			|| location.allowedMethods[i] == "DELETE"))
-			throw LocationSyntaxException();
+			throw StandardValuesException();
 	}
 	if (location.cgiExtents.size() != location.cgiPaths.size())
 		throw LocationSyntaxException();
@@ -164,9 +166,10 @@ void	Server::checkLocation(t_location location)
 	}
 }
 
-const char*	Server::SizeTooLargeException::what(void) const throw()
+const char*	Server::StandardValuesException::what(void) const throw()
 {
-	return ("Server: client max body size may not exceed 10MB");
+	return ("Server: host must be 127.0.0.1, client_max_body_size may not exceed 10MB,\n\
+and ony GET, POST and DELETE methods are allowed");
 }
 
 const char*	Server::LocationSyntaxException::what(void) const throw()
