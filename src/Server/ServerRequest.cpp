@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 17:34:09 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:07:40 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,31 @@ static bool	checkHeader(t_header header)
 		return (false);
 	if (header.host.empty() || header.port == 0)
 		return (false);
-	if (header.method == "POST" && header.contentType.empty())
+	if (header.method == "POST" && (header.contentLength.empty() || header.contentType.empty()))
 		return (false);
 	return (true);
 }
 
+int	Server::checkRequest(void)
+{
+	if (_header.method == "POST" && _header.contentLength.empty())
+		return (411);
+	if (!checkHeader(_header))
+		return (400);
+	if (_header.protocol != "HTTP/1.1")
+		return (505);
+	if (!_header.contentLength.empty() && stoul(_header.contentLength) > clientMaxBodySize)
+		return (413);
+	if (_location.match.empty())
+		return (404);
+	if (!_location.redirect.empty())
+		return (301);
+	return (0);
+}
+
 void	Server::handleRequest(t_header header, std::string request, int clientFd)
 {
+	int		code;
 	size_t	size;
 
 	clientMessage(request, clientFd);
@@ -54,34 +72,10 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	_request = request;
 	_header = header;
 	_location = selectLocation();
-	if (_header.method == "POST" && _header.contentLength.empty())
+	code = checkRequest();
+	if (code != 0)
 	{
-		sendErrorResponse(411);
-		return;
-	}
-	if (!checkHeader(_header))
-	{
-		sendErrorResponse(400);
-		return;
-	}
-	if (header.protocol != "HTTP/1.1")
-	{
-		sendErrorResponse(505);
-		return;
-	}
-	if (_location.match.empty())
-	{
-		sendErrorResponse(404);
-		return;
-	}
-	if (!_location.redirect.empty())
-	{
-		sendRedirectResponse();
-		return;
-	}
-	if (!_header.contentLength.empty() && stoul(_header.contentLength) > clientMaxBodySize)
-	{
-		sendErrorResponse(413);
+		sendErrorResponse(code);
 		return;
 	}
 	size = _location.allowedMethods.size();

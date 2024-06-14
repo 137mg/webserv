@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Response.cpp                                       :+:      :+:    :+:   */
+/*   ServerResponse.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:23:18 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 17:35:40 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:05:37 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,14 @@ void	Server::sendRedirectResponse(void)
 
 void	Server::sendErrorResponse(int errorCode)
 {
-	std::string response = buildResponse(errorPages[errorCode], errorMessages[errorCode]);
+	std::string	response;
+
+	if (errorCode == 301)
+	{
+		sendRedirectResponse();
+		return;
+	}
+	response = buildResponse(errorPages[errorCode], errorMessages[errorCode]);
 	write(_clientFd, response.c_str(), response.length());
 	serverMessage(response, _clientFd, RED);
 }

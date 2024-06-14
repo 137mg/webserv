@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 16:09:25 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:01:29 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class	Server
 		void		initErrorPages(void);
 		void		checkLocation(t_location location);
 		t_location	selectLocation(void);
+		int			checkRequest(void);
 		void		getMethod(void);
 		void		deleteMethod(void);
 		void		postMethod(void);
