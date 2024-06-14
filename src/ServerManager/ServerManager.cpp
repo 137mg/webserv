@@ -43,7 +43,7 @@ void	ServerManager::config(void)
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 	}
 }
- 
+
 // Create a socket for the ServerManager to listen for incoming connections
 int	ServerManager::createSocket(void)
 {
@@ -111,7 +111,7 @@ void ServerManager::checkForTimeouts(void)
 		{
 			if (now - _clientActivityMap[clientFd] > this->_timeout)
 			{
-				std::cout << RED <<"Client " << clientFd << " timed out."  << RESET << std::endl;
+				std::cout << RED <<"Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
 				closeClientConnection(i);
 				i--; // Adjust index after erasing the element
 			}

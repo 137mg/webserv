@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGI.cpp                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/13 16:21:30 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGI.cpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/14 16:38:14 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	CGI::initEnvp(const t_header& header)
 	std::string	fullMethod = "REQUEST_METHOD=" + header.method;
 	std::string	fullPort = "SERVER_PORT=" + std::to_string(_server.port);
 	std::string	fullProtocol = "SERVER_PROTOCOL=" + header.protocol;
-    std::string directoryPathEnv = "INPUT=" + header.file;
+	std::string directoryPathEnv = "INPUT=" + header.file;
 	
 	this->_envpVector.push_back(fullContent);
 	this->_envpVector.push_back(fullContentLen);
@@ -61,19 +61,19 @@ void	CGI::initEnvp(const t_header& header)
 void	CGI::convertVector(void)
 {
 	// Allocate memory for the char ** array
-    this->_envp = new char*[this->_envpVector.size() + 1]; // +1 for the NULL terminator
+	this->_envp = new char*[this->_envpVector.size() + 1]; // +1 for the NULL terminator
 
-    // Copy each string from the vector to the char ** array
-    for (size_t i = 0; i < this->_envpVector.size(); ++i) {
-        this->_envp[i] = new char[this->_envpVector[i].size() + 1];
-        std::strcpy(this->_envp[i], this->_envpVector[i].c_str());
-    }
-    this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
+	// Copy each string from the vector to the char ** array
+	for (size_t i = 0; i < this->_envpVector.size(); ++i) {
+		this->_envp[i] = new char[this->_envpVector[i].size() + 1];
+		std::strcpy(this->_envp[i], this->_envpVector[i].c_str());
+	}
+	this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
 void	buildHttpResponse(std::string content, int clientFd)
 {
-    std::string response = "";
+	std::string response = "";
 
 	response = "HTTP/1.1 200 OK \r\n";
 	response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
@@ -90,76 +90,75 @@ void	buildHttpResponse(std::string content, int clientFd)
 std::string	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
 {
 	int fds[2];
-    std::string httpResponse = "";
-    pid_t pid;
-    char buffer[4096];
-    ssize_t bytesRead;
+	std::string httpResponse = "";
+	pid_t pid;
+	char buffer[4096];
+	ssize_t bytesRead;
 
-    if (pipe(fds) == -1) {
-        perror("pipe failed");
-        return "";
-    }
+	if (pipe(fds) == -1) {
+		perror("pipe failed");
+		return "";
+	}
 
-    pid = fork();
-    if (pid == -1) {
-        perror("fork failed");
-        return "";
-    }
+	pid = fork();
+	if (pid == -1) {
+		perror("fork failed");
+		return "";
+	}
 
-    if (pid == 0)
+	if (pid == 0)
 	{
-        close(fds[0]); // close read end
+		close(fds[0]); // close read end
 
-        // redirect standard input to content passed by the parent process
-        int pipeStdin[2];
-        if (pipe(pipeStdin) == -1)
+		// redirect standard input to content passed by the parent process
+		int pipeStdin[2];
+		if (pipe(pipeStdin) == -1)
 		{
-            perror("pipe failed");
-            exit(EXIT_FAILURE);
-        }
+			perror("pipe failed");
+			exit(EXIT_FAILURE);
+		}
 
-        pid_t innerPid = fork();
-        if (innerPid == -1) {
-            perror("fork failed");
-            exit(EXIT_FAILURE);
-        }
+		pid_t innerPid = fork();
+		if (innerPid == -1) {
+			perror("fork failed");
+			exit(EXIT_FAILURE);
+		}
 
-        if (innerPid == 0) // grandchild process
+		if (innerPid == 0) // grandchild process
 		{
-            close(pipeStdin[1]); // close write end
-            dup2(pipeStdin[0], STDIN_FILENO); // redirect std input
-            close(pipeStdin[0]); // close original file descriptor
+			close(pipeStdin[1]); // close write end
+			dup2(pipeStdin[0], STDIN_FILENO); // redirect std input
+			close(pipeStdin[0]); // close original file descriptor
 
-            dup2(fds[1], STDOUT_FILENO); // redirect std output to a pipe
-            close(fds[1]); // close original file descriptor
+			dup2(fds[1], STDOUT_FILENO); // redirect std output to a pipe
+			close(fds[1]); // close original file descriptor
 
-            const char *args[] = {file.c_str(), nullptr};
-            execve(file.c_str(), const_cast<char **>(args), this->_envp);
-            perror("execve failed");
-            exit(EXIT_FAILURE);
-        }
+			const char *args[] = {file.c_str(), nullptr};
+			execve(file.c_str(), const_cast<char **>(args), this->_envp);
+			perror("execve failed");
+			exit(EXIT_FAILURE);
+		}
 		else
 		{
-            close(pipeStdin[0]); // close read end
-            write(pipeStdin[1], cgiContent.c_str(), cgiContent.size());
-            close(pipeStdin[1]); // close write end
-            waitpid(innerPid, nullptr, 0); // wait for grandchild process to finish
-            exit(EXIT_SUCCESS);
-        }
-    }
+			close(pipeStdin[0]); // close read end
+			write(pipeStdin[1], cgiContent.c_str(), cgiContent.size());
+			close(pipeStdin[1]); // close write end
+			waitpid(innerPid, nullptr, 0); // wait for grandchild process to finish
+			exit(EXIT_SUCCESS);
+		}
+	}
 	else
 	{
-        close(fds[1]); // close write end
+		close(fds[1]); // close write end
 
-        while ((bytesRead = read(fds[0], buffer, sizeof(buffer) - 1)) > 0)
+		while ((bytesRead = read(fds[0], buffer, sizeof(buffer) - 1)) > 0)
 		{
-            buffer[bytesRead] = '\0';
-            httpResponse += buffer;
-        }
-
-        close(fds[0]); // close read end
-        waitpid(pid, nullptr, 0);
-    }
+			buffer[bytesRead] = '\0';
+			httpResponse += buffer;
+		}
+		close(fds[0]); // close read end
+		waitpid(pid, nullptr, 0);
+	}
 	buildHttpResponse(httpResponse, clientFd);
 	return (httpResponse);
 }

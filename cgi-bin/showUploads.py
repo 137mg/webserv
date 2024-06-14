@@ -48,17 +48,17 @@ print("<!DOCTYPE html> \
 cwd = os.getcwd()
 sub_dir = 'cgi-bin/uploads'
 upload_dir = os.path.join(cwd, sub_dir)
-
 if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
 	count = 0
 	for filename in os.listdir(upload_dir):
+		display_filename = filename.replace('%20', ' ')
 		line = "<div class='entry'><button class='delete-button'"
 		line += "value='"
 		line += filename
 		line += "'onclick='deleteFile(\""
 		line += filename
 		line += "\")'>Delete</button><p>"
-		line += filename
+		line += display_filename
 		line += "</p><br></div>"
 		print(line)
 		count += 1

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 15:43:03 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:46:31 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	Server::initErrorPages(void)
 	errorPages[404] = "html/error_pages/PageNotFound.html"; // handled
 	errorPages[405] = "html/error_pages/MethodNotAllowed.html"; // handled
 	errorPages[406] = "html/NotAcceptable.html";
-	errorPages[407] = "html/ProxyAuthenticationRequired.html";
-	errorPages[408] = "html/RequestTimeout.html";
+	errorPages[407] = "html/ProxyAuthenticationRequired.html"; //No need to handle
+	errorPages[408] = "html/RequestTimeout.html"; // handled (?!)
 	errorPages[409] = "html/Conflict.html";
 	// status code 410 is for promotional purposes
 	errorPages[411] = "html/error_pages/LengthRequired.html";
@@ -80,9 +80,9 @@ void	Server::initErrorPages(void)
 	// status code 451 deals with legal stuff, we are anarchists
 	errorPages[500] = "html/error_pages/InternalServerError.html";
 	errorPages[501] = "html/error_pages/NotImplemented.html";
-	errorPages[502] = "html/error_pages/BadGateway.html";
+	errorPages[502] = "html/error_pages/BadGateway.html"; // No need to handle it
 	errorPages[503] = "html/error_pages/ServiceUnavailable.html";
-	errorPages[504] = "html/error_pages/GatewayTimeout.html";
+	errorPages[504] = "html/error_pages/GatewayTimeout.html"; // No need to handle it
 	errorPages[505] = "html/error_pages/HTTPVersionNotSupported.html";
 	// status code 506 I don't even begin to understand
 	errorPages[507] = "html/error_pages/InsufficientStorage.html";
