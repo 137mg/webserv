@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 15:44:17 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:46:25 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	ServerManager::selectServer(std::string buffer, int clientFd)
 	if (!checkHeader(header))
 	{
 		buffer.clear();
-		if (!header.port)
+		if (header.port == 0)
 			header.port = _ports[0];
 	}
 	port = header.port;
