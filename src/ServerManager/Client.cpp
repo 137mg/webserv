@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 12:54:21 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:17:29 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 	{
 		std::string& clientBuffer = this->_clientBuffers[clientFd];
 		clientBuffer.append(buffer, bytes_read);
-		if (clientBuffer.size() > 1048576)
+		if (clientBuffer.size() > MB * 10)
 		{
 			selectServer(clientBuffer, clientFd);
 			this->_clientBuffers.erase(clientFd);

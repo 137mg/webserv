@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 17:12:59 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:42:34 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	_request = request;
 	_header = header;
 	_location = selectLocation();
+	if (request.empty())
+	{
+		sendErrorResponse(400);
+		return;
+	}
 	if (_location.match.empty())
 	{
 		sendErrorResponse(404);

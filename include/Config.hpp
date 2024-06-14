@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:01:58 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/04 18:10:46 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 14:55:07 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define CONFIG_HPP
 
 # include "ServerManager.hpp"
-# include "Server.hpp"
 
 class	Config
 {
@@ -41,7 +40,22 @@ class	Config
 		~Config(void);
 		void						parseFile(void);
 		void						printServers(void);
-		class						ConfigFileException : public std::exception
+		class						InvalidFileException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
+		class						SyntaxErrorException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
+		class						OutOfRangeException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
+		class						ErrorPageException : public std::exception
 		{
 			public:
 				const char*	what(void) const throw();

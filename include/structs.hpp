@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:46:08 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:47:16 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:48:26 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,5 @@ typedef struct s_location
 	std::vector<std::string>	cgiExtents;
 	std::vector<std::string>	cgiPaths;
 }	t_location;
-
-typedef struct errorPageInfo
-{
-    std::string path;
-    std::string message;
-}	t_errorPageInfo;
 
 #endif
