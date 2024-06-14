@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 16:47:42 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:53:23 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ class	ServerManager
 		size_t	getRequestSize(std::string request_buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
-		t_header	parseRequest(std::string request);
 		
 		void	closeClientConnection(unsigned long i);
 		void	monitorSockets(void);

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 15:46:25 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:53:17 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static std::string	getValue(std::string request, std::string key)
 	return (value);
 }
 
-t_header	ServerManager::parseRequest(std::string request)
+static t_header	parseRequest(std::string request)
 {
 	std::istringstream	iss(request);
 	t_header			header;
