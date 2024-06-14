@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 15:07:42 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:09:25 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class	Server
 	private:
 		int			_clientFd;
 		std::string	_request;
+		std::string	_lastPath;
 		t_header	_header;
 		t_location	_location;
 		void		initDefaultLocation(void);

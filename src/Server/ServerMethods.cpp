@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerMethods.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/13 21:49:56 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/14 16:10:28 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	Server::getMethod(void)
 			return;
 		}
 	}
+	_lastPath = filePath;
 	response = buildResponse(filePath, "200 OK");
 	write(_clientFd, response.c_str(), response.size());
 	serverMessage(response, _clientFd, GREEN);
@@ -56,7 +57,7 @@ void	Server::deleteMethod(void)
 		{
 			if (std::remove(filePath.c_str()) != 0)
 				perror("Error deleting file");
-			response = buildResponse("html/files.html", "200 OK");
+			response = buildResponse(_lastPath, "200 OK");
 			write(_clientFd, response.c_str(), response.size());
 			serverMessage(response, _clientFd, GREEN);
 		}
