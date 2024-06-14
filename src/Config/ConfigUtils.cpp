@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:36:02 by mirjam            #+#    #+#             */
-/*   Updated: 2024/06/11 16:18:24 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:00:26 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	Config::parseLine(void)
 	_values.clear();
 	i = _line.find('=');
 	if (i == 0 || i == _line.size() - 1 || i == std::string::npos)
-		throw ConfigFileException();
+		throw SyntaxErrorException();
 	_key = _line.substr(0, i);
 	valueStr = _line.substr(i + 1);
 	size = valueStr.size();
@@ -54,7 +54,7 @@ void	Config::parseLine(void)
 	{
 		size = _values[i].size();
 		if (size < 3 || _values[i][0] != '\"' || _values[i].find('\"', 1) != size - 1)
-			throw ConfigFileException();
+			throw SyntaxErrorException();
 		_values[i] = _values[i].substr(1, size - 2);
 	}
 }
@@ -71,7 +71,7 @@ void	Config::parseArray(const std::string& valueStr)
 		{
 			i = valueStr.find('\"', i + 1);
 			if (i == std::string::npos)
-				throw ConfigFileException();
+				throw SyntaxErrorException();
 			continue;
 		}
 		if (valueStr[i] == ',')
@@ -88,9 +88,16 @@ uint16_t	Config::stouint16(const std::string& str)
 	uint16_t	u;
 	int			tmp;
 
-	tmp = stoi(str);
-	if (tmp < 0 || tmp > 65535)
-		throw ConfigFileException();
+	try
+	{
+		tmp = stoi(str);
+	}
+	catch (std::exception& e)
+	{
+		throw OutOfRangeException();
+	}
+	if (tmp < 1 || tmp > 65535)
+		throw OutOfRangeException();
 	u = static_cast<uint16_t>(tmp);
 	return (u);
 }

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
-#                                                    +#+                       #
-#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/13 14:38:46 by juvan-to      ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
+#    Updated: 2024/06/14 14:14:35 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,11 +20,12 @@ SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGI.cpp							\
 		src/Config/Config.cpp					\
+		src/Config/ConfigAdd.cpp				\
 		src/Config/ConfigPrint.cpp				\
 		src/Config/ConfigUpdate.cpp				\
 		src/Config/ConfigUtils.cpp				\
 		src/Server/Server.cpp					\
-		src/Server/Response.cpp				\
+		src/Server/Response.cpp					\
 		src/Server/ServerMethods.cpp			\
 		src/Server/ServerRequest.cpp			\
 		src/ServerManager/ConfigFile.cpp		\

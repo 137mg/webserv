@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 21:43:01 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/14 15:09:06 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,37 +115,33 @@ void	Server::initErrorPages(void)
 	errorMessages[511] = "511 Network Authentication Required";
 }
 
-bool	Server::checkServer(void)
+void	Server::checkServer(void)
 {
 	size_t	size;
 
-	if (port == 0)
-		return (false);
-	if (clientMaxBodySize == 0 || clientMaxBodySize > MB * 10)
-		return (false);
+	if (clientMaxBodySize > MB * 10)
+		throw SizeTooLargeException();
 	if (locations.empty())
 		locations.push_back(defaultLocation);
 	size = locations.size();
 	for (size_t i = 0; i < size; i++)
 	{
-		if (!checkLocation(locations[i]))
-			return (false);
+		checkLocation(locations[i]);
 		for (size_t j = 0; j < size; j++)
 		{
 			if (i != j && locations[i].match == locations[j].match)
-				return (false);
+				throw LocationSyntaxException();
 		}
 	}
-	return (true);
 }
 
-bool	Server::checkLocation(t_location location)
+void	Server::checkLocation(t_location location)
 {
 	std::string	path;
 	size_t		size;
 
 	if (location.match[0] != '/')
-		return (false);
+		throw LocationSyntaxException();
 	if (!location.index.empty())
 	{
 		path = location.root + location.match;
@@ -153,7 +149,7 @@ bool	Server::checkLocation(t_location location)
 			path += "/";
 		path += location.index;
 		if (access(path.c_str(), R_OK) == -1)
-			return (false);
+			throw LocationPathException();
 	}
 	size = location.allowedMethods.size();
 	for (size_t i = 0; i < size; i++)
@@ -161,17 +157,31 @@ bool	Server::checkLocation(t_location location)
 		if (!(location.allowedMethods[i] == "GET"
 			|| location.allowedMethods[i] == "POST"
 			|| location.allowedMethods[i] == "DELETE"))
-			return (false);
+			throw LocationSyntaxException();
 	}
 	if (location.cgiExtents.size() != location.cgiPaths.size())
-		return (false);
+		throw LocationSyntaxException();
 	size = location.cgiExtents.size();
 	for (size_t i = 0; i < size; i++)
 	{
 		if (location.cgiExtents[i][0] != '.')
-			return (false);
+			throw LocationSyntaxException();
 		if (access(location.cgiPaths[i].c_str(), X_OK) == -1)
-			return (false);
+			throw LocationPathException();
 	}
-	return (true);
+}
+
+const char*	Server::SizeTooLargeException::what(void) const throw()
+{
+	return ("Server: client max body size may not exceed 10MB");
+}
+
+const char*	Server::LocationSyntaxException::what(void) const throw()
+{
+	return ("Server: syntax error in location block");
+}
+
+const char*	Server::LocationPathException::what(void) const throw()
+{
+	return ("Server: path(s) in location block not accessible");
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ConfigUpdate.cpp                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mirjam <mirjam@student.42.fr>                +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/25 12:36:34 by mirjam        #+#    #+#                 */
-/*   Updated: 2024/06/07 17:30:19 by Julia         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ConfigUpdate.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/25 12:36:34 by mirjam            #+#    #+#             */
+/*   Updated: 2024/06/14 14:57:50 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Config::updateServer(Server& server)
 	if (_key == "listen" || _key == "client_max_body_size" || _key == "host")
 	{
 		if (_values.size() > 1)
-			throw ConfigFileException();
+			throw SyntaxErrorException();
 		if (_key == "host")
 		{
 			server.host = _values[0];
@@ -50,11 +50,11 @@ void	Config::updateErrorPages(Server& server)
 
 	code = stouint16(_key);
 	if (server.errorPages.count(code) == 0)
-		throw ConfigFileException();
+		throw ErrorPageException();
 	if (_values.size() > 1)
-		throw ConfigFileException();
+		throw SyntaxErrorException();
 	if (access(_values[0].c_str(), R_OK) == -1)
-		throw ConfigFileException();
+		throw ErrorPageException();
 	server.errorPages[code] = _values[0];
 }
 
@@ -70,7 +70,7 @@ void	Config::updateLocation(t_location& location)
 			break;
 	}
 	if (i < 5 && _values.size() > 1)
-		throw ConfigFileException();
+		throw SyntaxErrorException();
 	switch (i)
 	{
 		case 0:
@@ -79,7 +79,7 @@ void	Config::updateLocation(t_location& location)
 			else if (_values[0] == "false")
 				location.autoIndex = false;
 			else
-				throw ConfigFileException();
+				throw SyntaxErrorException();
 			break;
 		case 1:
 			location.match = _values[0];
@@ -103,7 +103,7 @@ void	Config::updateLocation(t_location& location)
 			updateVector(location.cgiPaths);
 			break;
 		default:
-			throw ConfigFileException();
+			throw SyntaxErrorException();
 	}
 }
 

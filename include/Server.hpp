@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/13 18:06:02 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:07:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class	Server
 		t_location	_location;
 		void		initDefaultLocation(void);
 		void		initErrorPages(void);
-		bool		checkLocation(t_location location);
+		void		checkLocation(t_location location);
 		t_location	selectLocation(void);
 		void		getMethod(void);
 		void		deleteMethod(void);
@@ -47,8 +47,23 @@ class	Server
 		Server(const Server& original);
 		~Server(void);
 		Server&								operator=(const Server& original);
-		bool								checkServer(void);
+		void								checkServer(void);
 		void								handleRequest(t_header header, std::string request, int clientFd);
+		class								SizeTooLargeException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
+		class								LocationSyntaxException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
+		class								LocationPathException : public std::exception
+		{
+			public:
+				const char*	what(void) const throw();
+		};
 };
 
 #endif

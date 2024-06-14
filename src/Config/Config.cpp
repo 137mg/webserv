@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 15:59:10 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/05/28 20:25:13 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/14 14:55:51 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ Config::Config(const char* filename) : _ifs(filename)
 	std::string	nameCheck;
 
 	if (!_ifs.good())
-		throw ConfigFileException();
+		throw InvalidFileException();
 	nameCheck = filename;
 	if (nameCheck.rfind(".toml") != nameCheck.size() - 5)
-		throw ConfigFileException();
+		throw InvalidFileException();
 }
 
 Config::~Config(void)
@@ -41,85 +41,29 @@ void	Config::parseFile(void)
 			break;
 		}
 		else
-			throw ConfigFileException();
+			throw SyntaxErrorException();
 	}
 	removeWhitespace();
 	if (!_line.empty() || servers.empty())
-		throw ConfigFileException();
+		throw SyntaxErrorException();
 }
 
-bool	Config::newTable(Server& server)
+const char*	Config::InvalidFileException::what(void) const throw()
 {
-	if (_line == "[[server]]")
-	{
-		addServer();
-		return (true);
-	}
-	if (_line == "[server.error_pages]")
-	{
-		addErrorPages(server);
-		return (true);
-	}
-	if (_line == "[[server.location]]")
-	{
-		addLocation(server);
-		return (true);
-	}
-	return (false);
+	return ("Configuration file: file in wrong format or not accessible");
 }
 
-void	Config::addServer(void)
+const char*	Config::SyntaxErrorException::what(void) const throw()
 {
-	Server	server;
-
-	for (getline(_ifs, _line); !_ifs.eof(); getline(_ifs, _line))
-	{
-		removeWhitespace();
-		if (_line.empty())
-			continue;
-		if (newTable(server))
-			break;
-		parseLine();
-		updateServer(server);
-	}
-	if (!server.checkServer())
-		throw ConfigFileException();
-	servers.push_front(server);
+	return ("Configuration file: syntax error");
 }
 
-void	Config::addErrorPages(Server& server)
+const char*	Config::OutOfRangeException::what(void) const throw()
 {
-	for (getline(_ifs, _line); !_ifs.eof(); getline(_ifs, _line))
-	{
-		removeWhitespace();
-		if (_line.empty())
-			continue;
-		if (newTable(server))
-			break;
-		parseLine();
-		updateErrorPages(server);
-	}
+	return ("Configuration file: numbers must be between 1 and 65535");
 }
 
-void	Config::addLocation(Server& server)
+const char*	Config::ErrorPageException::what(void) const throw()
 {
-	t_location	location;
-
-	location = server.defaultLocation;
-	for (getline(_ifs, _line); !_ifs.eof(); getline(_ifs, _line))
-	{
-		removeWhitespace();
-		if (_line.empty())
-			continue;
-		if (newTable(server))
-			break;
-		parseLine();
-		updateLocation(location);
-	}
-	server.locations.push_front(location);
-}
-
-const char*	Config::ConfigFileException::what(void) const throw()
-{
-	return ("Configuration file: ");
+	return ("Configuration file: invalid code or path for error page");
 }
