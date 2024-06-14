@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 15:09:06 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:43:03 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	Server::initDefaultLocation(void)
 
 void	Server::initErrorPages(void)
 {
-	errorPages[400] = "html/error_pages/BadRequest.html";
+	errorPages[400] = "html/error_pages/BadRequest.html"; // handled
 	errorPages[401] = "html/error_pages/unauthorized.html";
 	// status code 402 is not in use yet
 	errorPages[403] = "html/error_pages/Forbidden.html"; // handled
