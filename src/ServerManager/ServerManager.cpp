@@ -66,8 +66,7 @@ void	ServerManager::bindSocket(int sockfd)
 	if (bind(sockfd, reinterpret_cast<struct  sockaddr*>(&this->_ServerAddress),
 		sizeof(this->_ServerAddress)) != 0)
 		throw ServerSocketException();
-	int status = listen(sockfd, BACKLOG);
-	if (status != 0)
+	if (listen(sockfd, BACKLOG) != 0)
 		throw ServerSocketException();
 }
 
@@ -102,12 +101,16 @@ void	ServerManager::setUpPoll(void)
 	this->monitorSockets();
 }
 
-void ServerManager::checkForTimeouts(void) {
+void ServerManager::checkForTimeouts(void)
+{
 	time_t now = std::time(nullptr);
-	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++) {
+	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
+	{
 		int clientFd = this->_pollFdsVector[i].fd;
-		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end()) {
-			if (now - _clientActivityMap[clientFd] > this->_timeout) {
+		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end())
+		{
+			if (now - _clientActivityMap[clientFd] > this->_timeout)
+			{
 				std::cout << RED <<"Client " << clientFd << " timed out."  << RESET << std::endl;
 				closeClientConnection(i);
 				i--; // Adjust index after erasing the element

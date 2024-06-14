@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 15:17:29 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:31:01 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,12 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		printTimestamp();
 		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
 		this->_clientBuffers.erase(clientFd);
-		return false;
+		return (false);
 	}
-	// still need to decide between exception and error page or the like!
 	else if (bytes_read < 0)
 	{
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
-		return false;
+		return (false);
 	}
 	else
 	{
@@ -41,7 +40,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		{
 			selectServer(clientBuffer, clientFd);
 			this->_clientBuffers.erase(clientFd);
-			return false;
+			return (false);
 		}
 		else if (isRequestComplete(clientBuffer))
 		{
@@ -49,7 +48,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 			this->_clientBuffers.erase(clientFd);
 		}
 	}
-	return true;
+	return (true);
 }
 
 bool ServerManager::isRequestComplete(const std::string &request_buffer)
@@ -60,17 +59,17 @@ bool ServerManager::isRequestComplete(const std::string &request_buffer)
 
 	headerEnd = request_buffer.find("\r\n\r\n");
 	if (headerEnd == std::string::npos)
-		return false;
+		return (false);
 	totalExpectedSize = getRequestSize(request_buffer);
 	contentLengthPos = request_buffer.find("Content-Length:");
 	if (contentLengthPos != std::string::npos)
 	{
 		if (request_buffer.size() >= totalExpectedSize)
-			return true;
+			return (true);
 	} 
 	else
-		return true;
-	return false;
+		return (true);
+	return (false);
 }
 
 // Returns the size of a request
@@ -83,9 +82,9 @@ size_t ServerManager::getRequestSize(std::string request_buffer)
 		size_t contentLengthEnd = request_buffer.find("\r\n", contentLengthPos);
 		size_t contentLength = std::stoi(request_buffer.substr(contentLengthPos + 15, contentLengthEnd - contentLengthPos - 15));
 		size_t totalExpectedSize = request_buffer.find("\r\n\r\n") + 4 + contentLength;
-		return totalExpectedSize;
+		return (totalExpectedSize);
 	}
-	return request_buffer.size();
+	return (request_buffer.size());
 }
 
 void	ServerManager::closeClientConnection(unsigned long i)

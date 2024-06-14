@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 16:10:28 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:43:05 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ void	Server::deleteMethod(void)
 	{
 		if (access(filePath.c_str(), W_OK) == 0)
 		{
-			if (std::remove(filePath.c_str()) != 0)
-				perror("Error deleting file");
+			std::remove(filePath.c_str());
 			response = buildResponse(_lastPath, "200 OK");
 			write(_clientFd, response.c_str(), response.size());
 			serverMessage(response, _clientFd, GREEN);
