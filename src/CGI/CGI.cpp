@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 14:53:32 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 16:38:14 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.cpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/18 00:48:57 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,19 @@ void	buildHttpResponse(std::string content, int clientFd)
 
 std::string	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
 {
-	int fds[2];
+	int stdoutPipe[2];
+	int stdinPipe[2];
 	std::string httpResponse = "";
 	pid_t pid;
 	char buffer[4096];
 	ssize_t bytesRead;
 
-	if (pipe(fds) == -1) {
+	if (pipe(stdoutPipe) == -1) {
+		perror("pipe failed");
+		return "";
+	}
+
+	if (pipe(stdinPipe) == -1) {
 		perror("pipe failed");
 		return "";
 	}
@@ -108,57 +114,37 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
 
 	if (pid == 0)
 	{
-		close(fds[0]); // close read end
+		close(stdoutPipe[0]); // close read end of stdout pipe
+		close(stdinPipe[1]);  // close write end of stdin pipe
 
-		// redirect standard input to content passed by the parent process
-		int pipeStdin[2];
-		if (pipe(pipeStdin) == -1)
-		{
-			perror("pipe failed");
-			exit(EXIT_FAILURE);
-		}
+		dup2(stdinPipe[0], STDIN_FILENO); // redirect stdin
+		dup2(stdoutPipe[1], STDOUT_FILENO); // redirect stdout
 
-		pid_t innerPid = fork();
-		if (innerPid == -1) {
-			perror("fork failed");
-			exit(EXIT_FAILURE);
-		}
+		close(stdinPipe[0]);
+		close(stdoutPipe[1]);
 
-		if (innerPid == 0) // grandchild process
-		{
-			close(pipeStdin[1]); // close write end
-			dup2(pipeStdin[0], STDIN_FILENO); // redirect std input
-			close(pipeStdin[0]); // close original file descriptor
-
-			dup2(fds[1], STDOUT_FILENO); // redirect std output to a pipe
-			close(fds[1]); // close original file descriptor
-
-			const char *args[] = {file.c_str(), nullptr};
-			execve(file.c_str(), const_cast<char **>(args), this->_envp);
-			perror("execve failed");
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			close(pipeStdin[0]); // close read end
-			write(pipeStdin[1], cgiContent.c_str(), cgiContent.size());
-			close(pipeStdin[1]); // close write end
-			waitpid(innerPid, nullptr, 0); // wait for grandchild process to finish
-			exit(EXIT_SUCCESS);
-		}
+		const char *args[] = {file.c_str(), nullptr};
+		execve(file.c_str(), const_cast<char **>(args), this->_envp);
+		perror("execve failed");
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		close(fds[1]); // close write end
+		close(stdoutPipe[1]); // close write end of stdout pipe
+		close(stdinPipe[0]);  // close read end of stdin pipe
 
-		while ((bytesRead = read(fds[0], buffer, sizeof(buffer) - 1)) > 0)
+		write(stdinPipe[1], cgiContent.c_str(), cgiContent.size());
+		close(stdinPipe[1]); // close write end of stdin pipe
+
+		while ((bytesRead = read(stdoutPipe[0], buffer, sizeof(buffer) - 1)) > 0)
 		{
 			buffer[bytesRead] = '\0';
 			httpResponse += buffer;
 		}
-		close(fds[0]); // close read end
+
+		close(stdoutPipe[0]); // close read end of stdout pipe
 		waitpid(pid, nullptr, 0);
 	}
 	buildHttpResponse(httpResponse, clientFd);
-	return (httpResponse);
+	return httpResponse;
 }
