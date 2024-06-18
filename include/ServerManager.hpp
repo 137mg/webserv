@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerManager.hpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 15:47:12 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 15:53:23 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerManager.hpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/18 01:36:55 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class	ServerManager
 
 		// struct pollfd							*_pollFds;
 		std::vector<pollfd>						_pollFdsVector;
+		std::vector<t_CGIProcess>					_cgiProcesses;
 		
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
@@ -95,6 +96,7 @@ class	ServerManager
 		void	handleSocketEvents(void);
 		void	checkForTimeouts(void);
 
+		void	addCGIProcess(t_CGIProcess cgiProcess);
 		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception

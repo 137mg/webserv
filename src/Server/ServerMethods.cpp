@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 16:55:51 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerMethods.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/18 01:59:29 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	Server::postMethod(void)
 
 void	Server::runCGI(std::string filePath)
 {
-	CGI			cgi(*this);
+	CGI			cgi(*this, *(this->serverManager));
 	std::string	response;
 
 	cgi.initEnvp(_header);

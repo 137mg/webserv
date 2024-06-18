@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 17:09:18 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 22:03:24 by mirjam           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Server.hpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mirjam <mirjam@student.42.fr>                +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/18 02:00:08 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 
 # include "ServerManager.hpp"
 
+class	ServerManager;
+
 class	Server
 {
 	private:
-		int			_clientFd;
-		std::string	_request;
-		std::string	_lastPath;
-		t_header	_header;
-		t_location	_location;
+		int				_clientFd;
+		std::string		_request;
+		std::string		_lastPath;
+		t_header		_header;
+		t_location		_location;
+		
 		void		initDefaultLocation(void);
 		void		initErrorPages(void);
 		void		checkLocation(t_location location);
@@ -37,6 +40,7 @@ class	Server
 		std::string	buildResponse(const std::string path, std::string status);
 
 	public:
+		ServerManager						*serverManager;
 		uint16_t							port;
 		uint32_t							clientMaxBodySize;
 		std::string							host;
@@ -45,6 +49,7 @@ class	Server
 		std::deque<t_location>				locations;
 		std::map<uint16_t, std::string>		errorPages;
 		std::map<uint16_t, std::string>		errorMessages;
+		
 		Server(void);
 		Server(const Server& original);
 		~Server(void);

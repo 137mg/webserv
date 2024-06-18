@@ -166,6 +166,11 @@ void	ServerManager::addToPollFds(int clientFd)
 	this->_pollFdsVector.push_back(newPollFd);
 }
 
+void ServerManager::addCGIProcess(t_CGIProcess cgiProcess)
+{
+	_cgiProcesses.push_back(cgiProcess);
+}
+
 void	ServerManager::delFromPollFds(int i)
 {
 	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);

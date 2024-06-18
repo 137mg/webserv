@@ -6,13 +6,13 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 00:48:57 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 01:36:49 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI(const Server& server) : _server(server)
+CGI::CGI(const Server& server, ServerManager &serverManager) : _server(server), _serverManager(serverManager)
 {
 	this->_envp = nullptr;
 }
@@ -90,61 +90,46 @@ void	buildHttpResponse(std::string content, int clientFd)
 std::string	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
 {
 	int stdoutPipe[2];
-	int stdinPipe[2];
-	std::string httpResponse = "";
-	pid_t pid;
-	char buffer[4096];
-	ssize_t bytesRead;
+    int stdinPipe[2];
+    pid_t pid;
 
-	if (pipe(stdoutPipe) == -1) {
-		perror("pipe failed");
-		return "";
-	}
+    if (pipe(stdoutPipe) == -1 || pipe(stdinPipe) == -1) {
+        perror("pipe failed");
+        return "";
+    }
 
-	if (pipe(stdinPipe) == -1) {
-		perror("pipe failed");
-		return "";
-	}
+    pid = fork();
+    if (pid == -1) {
+        perror("fork failed");
+        return "";
+    }
 
-	pid = fork();
-	if (pid == -1) {
-		perror("fork failed");
-		return "";
-	}
+    if (pid == 0) {
+        close(stdoutPipe[0]); // close read end of stdout pipe
+        close(stdinPipe[1]);  // close write end of stdin pipe
 
-	if (pid == 0)
-	{
-		close(stdoutPipe[0]); // close read end of stdout pipe
-		close(stdinPipe[1]);  // close write end of stdin pipe
+        dup2(stdinPipe[0], STDIN_FILENO); // redirect stdin
+        dup2(stdoutPipe[1], STDOUT_FILENO); // redirect stdout
 
-		dup2(stdinPipe[0], STDIN_FILENO); // redirect stdin
-		dup2(stdoutPipe[1], STDOUT_FILENO); // redirect stdout
+        close(stdinPipe[0]);
+        close(stdoutPipe[1]);
 
-		close(stdinPipe[0]);
-		close(stdoutPipe[1]);
+        const char *args[] = {file.c_str(), nullptr};
+        execve(file.c_str(), const_cast<char **>(args), _envp);
+        perror("execve failed");
+        exit(EXIT_FAILURE);
+    } else {
+        close(stdoutPipe[1]); // close write end of stdout pipe
+        close(stdinPipe[0]);  // close read end of stdin pipe
 
-		const char *args[] = {file.c_str(), nullptr};
-		execve(file.c_str(), const_cast<char **>(args), this->_envp);
-		perror("execve failed");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		close(stdoutPipe[1]); // close write end of stdout pipe
-		close(stdinPipe[0]);  // close read end of stdin pipe
+        write(stdinPipe[1], cgiContent.c_str(), cgiContent.size());
+        close(stdinPipe[1]); // close write end of stdin pipe
 
-		write(stdinPipe[1], cgiContent.c_str(), cgiContent.size());
-		close(stdinPipe[1]); // close write end of stdin pipe
+        t_CGIProcess cgiProcess = {stdinPipe[1], stdoutPipe[0], clientFd, pid};
+        _serverManager.addCGIProcess(cgiProcess); // Add CGI process to ServerManager
 
-		while ((bytesRead = read(stdoutPipe[0], buffer, sizeof(buffer) - 1)) > 0)
-		{
-			buffer[bytesRead] = '\0';
-			httpResponse += buffer;
-		}
+		_serverManager.addToPollFds(stdoutPipe[0]);
+    }
 
-		close(stdoutPipe[0]); // close read end of stdout pipe
-		waitpid(pid, nullptr, 0);
-	}
-	buildHttpResponse(httpResponse, clientFd);
-	return httpResponse;
+    return "";
 }

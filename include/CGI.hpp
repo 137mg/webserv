@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/12 16:04:38 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/18 01:19:56 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ class CGI
 		char						**_envp;
 		std::vector<std::string>	_envpVector;
 		Server						_server;
+		ServerManager				&_serverManager;
 	
 	public:
-		CGI(const Server& server);
+		CGI(const Server& server, ServerManager &serverManager);
 		~CGI(void);
 		void		initEnvp(const t_header& header);
 		void		convertVector(void);

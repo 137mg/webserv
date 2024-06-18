@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   selectServer.cpp                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 17:27:45 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   selectServer.cpp                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/18 01:54:53 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	ServerManager::selectServer(std::string buffer, int clientFd)
 	size_t				j;
 
 	header = parseRequest(buffer);
+	server.serverManager = this;
 	if (header.port == 0)
 		port = _ports[0];
 	else
