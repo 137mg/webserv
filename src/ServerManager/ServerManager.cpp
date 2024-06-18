@@ -141,6 +141,16 @@ void ServerManager::handleSocketEvents(void)
 	{
 		if ((this->_pollFdsVector[i].revents & POLLIN))
 		{
+			auto it = std::find_if(_cgiProcesses.begin(), _cgiProcesses.end(),
+									[&](const t_CGIProcess &cgi) { return cgi.stdoutFd == _pollFdsVector[i].fd; });
+			if (it != _cgiProcesses.end())
+			{
+				std::cout << "CGI output??" << std::endl;
+				// handleCGIOutput(*it, i);
+				exit(1);
+				continue;
+			}
+
 			if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFdsVector[i].fd) != _listenFds.end()) 
 				this->newClientConnection(this->_pollFdsVector[i].fd);
 			else
