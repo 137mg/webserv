@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 01:36:55 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 02:26:00 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ class	ServerManager
 		void	checkForTimeouts(void);
 
 		void	addCGIProcess(t_CGIProcess cgiProcess);
+		bool	checkIfCGIProcessExistsForFd(int fd);
 		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception

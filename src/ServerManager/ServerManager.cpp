@@ -141,14 +141,11 @@ void ServerManager::handleSocketEvents(void)
 	{
 		if ((this->_pollFdsVector[i].revents & POLLIN))
 		{
-			auto it = std::find_if(_cgiProcesses.begin(), _cgiProcesses.end(),
-									[&](const t_CGIProcess &cgi) { return cgi.stdoutFd == _pollFdsVector[i].fd; });
-			if (it != _cgiProcesses.end())
+			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
 			{
-				std::cout << "CGI output??" << std::endl;
-				// handleCGIOutput(*it, i);
-				exit(1);
-				continue;
+				std::cout << "CGI output recognised but exiting until i handled the rest" << std::endl;
+				exit(1); // exit for now until i implemented handle cgi output
+				break;
 			}
 
 			if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFdsVector[i].fd) != _listenFds.end()) 
@@ -174,6 +171,22 @@ void	ServerManager::addToPollFds(int clientFd)
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
 	this->_pollFdsVector.push_back(newPollFd);
+}
+
+bool	ServerManager::checkIfCGIProcessExistsForFd(int fd)
+{
+	// Find the CGI process in _cgiProcesses whose stdoutFd matches fd
+	std::vector<t_CGIProcess>::iterator it = std::find_if(_cgiProcesses.begin()
+								,_cgiProcesses.end(), [&](const t_CGIProcess &cgi)
+		{
+			return cgi.stdoutFd == fd;
+		});
+
+	// Check if the iterator points to a valid element in _cgiProcesses
+	bool found = (it != _cgiProcesses.end());
+
+	// Return true if the CGI process with stdoutFd equal to fd was found, otherwise false
+	return found;
 }
 
 void ServerManager::addCGIProcess(t_CGIProcess cgiProcess)

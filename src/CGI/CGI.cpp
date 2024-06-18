@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 01:36:49 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 02:32:03 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ void	buildHttpResponse(std::string content, int clientFd)
 	std::cout << content << clientFd << std::endl;
 }
 
-std::string	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
+void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
 {
-	int stdoutPipe[2];
-    int stdinPipe[2];
-    pid_t pid;
+	int 	stdoutPipe[2];
+    int		stdinPipe[2];
+    pid_t	pid;
 
     if (pipe(stdoutPipe) == -1 || pipe(stdinPipe) == -1) {
         perror("pipe failed");
@@ -99,12 +99,14 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
     }
 
     pid = fork();
-    if (pid == -1) {
+    if (pid == -1)
+	{
         perror("fork failed");
         return "";
     }
 
-    if (pid == 0) {
+    if (pid == 0)
+	{
         close(stdoutPipe[0]); // close read end of stdout pipe
         close(stdinPipe[1]);  // close write end of stdin pipe
 
@@ -118,7 +120,9 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
         execve(file.c_str(), const_cast<char **>(args), _envp);
         perror("execve failed");
         exit(EXIT_FAILURE);
-    } else {
+    }
+	else
+	{
         close(stdoutPipe[1]); // close write end of stdout pipe
         close(stdinPipe[0]);  // close read end of stdin pipe
 
@@ -130,6 +134,4 @@ std::string	CGI::executeScript(std::string file, std::string cgiContent, int cli
 
 		_serverManager.addToPollFds(stdoutPipe[0]);
     }
-
-    return "";
 }
