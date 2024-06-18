@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 17:22:48 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/19 01:18:04 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,15 @@ class	ServerManager
 
 		// imma try some things here hear me out
 		void			handleCGIOutput(int cgiFd, size_t pollIndex);
+		void			handleCGIInput(int cgiFd, size_t pollIndex);
 		void			buildResponse(std::string content, int clientFd);
 		t_CGIProcess	&getCGIProcessForFd(int fd);
 		void			sendResponse(std::string response, int clientFd);
 		void			sendPendingResponse(int clientFd);
 		void			markFdForWriting(int clientFd);
 		void			clearFdForWriting(int clientFd);
+		bool			isCGIInputFd(int fd);
+		void			removeCGIProcess(int fd);
 	
 		//void	signalHandler(int signum);
 

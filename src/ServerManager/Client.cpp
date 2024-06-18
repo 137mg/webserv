@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 17:38:22 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/19 01:36:26 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,31 +98,53 @@ void	ServerManager::closeClientConnection(unsigned long i)
 
 void	ServerManager::handleCGIOutput(int cgiFd, size_t pollIndex)
 {
-	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
-	std::string		httpResponse = "";
-    char			buffer[4096];
-    ssize_t 		bytesRead;
+	t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
+	std::string httpResponse = "";
+	char buffer[4096];
+	ssize_t bytesRead;
 
 	// Read from the stdoutFd of the CGI process
-    bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
+	bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
 
-    if (bytesRead > 0)
-    {
-        // Process the CGI output (e.g., store it, send it to client, etc.)
-        std::string output(buffer, bytesRead);
-        // Example: send output to client
-        buildResponse(output, cgi.clientFd);
-    }
-    else if (bytesRead == 0)
-    {
-        // No more data to read, handle completion if needed
-        // Example: close CGI process, remove from _cgiProcesses, etc.
-    }
-    else
-    {
-        // Handle read error
-        // Example: log error, handle exception, etc.
-    }
+	if (bytesRead > 0)
+	{
+		// Process the CGI output (e.g., store it, send it to client, etc.)
+		std::string output(buffer, bytesRead);
+		// Example: send output to client
+		buildResponse(output, cgi.clientFd);
+	}
+	else if (bytesRead == 0)
+	{
+		// No more data to read, handle completion if needed
+		close(cgi.stdoutFd); // Close the stdout pipe
+		closeClientConnection(pollIndex); // Close the client connection
+		removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
+	}
+	else
+	{
+		// Handle read error
+		perror("read from CGI stdout failed");
+		close(cgi.stdoutFd); // Close the stdout pipe
+		closeClientConnection(pollIndex); // Close the client connection
+		removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
+	}
+	return;
+	std::cout << pollIndex;
+}
+
+void	ServerManager::handleCGIInput(int cgiFd, size_t pollIndex)
+{
+	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);
+
+	ssize_t bytesWritten = write(cgiFd, cgi.cgiContent.c_str(), cgi.cgiContent.size());
+	if (bytesWritten > 0)
+	{
+		cgi.cgiContentSent += bytesWritten;
+	}
+
+	clearFdForWriting(cgiFd);
+	close(cgiFd); // Close the stdin pipe after writing is complete
+
 	return;
 	std::cout << pollIndex;
 }
@@ -193,4 +215,28 @@ void	ServerManager::clearFdForWriting(int clientFd)
     }
     // Handle case where clientFd is not found in _pollFdsVector
     throw std::runtime_error("Client fd not found in _pollFdsVector");
+}
+
+bool	ServerManager::isCGIInputFd(int fd)
+{
+    for (const auto& cgi : _cgiProcesses)
+    {
+        if (cgi.stdinFd == fd)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ServerManager::removeCGIProcess(int fd)
+{
+	auto it = std::remove_if(_cgiProcesses.begin(), _cgiProcesses.end(),
+							 [fd](const t_CGIProcess &cgi) {
+								 return cgi.stdinFd == fd || cgi.stdoutFd == fd || cgi.clientFd == fd;
+							 });
+	if (it != _cgiProcesses.end())
+	{
+		_cgiProcesses.erase(it, _cgiProcesses.end());
+	}
 }

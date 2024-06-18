@@ -161,6 +161,11 @@ void ServerManager::handleSocketEvents(void)
 		}
 		else if (this->_pollFdsVector[i].revents & POLLOUT)
         {
+			if (isCGIInputFd(_pollFdsVector[i].fd))
+            {
+                handleCGIInput(_pollFdsVector[i].fd, i);
+                continue;
+            }
             // Handle outgoing data (response)
             sendPendingResponse(_pollFdsVector[i].fd);
         }

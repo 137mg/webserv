@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/13 16:46:08 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 15:23:55 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/19 00:41:07 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct s_CGIProcess
     int 		stdinFd;
     int 		stdoutFd;
     int 		clientFd;
+	int			cgiContentSent;
+	std::string	cgiContent;
 	std::string	outputBuffer;
     pid_t 		pid;
 }	t_CGIProcess;
