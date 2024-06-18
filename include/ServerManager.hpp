@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 02:26:00 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 15:37:36 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ class	ServerManager
 
 		// struct pollfd							*_pollFds;
 		std::vector<pollfd>						_pollFdsVector;
-		std::vector<t_CGIProcess>					_cgiProcesses;
+		std::vector<t_CGIProcess>				_cgiProcesses;
 		
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
@@ -98,6 +98,11 @@ class	ServerManager
 
 		void	addCGIProcess(t_CGIProcess cgiProcess);
 		bool	checkIfCGIProcessExistsForFd(int fd);
+
+		// imma try some things here hear me out
+		void			handleCGIOutput(int cgiFd, size_t pollIndex);
+		void			buildResponse(std::string content, int clientFd);
+		t_CGIProcess	&getCGIProcessForFd(int fd);
 		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception

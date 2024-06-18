@@ -143,9 +143,9 @@ void ServerManager::handleSocketEvents(void)
 		{
 			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
 			{
-				std::cout << "CGI output recognised but exiting until i handled the rest" << std::endl;
-				exit(1); // exit for now until i implemented handle cgi output
-				break;
+				std::cout << "CGI output recognised" << std::endl;
+				handleCGIOutput(_pollFdsVector[i].fd, i);
+				continue;
 			}
 
 			if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFdsVector[i].fd) != _listenFds.end()) 

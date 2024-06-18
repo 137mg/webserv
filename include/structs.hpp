@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/13 16:46:08 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 01:08:48 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 15:23:55 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ typedef struct s_location
 
 typedef struct s_CGIProcess
 {
-    int stdinFd;
-    int stdoutFd;
-    int clientFd;
-    pid_t pid;
+    int 		stdinFd;
+    int 		stdoutFd;
+    int 		clientFd;
+	std::string	outputBuffer;
+    pid_t 		pid;
 }	t_CGIProcess;
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Client.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 17:00:22 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 16:31:01 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Client.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/18 15:50:53 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,61 @@ void	ServerManager::closeClientConnection(unsigned long i)
     std::cout << RED << "Closing " << RESET << "client socket " << RESET << _pollFdsVector[i].fd << std::endl;
     close(_pollFdsVector[i].fd);
     delFromPollFds(i);
+}
+
+void	ServerManager::handleCGIOutput(int cgiFd, size_t pollIndex)
+{
+	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
+	std::string		httpResponse = "";
+    char			buffer[4096];
+    ssize_t 		bytesRead;
+
+	// Read from the stdoutFd of the CGI process
+    bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
+
+    if (bytesRead > 0)
+    {
+        // Process the CGI output (e.g., store it, send it to client, etc.)
+        std::string output(buffer, bytesRead);
+        // Example: send output to client
+        buildResponse(output, cgi.clientFd);
+    }
+    else if (bytesRead == 0)
+    {
+        // No more data to read, handle completion if needed
+        // Example: close CGI process, remove from _cgiProcesses, etc.
+    }
+    else
+    {
+        // Handle read error
+        // Example: log error, handle exception, etc.
+    }
+	return;
+	std::cout << pollIndex;
+}
+
+void	ServerManager::buildResponse(std::string content, int clientFd)
+{
+	std::string response = "";
+
+	response = "HTTP/1.1 200 OK \r\n";
+	response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
+	response += "Connection: keep-alive\r\n";
+	response += "Content-Type: text/html\r\n\r\n";
+	response += content;
+	
+	write(clientFd, response.c_str(), response.size());
+	serverMessage(response, clientFd, GREEN);
+}
+
+t_CGIProcess& ServerManager::getCGIProcessForFd(int fd)
+{
+    for (auto& cgi : _cgiProcesses)
+    {
+        if (cgi.stdinFd == fd || cgi.stdoutFd == fd || cgi.clientFd == fd)
+        {
+            return cgi;
+        }
+    }
+	throw std::runtime_error("CGI process not found for given file descriptor");
 }

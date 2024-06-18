@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 02:32:03 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 15:34:56 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,16 +93,15 @@ void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
     int		stdinPipe[2];
     pid_t	pid;
 
-    if (pipe(stdoutPipe) == -1 || pipe(stdinPipe) == -1) {
+    if (pipe(stdoutPipe) == -1 || pipe(stdinPipe) == -1)
+	{
         perror("pipe failed");
-        return "";
     }
 
     pid = fork();
     if (pid == -1)
 	{
         perror("fork failed");
-        return "";
     }
 
     if (pid == 0)
@@ -129,7 +128,7 @@ void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
         write(stdinPipe[1], cgiContent.c_str(), cgiContent.size());
         close(stdinPipe[1]); // close write end of stdin pipe
 
-        t_CGIProcess cgiProcess = {stdinPipe[1], stdoutPipe[0], clientFd, pid};
+        t_CGIProcess cgiProcess = {stdinPipe[1], stdoutPipe[0], clientFd, "", pid};
         _serverManager.addCGIProcess(cgiProcess); // Add CGI process to ServerManager
 
 		_serverManager.addToPollFds(stdoutPipe[0]);
