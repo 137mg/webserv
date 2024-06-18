@@ -143,7 +143,6 @@ void ServerManager::handleSocketEvents(void)
 		{
 			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
 			{
-				std::cout << "CGI output recognised" << std::endl;
 				handleCGIOutput(_pollFdsVector[i].fd, i);
 				continue;
 			}
@@ -160,6 +159,11 @@ void ServerManager::handleSocketEvents(void)
 				_clientActivityMap[this->_pollFdsVector[i].fd] = std::time(nullptr); // Update the last activity time
 			}
 		}
+		else if (this->_pollFdsVector[i].revents & POLLOUT)
+        {
+            // Handle outgoing data (response)
+            sendPendingResponse(_pollFdsVector[i].fd);
+        }
 		else if (this->_pollFdsVector[i].revents & (POLLHUP | POLLERR))
 			this->closeClientConnection(i);
 	}

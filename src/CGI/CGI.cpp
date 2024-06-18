@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 15:34:56 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/18 16:23:59 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,6 @@ void	CGI::convertVector(void)
 		std::strcpy(this->_envp[i], this->_envpVector[i].c_str());
 	}
 	this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
-}
-
-void	buildHttpResponse(std::string content, int clientFd)
-{
-	std::string response = "";
-
-	response = "HTTP/1.1 200 OK \r\n";
-	response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
-	response += "Connection: keep-alive\r\n";
-	response += "Content-Type: text/html\r\n\r\n";
-	response += content;
-	
-	write(clientFd, response.c_str(), response.size());
-	serverMessage(response, clientFd, GREEN);
-	return;
-	std::cout << content << clientFd << std::endl;
 }
 
 void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)

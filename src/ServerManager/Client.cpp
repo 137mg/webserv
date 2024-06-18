@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 15:50:53 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/18 17:28:21 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ bool	ServerManager::handleClientConnection(int clientFd)
 		else if (isRequestComplete(clientBuffer))
 		{
 			selectServer(clientBuffer, clientFd);
+			markFdForWriting(clientFd);
 			this->_clientBuffers.erase(clientFd);
 		}
 	}
@@ -150,4 +151,46 @@ t_CGIProcess& ServerManager::getCGIProcessForFd(int fd)
         }
     }
 	throw std::runtime_error("CGI process not found for given file descriptor");
+}
+
+void	ServerManager::sendResponse(std::string response, int clientFd)
+{
+	write(clientFd, response.c_str(), response.size());
+	serverMessage(response, clientFd, GREEN);
+}
+
+void	ServerManager::sendPendingResponse(int clientFd)
+{
+	sendResponse(clientResponses[clientFd], clientFd);
+	clearFdForWriting(clientFd);
+}
+
+void	ServerManager::markFdForWriting(int clientFd)
+{
+    for (auto& pollFd : _pollFdsVector)
+    {
+        if (pollFd.fd == clientFd)
+        {
+            // Add POLLOUT flag to revents
+            pollFd.events |= POLLOUT;
+            return;
+        }
+    }
+    // Handle case where clientFd is not found in _pollFdsVector
+    throw std::runtime_error("Client fd not found in _pollFdsVector");
+}
+
+void	ServerManager::clearFdForWriting(int clientFd)
+{
+    for (auto& pollFd : _pollFdsVector)
+    {
+        if (pollFd.fd == clientFd)
+        {
+            // Remove POLLOUT flag from events
+            pollFd.events &= ~POLLOUT;
+            return;
+        }
+    }
+    // Handle case where clientFd is not found in _pollFdsVector
+    throw std::runtime_error("Client fd not found in _pollFdsVector");
 }

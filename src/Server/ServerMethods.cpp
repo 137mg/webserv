@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 01:59:29 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 17:14:34 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ void	Server::getMethod(void)
 		}
 	}
 	_lastPath = filePath;
-	response = buildResponse(filePath, "200 OK");
-	write(_clientFd, response.c_str(), response.size());
-	serverMessage(response, _clientFd, GREEN);
+	this->_response = buildResponse(filePath, "200 OK");
+	this->serverManager->clientResponses[this->_clientFd] = this->_response;
+	// response = buildResponse(filePath, "200 OK");
+	// write(_clientFd, response.c_str(), response.size());
+	// serverMessage(response, _clientFd, GREEN);
 }
 
 void	Server::deleteMethod(void)
@@ -56,6 +58,7 @@ void	Server::deleteMethod(void)
 		if (access(filePath.c_str(), W_OK) == 0)
 		{
 			std::remove(filePath.c_str());
+			this->_response = buildResponse(_lastPath, "200 OK");
 			response = buildResponse(_lastPath, "200 OK");
 			write(_clientFd, response.c_str(), response.size());
 			serverMessage(response, _clientFd, GREEN);

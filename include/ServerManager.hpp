@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 15:47:12 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 15:37:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/18 17:22:48 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ class	ServerManager
 		ServerManager(void);
 		~ServerManager(void);
 	
+		std::map<int, std::string>				clientResponses;
 		int		newClientConnection(int listenFd);
 		void	config(void);
 		void	configFile(const char* filename);
@@ -103,6 +104,11 @@ class	ServerManager
 		void			handleCGIOutput(int cgiFd, size_t pollIndex);
 		void			buildResponse(std::string content, int clientFd);
 		t_CGIProcess	&getCGIProcessForFd(int fd);
+		void			sendResponse(std::string response, int clientFd);
+		void			sendPendingResponse(int clientFd);
+		void			markFdForWriting(int clientFd);
+		void			clearFdForWriting(int clientFd);
+	
 		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception

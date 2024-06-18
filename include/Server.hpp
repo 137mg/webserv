@@ -6,7 +6,7 @@
 /*   By: mirjam <mirjam@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 02:00:08 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/18 16:48:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class	Server
 	private:
 		int				_clientFd;
 		std::string		_request;
+		std::string		_response;
 		std::string		_lastPath;
 		t_header		_header;
 		t_location		_location;
