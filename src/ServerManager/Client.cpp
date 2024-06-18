@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/19 01:36:26 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/19 01:45:08 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,35 +99,34 @@ void	ServerManager::closeClientConnection(unsigned long i)
 void	ServerManager::handleCGIOutput(int cgiFd, size_t pollIndex)
 {
 	t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
-	std::string httpResponse = "";
-	char buffer[4096];
-	ssize_t bytesRead;
+    char buffer[4096];
+    ssize_t bytesRead;
 
-	// Read from the stdoutFd of the CGI process
-	bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
+    // Read from the stdoutFd of the CGI process
+    bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
 
-	if (bytesRead > 0)
-	{
-		// Process the CGI output (e.g., store it, send it to client, etc.)
-		std::string output(buffer, bytesRead);
-		// Example: send output to client
-		buildResponse(output, cgi.clientFd);
-	}
-	else if (bytesRead == 0)
-	{
-		// No more data to read, handle completion if needed
-		close(cgi.stdoutFd); // Close the stdout pipe
-		closeClientConnection(pollIndex); // Close the client connection
-		removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
-	}
-	else
-	{
-		// Handle read error
-		perror("read from CGI stdout failed");
-		close(cgi.stdoutFd); // Close the stdout pipe
-		closeClientConnection(pollIndex); // Close the client connection
-		removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
-	}
+    if (bytesRead > 0)
+    {
+        // Process the CGI output (e.g., store it, send it to client, etc.)
+        std::string output(buffer, bytesRead);
+        // Example: send output to client
+        buildResponse(output, cgi.clientFd);
+    }
+    else if (bytesRead == 0)
+    {
+        // No more data to read, handle completion if needed
+        close(cgi.stdoutFd); // Close the stdout pipe
+        closeClientConnection(pollIndex); // Close the client connection
+        removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
+    }
+    else
+    {
+        // Handle read error
+        perror("read from CGI stdout failed");
+        close(cgi.stdoutFd); // Close the stdout pipe
+        closeClientConnection(pollIndex); // Close the client connection
+        removeCGIProcess(cgiFd); // Remove CGI process from _cgiProcesses
+    }
 	return;
 	std::cout << pollIndex;
 }
