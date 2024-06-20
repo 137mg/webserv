@@ -1,3 +1,6 @@
 .vscode
 **/.vscode/
+.vscode/*
+.vscode/**/*
 webserv_examples
+vscode
