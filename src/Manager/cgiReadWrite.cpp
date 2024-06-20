@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/20 13:55:35 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 15:03:24 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 15:05:10 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 		
 		close(cgi.stdoutFd);
 		sendResponse(response, cgi.clientFd);
-		clearFdForWriting(cgi.clientFd);
 		removeCGIProcess(cgiFd);
     }
     else if (bytesRead == 0)
