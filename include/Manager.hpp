@@ -54,13 +54,11 @@ class	Manager
 
 		std::string								_ServerName;
 		std::vector<int>						_listenFds;
-		//int										_listenFds;
 		int										_clientFd;
 		struct sockaddr_in						_ServerAddress;
 		std::string								_buffer;
 		size_t									_requestSize;
 
-		// struct pollfd							*_pollFds;
 		std::vector<pollfd>						_pollFdsVector;
 		std::vector<t_CGIProcess>				_cgiProcesses;
 		
@@ -101,17 +99,18 @@ class	Manager
 		bool	checkIfCGIProcessExistsForFd(int fd);
 
 		// imma try some things here hear me out
-		void			handleCGIOutput(int cgiFd, size_t pollIndex);
-		void			handleCGIInput(int cgiFd, size_t pollIndex);
-		void			buildResponse(std::string content, int clientFd);
-		t_CGIProcess	&getCGIProcessForFd(int fd);
-		void			sendResponse(std::string response, int clientFd);
-		void			sendPendingResponse(int clientFd);
-		void			markFdForWriting(int clientFd);
-		void			clearFdForWriting(int clientFd);
-		bool			isCGIInputFd(int fd);
-		void			removeCGIProcess(int fd);
-		void			delFromPollFdsByValue(int fd);
+		void				handleCGIOutput(int cgiFd, size_t pollIndex);
+		void				handleCGIInput(int cgiFd, size_t pollIndex);
+		void				buildResponse(std::string content, int clientFd);
+		t_CGIProcess		&getCGIProcessForFd(int fd);
+		void				sendResponse(std::string response, int clientFd);
+		void				sendPendingResponse(int clientFd);
+		void				markFdForWriting(int clientFd);
+		void				clearFdForWriting(int clientFd);
+		bool				isCGIInputFd(int fd);
+		void				removeCGIProcess(int fd);
+		void				delFromPollFdsByValue(int fd);
+		std::vector<pollfd>	getFdsVector(void);
 	
 		//void	signalHandler(int signum);
 

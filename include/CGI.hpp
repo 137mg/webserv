@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 14:04:43 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 16:31:44 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class CGI
 		std::vector<std::string>	_envpVector;
 		std::vector<std::string>	_outputBuffer;
 		Server						_server;
-		Manager				&_Manager;
+		Manager						&_Manager;
 	
 	public:
 		CGI(const Server& server, Manager &Manager);

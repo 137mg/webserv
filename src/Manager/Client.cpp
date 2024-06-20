@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 15:27:54 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 16:47:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,12 @@ void	Manager::sendResponse(std::string response, int clientFd)
 
 void	Manager::sendPendingResponse(int clientFd)
 {
-	sendResponse(clientResponses[clientFd], clientFd);
-	clearFdForWriting(clientFd);
+	if (clientResponses.count(clientFd) > 0 && !clientResponses[clientFd].empty())
+    {
+        sendResponse(clientResponses[clientFd], clientFd);
+        clearFdForWriting(clientFd);
+		clientResponses.erase(clientFd);
+    }
 }
 
 void	Manager::markFdForWriting(int clientFd)

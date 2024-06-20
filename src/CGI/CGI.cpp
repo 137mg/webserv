@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 15:26:03 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 16:39:16 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,9 @@ void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
 		cgi.stdoutFd = stdoutPipe[0];
 		
         _Manager.addCGIProcess(cgi); // Add CGI process to Manager
-		_Manager.addToPollFds(stdinPipe[1]); // Add stdin pipe to poll list with POLLOUT
-		_Manager.markFdForWriting(stdinPipe[1]);
-		_Manager.addToPollFds(stdoutPipe[0]);
+		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
+		_Manager.markFdForWriting(cgi.stdinFd);
+		_Manager.addToPollFds(cgi.stdoutFd);
     }
 	return;
 }

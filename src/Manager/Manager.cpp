@@ -217,3 +217,8 @@ const char*	Manager::ClientSocketException::what(void) const throw()
 {
 	return ("Client socket: ");
 }
+
+std::vector<pollfd>	Manager::getFdsVector(void)
+{
+	return this->_pollFdsVector;
+}
