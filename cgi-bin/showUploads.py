@@ -2,48 +2,51 @@
 
 import os
 
-print("<!DOCTYPE html> \
-<html> \
-<head> \
-	<meta charset='utf-8'> \
-	<meta name='viewport' content='width=device-width, initial-scale=1'> \
-	<title>Webserv</title> \
-	<link rel='icon' type='image/x-icon' href='/html/images/favicon.ico'> \
-	<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'> \
-	<link href='/html/css/stylesheet.css' rel='stylesheet' type='text/css'> \
-</head><body> \
-	\
-	<div class ='navigation-bar'> \
-	<a href='/'>Home</a> \
-	<a href='/upload.html'>Upload</a> \
-	<a href='/cgi-bin/showUploads.py'>Files</a> \
-	<a href='/tests.html'>Tests</a> \
-	</div>\
-	  <script>\
-	  function deleteFile(filename) {\
-	const filePath = 'uploads/' + filename;\
-	fetch(filePath,\
-	{\
-		method: 'DELETE'\
-	})\
-	.then(response =>\
-	{\
-		if (response.ok)\
-		{\
-			window.location.reload();\
-		}\
-		else\
-		{\
-			return response.text().then(text => {\
-				document.open();\
-				document.write(text);\
-				document.close();\
-			});\
-		}\
-	})\
-}</script>\
-	<div class ='block form-block files-block'> \
-		<h2>Uploaded files</h2><ul>")
+print("<!DOCTYPE html>")
+print("<html>")
+print("<head>")
+print("    <meta charset='utf-8'>")
+print("    <meta name='viewport' content='width=device-width, initial-scale=1'>")
+print("    <title>Webserv</title>")
+print("    <link rel='icon' type='image/x-icon' href='/html/images/favicon.ico'>")
+print("    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>")
+print("    <link href='/html/css/stylesheet.css' rel='stylesheet' type='text/css'>")
+print("</head>")
+print("<body>")
+print("    <div class ='navigation-bar'>")
+print("        <a href='/'>Home</a>")
+print("        <a href='/upload.html'>Upload</a>")
+print("        <a href='/cgi-bin/showUploads.py'>Files</a>")
+print("        <a href='/tests.html'>Tests</a>")
+print("    </div>")
+print("    <script>")
+print("    function deleteFile(filename) {")
+print("        const filePath = 'uploads/' + filename;")
+print("        fetch(filePath,")
+print("        {")
+print("            method: 'DELETE'")
+print("        })")
+print("        .then(response =>")
+print("        {")
+print("            if (response.ok)")
+print("            {")
+print("                window.location.reload();")
+print("            }")
+print("            else")
+print("            {")
+print("                return response.text().then(text => {")
+print("                    document.open();")
+print("                    document.write(text);")
+print("                    document.close();")
+print("                });")
+print("            }")
+print("        })")
+print("    }")
+print("    </script>")
+print("    <div class ='block form-block files-block'>")
+print("        <h2>Uploaded files</h2>")
+print("        <ul>")
+
 
 cwd = os.getcwd()
 sub_dir = 'cgi-bin/uploads'
