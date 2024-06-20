@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/20 13:55:35 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 17:16:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 17:32:54 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 {
 	t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
-    char buffer[80096];
+    char buffer[MESSAGE_BUFFER];
     ssize_t bytesRead;
 
     // Read from the stdoutFd of the CGI process
