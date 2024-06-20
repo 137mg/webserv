@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 16:47:58 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 17:10:00 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	Manager::buildResponse(std::string content, int clientFd)
 
 void	Manager::sendResponse(std::string response, int clientFd)
 {
-	// std::cout << response << std::endl;
 	write(clientFd, response.c_str(), response.size());
 	serverMessage(response, clientFd, GREEN);
 }

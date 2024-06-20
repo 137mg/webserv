@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/20 13:55:35 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 16:44:52 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 17:16:57 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
     bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
     if (bytesRead > 0)
     {
+		buffer[bytesRead] = '\0';
 		std::string response = "";
 
 		response = "HTTP/1.1 200 OK \r\n";
@@ -31,8 +32,8 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 		response += "Content-Type: text/html\r\n\r\n";
 		response += buffer;
 		
-		sendResponse(response, cgi.clientFd);
-		clearFdForWriting(cgiFd);
+		this->clientResponses[cgi.clientFd] = response;
+		markFdForWriting(cgi.clientFd);
     }
 	if (bytesRead <= 0)
     {
