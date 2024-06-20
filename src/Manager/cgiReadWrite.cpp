@@ -6,7 +6,7 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/20 13:55:35 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 15:05:10 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 15:30:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 		response += buffer;
 		
 		close(cgi.stdoutFd);
+		std::cout << "deleting cgi pipe: " << cgi.stdoutFd << std::endl;
+		delFromPollFdsByValue(cgi.stdoutFd);
+		
 		sendResponse(response, cgi.clientFd);
 		removeCGIProcess(cgiFd);
     }
@@ -104,3 +107,14 @@ t_CGIProcess& Manager::getCGIProcessForFd(int fd)
     }
 	throw std::runtime_error("CGI process not found for given file descriptor");
 }
+
+void Manager::delFromPollFdsByValue(int fd)
+{
+    auto it = std::find_if(this->_pollFdsVector.begin(), this->_pollFdsVector.end(),
+                           [fd](const pollfd& pfd) { return pfd.fd == fd; });
+    if (it != this->_pollFdsVector.end())
+    {
+        this->_pollFdsVector.erase(it);
+    }
+}
+

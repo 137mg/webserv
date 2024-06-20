@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 14:38:45 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 15:27:54 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	Manager::handleClientConnection(int clientFd)
 	}
 	else if (bytes_read < 0)
 	{
-		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
+		std::cerr << RED << BOLD << "Read error on socket " << clientFd << " " << std::strerror(errno) << RESET << std::endl;
 		return (false);
 	}
 	else

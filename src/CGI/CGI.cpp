@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 14:05:26 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 15:26:03 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,13 @@ void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
         close(stdinPipe[0]);  // close read end of stdin pipe
 
 
-        t_CGIProcess cgiProcess = {stdinPipe[1], stdoutPipe[0], clientFd, 0, "", "", pid};
-        cgiProcess.cgiRequest = cgiRequest; // Store the request body
-        cgiProcess.cgiRequestSent = 0; // Track how much of the request body has been sent
+        t_CGIProcess cgi = {stdinPipe[1], stdoutPipe[0], clientFd, 0, "", "", pid};
+        cgi.cgiRequest = cgiRequest; // Store the request body
+        cgi.cgiRequestSent = 0; // Track how much of the request body has been sent
+		cgi.stdinFd = stdinPipe[1];
+		cgi.stdoutFd = stdoutPipe[0];
 		
-        _Manager.addCGIProcess(cgiProcess); // Add CGI process to Manager
+        _Manager.addCGIProcess(cgi); // Add CGI process to Manager
 		_Manager.addToPollFds(stdinPipe[1]); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(stdinPipe[1]);
 		_Manager.addToPollFds(stdoutPipe[0]);

@@ -111,6 +111,7 @@ class	Manager
 		void			clearFdForWriting(int clientFd);
 		bool			isCGIInputFd(int fd);
 		void			removeCGIProcess(int fd);
+		void			delFromPollFdsByValue(int fd);
 	
 		//void	signalHandler(int signum);
 
