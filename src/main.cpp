@@ -6,11 +6,11 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:49:54 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 02:04:40 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Manager.hpp"
 
 volatile bool RUNNING;
 
@@ -29,7 +29,7 @@ void	setUpSignals()
 
 int main(int argc, char** argv)
 {
-	ServerManager	serverManager;
+	Manager	Manager;
 
 	if (argc > 2)
 	{
@@ -39,9 +39,9 @@ int main(int argc, char** argv)
 	try
 	{
 		if (argc == 2)
-			serverManager.configFile(argv[1]);
+			Manager.configFile(argv[1]);
 		else
-			serverManager.configFile(DEFAULT_PATH);
+			Manager.configFile(DEFAULT_PATH);
 	}
 	catch (std::exception& e)
 	{
@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 	setUpSignals();
 	try
 	{
-		serverManager.config();
-		serverManager.setUpPoll();
+		Manager.config();
+		Manager.setUpPoll();
 	}
 	catch (std::exception& e)
 	{

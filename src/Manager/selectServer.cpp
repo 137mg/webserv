@@ -6,11 +6,11 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 01:54:53 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Manager.hpp"
 
 static std::string	getValue(std::string request, std::string key)
 {
@@ -54,7 +54,7 @@ static t_header	parseRequest(std::string request)
 	return (header);
 }
 
-void	ServerManager::selectServer(std::string buffer, int clientFd)
+void	Manager::selectServer(std::string buffer, int clientFd)
 {
 	t_header			header;
 	uint16_t			port;
@@ -64,7 +64,7 @@ void	ServerManager::selectServer(std::string buffer, int clientFd)
 	size_t				j;
 
 	header = parseRequest(buffer);
-	server.serverManager = this;
+	server.Manager = this;
 	if (header.port == 0)
 		port = _ports[0];
 	else

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/18 17:35:55 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	Server::getMethod(void)
 	}
 	_lastPath = filePath;
 	this->_response = buildResponse(filePath, "200 OK");
-	this->serverManager->clientResponses[this->_clientFd] = this->_response;
+	this->Manager->clientResponses[this->_clientFd] = this->_response;
 }
 
 void	Server::deleteMethod(void)
@@ -56,7 +56,7 @@ void	Server::deleteMethod(void)
 		{
 			std::remove(filePath.c_str());
 			this->_response = buildResponse(filePath, "200 OK");
-			this->serverManager->clientResponses[this->_clientFd] = this->_response;
+			this->Manager->clientResponses[this->_clientFd] = this->_response;
 		}
 		else
 			sendErrorResponse(403);
@@ -83,7 +83,7 @@ void	Server::postMethod(void)
 
 void	Server::runCGI(std::string filePath)
 {
-	CGI			cgi(*this, *(this->serverManager));
+	CGI			cgi(*this, *(this->Manager));
 
 	cgi.initEnvp(_header);
 	cgi.convertVector();

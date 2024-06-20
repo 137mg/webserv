@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerManagerManager.cpp                                  :+:      :+:    :+:   */
+/*   ManagerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Manager.hpp"
 
-ServerManager::ServerManager(void) : _timeout(60)
+Manager::Manager(void) : _timeout(60)
 {
 	this->_ServerName = "Webserv";
 }
 
-ServerManager::~ServerManager(void)
+Manager::~Manager(void)
 {
 	for (std::vector<int>::size_type i = 0; i < this->_listenFds.size(); i++)
 	{
@@ -26,7 +26,7 @@ ServerManager::~ServerManager(void)
 	}
 }
 
-void	ServerManager::config(void)
+void	Manager::config(void)
 {
 	for (size_t i = 0; i != _ports.size(); i++)
 	{
@@ -44,8 +44,8 @@ void	ServerManager::config(void)
 	}
 }
 
-// Create a socket for the ServerManager to listen for incoming connections
-int	ServerManager::createSocket(void)
+// Create a socket for the Manager to listen for incoming connections
+int	Manager::createSocket(void)
 {
 	int	opt;
 
@@ -61,7 +61,7 @@ int	ServerManager::createSocket(void)
 }
 
 // Bind the socket to a specific address and port and listen for incoming connections
-void	ServerManager::bindSocket(int sockfd)
+void	Manager::bindSocket(int sockfd)
 {	
 	if (bind(sockfd, reinterpret_cast<struct  sockaddr*>(&this->_ServerAddress),
 		sizeof(this->_ServerAddress)) != 0)
@@ -70,7 +70,7 @@ void	ServerManager::bindSocket(int sockfd)
 		throw ServerSocketException();
 }
 
-int	ServerManager::newClientConnection(int listenFd)
+int	Manager::newClientConnection(int listenFd)
 {
 	struct sockaddr_storage	client_addr;
 	socklen_t				addr_size;
@@ -89,7 +89,7 @@ int	ServerManager::newClientConnection(int listenFd)
 	return clientFd;
 }
 
-void	ServerManager::setUpPoll(void)
+void	Manager::setUpPoll(void)
 {	
 	for (size_t i = 0; i < _listenFds.size(); ++i)
 	{
@@ -101,7 +101,7 @@ void	ServerManager::setUpPoll(void)
 	this->monitorSockets();
 }
 
-void ServerManager::checkForTimeouts(void)
+void Manager::checkForTimeouts(void)
 {
 	time_t now = std::time(nullptr);
 	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
@@ -119,7 +119,7 @@ void ServerManager::checkForTimeouts(void)
 	}
 }
 
-void	ServerManager::monitorSockets(void)
+void	Manager::monitorSockets(void)
 {
 	while (RUNNING)
 	{
@@ -135,7 +135,7 @@ void	ServerManager::monitorSockets(void)
 	}
 }
 
-void ServerManager::handleSocketEvents(void)
+void Manager::handleSocketEvents(void)
 {
 	for (unsigned long i = 0; i < this->_pollFdsVector.size() && RUNNING; i++)
 	{
@@ -174,7 +174,7 @@ void ServerManager::handleSocketEvents(void)
 	}
 }
 
-void	ServerManager::addToPollFds(int clientFd)
+void	Manager::addToPollFds(int clientFd)
 {
 	pollfd newPollFd;
 	newPollFd.fd = clientFd;
@@ -182,7 +182,7 @@ void	ServerManager::addToPollFds(int clientFd)
 	this->_pollFdsVector.push_back(newPollFd);
 }
 
-bool	ServerManager::checkIfCGIProcessExistsForFd(int fd)
+bool	Manager::checkIfCGIProcessExistsForFd(int fd)
 {
 	// Find the CGI process in _cgiProcesses whose stdoutFd matches fd
 	std::vector<t_CGIProcess>::iterator it = std::find_if(_cgiProcesses.begin()
@@ -198,22 +198,22 @@ bool	ServerManager::checkIfCGIProcessExistsForFd(int fd)
 	return found;
 }
 
-void ServerManager::addCGIProcess(t_CGIProcess cgiProcess)
+void Manager::addCGIProcess(t_CGIProcess cgiProcess)
 {
 	_cgiProcesses.push_back(cgiProcess);
 }
 
-void	ServerManager::delFromPollFds(int i)
+void	Manager::delFromPollFds(int i)
 {
 	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
 }
 
-const char*	ServerManager::ServerSocketException::what(void) const throw()
+const char*	Manager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");
 }
 
-const char*	ServerManager::ClientSocketException::what(void) const throw()
+const char*	Manager::ClientSocketException::what(void) const throw()
 {
 	return ("Client socket: ");
 }

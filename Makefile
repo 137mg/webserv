@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/06/14 15:23:34 by mgoedkoo         ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
+#                                                    +#+                       #
+#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
+#    Updated: 2024/06/20 13:59:50 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,10 +28,11 @@ SRC =	src/CGI/CGI.cpp							\
 		src/Server/ServerMethods.cpp			\
 		src/Server/ServerRequest.cpp			\
 		src/Server/ServerResponse.cpp			\
-		src/ServerManager/ConfigFile.cpp		\
-		src/ServerManager/selectServer.cpp		\
-		src/ServerManager/ServerManager.cpp		\
-		src/ServerManager/Client.cpp			\
+		src/Manager/cgiReadWrite.cpp				\
+		src/Manager/ConfigFile.cpp				\
+		src/Manager/selectServer.cpp			\
+		src/Manager/Manager.cpp					\
+		src/Manager/Client.cpp					\
 		src/Logger.cpp							\
 		src/main.cpp
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)

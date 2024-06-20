@@ -6,13 +6,13 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/19 01:19:38 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/20 14:05:26 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI(const Server& server, ServerManager &serverManager) : _server(server), _serverManager(serverManager)
+CGI::CGI(const Server& server, Manager &Manager) : _server(server), _Manager(Manager)
 {
 	this->_envp = nullptr;
 }
@@ -71,7 +71,7 @@ void	CGI::convertVector(void)
 	this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
+void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
 {
 	int 	stdoutPipe[2];
     int		stdinPipe[2];
@@ -111,15 +111,15 @@ void	CGI::executeScript(std::string file, std::string cgiContent, int clientFd)
 
 
         t_CGIProcess cgiProcess = {stdinPipe[1], stdoutPipe[0], clientFd, 0, "", "", pid};
-        cgiProcess.cgiContent = cgiContent; // Store the request body
-        cgiProcess.cgiContentSent = 0; // Track how much of the request body has been sent
+        cgiProcess.cgiRequest = cgiRequest; // Store the request body
+        cgiProcess.cgiRequestSent = 0; // Track how much of the request body has been sent
 		
-        _serverManager.addCGIProcess(cgiProcess); // Add CGI process to ServerManager
-		_serverManager.addToPollFds(stdinPipe[1]); // Add stdin pipe to poll list with POLLOUT
-		_serverManager.markFdForWriting(stdinPipe[1]);
-		_serverManager.addToPollFds(stdoutPipe[0]);
+        _Manager.addCGIProcess(cgiProcess); // Add CGI process to Manager
+		_Manager.addToPollFds(stdinPipe[1]); // Add stdin pipe to poll list with POLLOUT
+		_Manager.markFdForWriting(stdinPipe[1]);
+		_Manager.addToPollFds(stdoutPipe[0]);
     }
 	return;
 }
 
-    // write(stdinPipe[1], cgiContent.c_str(), cgiContent.size());
+    // write(stdinPipe[1], cgiRequest.c_str(), cgiRequest.size());

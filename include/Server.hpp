@@ -6,16 +6,16 @@
 /*   By: mirjam <mirjam@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/18 16:48:38 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/20 13:58:07 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include "ServerManager.hpp"
+# include "Manager.hpp"
 
-class	ServerManager;
+class	Manager;
 
 class	Server
 {
@@ -41,7 +41,7 @@ class	Server
 		std::string	buildResponse(const std::string path, std::string status);
 
 	public:
-		ServerManager						*serverManager;
+		Manager								*Manager;
 		uint16_t							port;
 		uint32_t							clientMaxBodySize;
 		std::string							host;

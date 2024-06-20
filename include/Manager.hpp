@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ServerManager.hpp                                  :+:    :+:            */
+/*   Manager.hpp                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVERMANAGER_HPP
-#define SERVERMANAGER_HPP
+#ifndef MANAGER_HPP
+#define MANAGER_HPP
 
 #include <netinet/in.h>
 #include <netdb.h>
@@ -46,7 +46,7 @@ extern volatile bool RUNNING;
 
 class	Server;
 
-class	ServerManager
+class	Manager
 {
 	private:
 		std::vector<uint16_t>					_ports;
@@ -71,8 +71,8 @@ class	ServerManager
 		const int								_timeout;
 
 	public:
-		ServerManager(void);
-		~ServerManager(void);
+		Manager(void);
+		~Manager(void);
 	
 		std::map<int, std::string>				clientResponses;
 		int		newClientConnection(int listenFd);

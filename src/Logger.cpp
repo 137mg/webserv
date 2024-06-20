@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Logger.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 14:41:06 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/11 11:00:00 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Logger.cpp                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/18 14:41:06 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ServerManager.hpp"
+#include "Manager.hpp"
 
 void	clientMessage(const std::string &message, int clientFd)
 {
