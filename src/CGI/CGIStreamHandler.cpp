@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGIStreamHandler.cpp                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:57:15 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGIStreamHandler.cpp                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 13:05:14 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/21 17:48:43 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
     ssize_t bytesRead;
 
     // Read from the stdoutFd of the CGI process
-    bytesRead = read(cgi.stdoutFd, buffer, sizeof(buffer));
+	memset(buffer, '\0', MESSAGE_BUFFER);
+    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER - 1);
     if (bytesRead > 0)
     {
 		buffer[bytesRead] = '\0';
