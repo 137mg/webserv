@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 14:07:23 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/21 14:58:28 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	code = checkRequest();
 	if (code != 0)
 	{
-		sendErrorResponse(code);
+		buildErrorResponse(code);
 		return;
 	}
 	size = _location.allowedMethods.size();
@@ -97,5 +97,5 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 			return;
 		}
 	}
-	sendErrorResponse(405);
+	buildErrorResponse(405);
 }

@@ -74,6 +74,8 @@ class	Manager
 		~Manager(void);
 	
 		std::map<int, std::string>				clientResponses;
+		std::map<int, std::string>				clientErrorResponses;
+	
 		int		newClientConnection(int listenFd);
 		void	config(void);
 		void	configFile(const char* filename);
@@ -114,6 +116,7 @@ class	Manager
 		void				removeCGIProcess(int fd);
 		void				delFromPollFdsByValue(int fd);
 		std::vector<pollfd>	getFdsVector(void);
+		void				sendErrorResponse(std::string response, int clientFd);
 	
 		//void	signalHandler(int signum);
 

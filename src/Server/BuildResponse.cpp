@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ServerResponse.cpp                                 :+:    :+:            */
+/*   BuildResponse.cpp                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 12:48:21 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 14:56:58 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,25 @@ std::string	Server::buildResponse(const std::string path, std::string status)
 	return (response);
 }
 
-void	Server::sendRedirectResponse(void)
+void	Server::buildRedirectResponse(void)
 {
 	std::string	response;
 
 	response = "HTTP/1.1 301 Moved Permanently\r\n";
 	response += "Location: " + _location.redirect + "\r\n";
 	response += "Connection: keep-alive\r\n\r\n";
-	write(_clientFd, response.c_str(), response.length());
-	serverMessage(response, _clientFd, BLUE);
+	this->Manager->clientErrorResponses[_clientFd] = response;
 }
 
-void	Server::sendErrorResponse(int errorCode)
+void	Server::buildErrorResponse(int errorCode)
 {
 	std::string	response;
 
 	if (errorCode == 301)
 	{
-		sendRedirectResponse();
+		buildRedirectResponse();
 		return;
 	}
 	response = buildResponse(errorPages[errorCode], errorMessages[errorCode]);
-	write(_clientFd, response.c_str(), response.length());
-	serverMessage(response, _clientFd, RED);
+	this->Manager->clientErrorResponses[_clientFd] = response;
 }

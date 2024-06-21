@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 12:52:07 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 14:09:32 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	Server::getMethod(void)
 		filePath += _location.index;
 	if (access(filePath.c_str(), R_OK) != 0 || (filePath.back() == '/' && !_location.autoIndex))
 	{
-		sendErrorResponse(404);
+		buildErrorResponse(404);
 		return;
 	}
 	if (filePath.back() == '/')
@@ -57,10 +57,10 @@ void	Server::deleteMethod(void)
 			this->Manager->clientResponses[_clientFd] = buildResponse(filePath, "200 OK");
 		}
 		else
-			sendErrorResponse(403);
+			buildErrorResponse(403);
 	}
 	else
-		sendErrorResponse(404);
+		buildErrorResponse(404);
 }
 
 void	Server::postMethod(void)
@@ -76,7 +76,7 @@ void	Server::postMethod(void)
 			return;
 		}
 	}
-	sendErrorResponse(415);
+	buildErrorResponse(415);
 }
 
 void	Server::runCGI(std::string filePath)
@@ -90,5 +90,5 @@ void	Server::runCGI(std::string filePath)
 		cgi.executeScript(filePath, _request, _clientFd);
 	}
 	else
-		sendErrorResponse(403);
+		buildErrorResponse(403);
 }
