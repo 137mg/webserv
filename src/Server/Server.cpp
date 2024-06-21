@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/21 14:06:50 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:56:28 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ Server&	Server::operator=(const Server& original)
 	locations = original.locations;
 	errorPages = original.errorPages;
 	errorMessages = original.errorMessages;
+	Manager = original.Manager;
 	return (*this);
 }
 

@@ -110,7 +110,6 @@ void Manager::checkForTimeouts(void)
 		{
 			if (now - _clientActivityMap[clientFd] > this->_timeout)
 			{
-				// std::cout << RED <<"Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
 				selectServer("", clientFd);
 				markFdForWriting(clientFd);
 				closeClientConnection(i);

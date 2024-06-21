@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 14:58:28 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:43:48 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	int		code;
 	size_t	size;
 
-	clientMessage(request, clientFd);
 	_clientFd = clientFd;
 	_request = request;
 	if (_request.empty())
 	{
-		sendErrorResponse(408);
+		buildErrorResponse(408);
 		return;
 	}
 	_header = header;
 	_location = selectLocation();
+	clientMessage(request, clientFd);
 	code = checkRequest();
 	if (code != 0)
 	{

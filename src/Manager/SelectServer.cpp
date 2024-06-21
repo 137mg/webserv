@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 14:05:26 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:57:50 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ void	Manager::selectServer(std::string buffer, int clientFd)
 	{
 		server = _serverMap[port][0];
 		server.handleRequest(header, buffer, clientFd);
+		return;
 	}
 	header = parseHeader(buffer, port);
-	server.Manager = this;
 	serverList = _serverMap[port];
 	for (i = 0; i < serverList.size(); i++)
 	{
