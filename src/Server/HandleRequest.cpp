@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 18:07:40 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   HandleRequest.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/21 14:09:32 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	code = checkRequest();
 	if (code != 0)
 	{
-		sendErrorResponse(code);
+		buildErrorResponse(code);
 		return;
 	}
 	size = _location.allowedMethods.size();
@@ -92,5 +92,5 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 			return;
 		}
 	}
-	sendErrorResponse(405);
+	buildErrorResponse(405);
 }

@@ -6,13 +6,14 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:07:01 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 13:57:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
 #include "Server.hpp"
 
+// This will read the output from thr CGI script and build a response with it
 void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 {
 	t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
@@ -52,6 +53,7 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 	std::cout << pollIndex;
 }
 
+// This writes the request to the CGI script
 void	Manager::handleCGIInput(int cgiFd, size_t pollIndex)
 {
 	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);

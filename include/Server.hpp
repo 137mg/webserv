@@ -6,7 +6,7 @@
 /*   By: mirjam <mirjam@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/21 12:49:14 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 14:57:00 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ class	Server
 		void		getMethod(void);
 		void		deleteMethod(void);
 		void		postMethod(void);
-		void		sendErrorResponse(int errorCode);
-		void		sendRedirectResponse(void);
+		void		buildErrorResponse(int errorCode);
+		void		buildRedirectResponse(void);
 		void		runCGI(std::string filePath);
 		std::string	buildResponse(const std::string path, std::string status);
 
