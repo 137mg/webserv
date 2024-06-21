@@ -151,7 +151,7 @@ void Manager::handleSocketEvents(void)
 				this->newClientConnection(this->_pollFdsVector[i].fd);
 			else
 			{
-				if (!this->handleClientConnection(this->_pollFdsVector[i].fd))
+				if (!this->readRequest(this->_pollFdsVector[i].fd))
 				{
 					closeClientConnection(i);
 					break;
@@ -180,27 +180,6 @@ void	Manager::addToPollFds(int clientFd)
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
 	this->_pollFdsVector.push_back(newPollFd);
-}
-
-bool	Manager::checkIfCGIProcessExistsForFd(int fd)
-{
-	// Find the CGI process in _cgiProcesses whose stdoutFd matches fd
-	std::vector<t_CGIProcess>::iterator it = std::find_if(_cgiProcesses.begin()
-								,_cgiProcesses.end(), [&](const t_CGIProcess &cgi)
-		{
-			return cgi.stdoutFd == fd;
-		});
-
-	// Check if the iterator points to a valid element in _cgiProcesses
-	bool found = (it != _cgiProcesses.end());
-
-	// Return true if the CGI process with stdoutFd equal to fd was found, otherwise false
-	return found;
-}
-
-void Manager::addCGIProcess(t_CGIProcess cgiProcess)
-{
-	_cgiProcesses.push_back(cgiProcess);
 }
 
 void	Manager::delFromPollFds(int i)

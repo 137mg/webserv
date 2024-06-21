@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/20 13:59:50 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/06/21 13:12:58 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
-SRC =	src/CGI/CGI.cpp							\
+SRC =	src/CGI/CGIExecuter.cpp					\
+		src/CGI/CGIStreamHandler.cpp			\
+		src/CGI/CGIFdManager.cpp				\
 		src/Config/Config.cpp					\
 		src/Config/ConfigAdd.cpp				\
 		src/Config/ConfigPrint.cpp				\
@@ -26,11 +28,12 @@ SRC =	src/CGI/CGI.cpp							\
 		src/Config/ConfigUtils.cpp				\
 		src/Server/Server.cpp					\
 		src/Server/ServerMethods.cpp			\
-		src/Server/ServerRequest.cpp			\
+		src/Server/HandleRequest.cpp			\
 		src/Server/ServerResponse.cpp			\
-		src/Manager/cgiReadWrite.cpp				\
 		src/Manager/ConfigFile.cpp				\
-		src/Manager/selectServer.cpp			\
+		src/Manager/SelectServer.cpp			\
+		src/Manager/ReadRequest.cpp				\
+		src/Manager/FdManager.cpp				\
 		src/Manager/Manager.cpp					\
 		src/Manager/Client.cpp					\
 		src/Logger.cpp							\

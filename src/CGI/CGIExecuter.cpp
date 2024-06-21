@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   CGI.cpp                                            :+:    :+:            */
+/*   CGIExecuter.cpp                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/04/25 14:53:32 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 16:39:16 by juvan-to      ########   odam.nl         */
+/*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/21 13:13:07 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,5 +123,3 @@ void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
     }
 	return;
 }
-
-    // write(stdinPipe[1], cgiRequest.c_str(), cgiRequest.size());

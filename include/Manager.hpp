@@ -83,7 +83,7 @@ class	Manager
 		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
 
-		bool	handleClientConnection(int clientFd);
+		bool	readRequest(int clientFd);
 		bool	isRequestComplete(const std::string &request_buffer);
 
 		size_t	getRequestSize(std::string request_buffer);

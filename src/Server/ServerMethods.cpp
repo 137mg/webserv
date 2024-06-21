@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 12:52:07 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	Server::getMethod(void)
 		}
 	}
 	_lastPath = filePath;
-	this->_response = buildResponse(filePath, "200 OK");
-	this->Manager->clientResponses[this->_clientFd] = this->_response;
+	this->Manager->clientResponses[_clientFd] = buildResponse(filePath, "200 OK");
 }
 
 void	Server::deleteMethod(void)
@@ -55,8 +54,7 @@ void	Server::deleteMethod(void)
 		if (access(filePath.c_str(), W_OK) == 0)
 		{
 			std::remove(filePath.c_str());
-			this->_response = buildResponse(filePath, "200 OK");
-			this->Manager->clientResponses[this->_clientFd] = this->_response;
+			this->Manager->clientResponses[_clientFd] = buildResponse(filePath, "200 OK");
 		}
 		else
 			sendErrorResponse(403);
