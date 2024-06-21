@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   SelectServer.cpp                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:32:38 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   SelectServer.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/21 14:05:26 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ std::string	Manager::getValue(std::string request, std::string key)
 	return (value);
 }
 
-t_header	Manager::parseHeader(std::string request)
+t_header	Manager::parseHeader(std::string request, uint16_t port)
 {
 	std::istringstream	iss(request);
 	t_header			header;
-	std::string			portStr;
 	size_t				i;
 
 	std::getline(iss, header.method, ' ');
@@ -42,16 +41,31 @@ t_header	Manager::parseHeader(std::string request)
 	std::getline(iss, header.protocol, '\r');
 	header.host = getValue(request, "Host");
 	i = header.host.find(":");
-	portStr = header.host.substr(i + 1);
-	header.host.erase(i);
-	if (!portStr.empty())
-		header.port = static_cast<uint16_t>(stoi(portStr));
+	if (i != std::string::npos)
+		header.host.erase(i);
+	header.port = port;
 	if (header.method == "POST")
 	{
 		header.contentLength = getValue(request, "Content-Length");
 		header.contentType = getValue(request, "Content-Type");
 	}
 	return (header);
+}
+
+uint16_t	Manager::findPort(int clientFd)
+{
+	int		listenFd;
+	size_t	i;
+	size_t	size;
+
+	listenFd = _fdMap[clientFd];
+	size = _listenFds.size();
+	for (i = 0; i < size; i++)
+	{
+		if (listenFd == _listenFds[i])
+			break;
+	}
+	return (_ports[i]);
 }
 
 void	Manager::selectServer(std::string buffer, int clientFd)
@@ -63,12 +77,14 @@ void	Manager::selectServer(std::string buffer, int clientFd)
 	size_t				i;
 	size_t				j;
 
-	header = parseHeader(buffer);
+	port = findPort(clientFd);
+	if (buffer.empty())
+	{
+		server = _serverMap[port][0];
+		server.handleRequest(header, buffer, clientFd);
+	}
+	header = parseHeader(buffer, port);
 	server.Manager = this;
-	if (header.port == 0)
-		port = _ports[0];
-	else
-		port = header.port;
 	serverList = _serverMap[port];
 	for (i = 0; i < serverList.size(); i++)
 	{

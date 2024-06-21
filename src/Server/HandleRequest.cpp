@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerRequest.cpp                                  :+:      :+:    :+:   */
+/*   HandleRequest.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/14 18:07:40 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/21 14:07:23 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ void	Server::handleRequest(t_header header, std::string request, int clientFd)
 	clientMessage(request, clientFd);
 	_clientFd = clientFd;
 	_request = request;
+	if (_request.empty())
+	{
+		sendErrorResponse(408);
+		return;
+	}
 	_header = header;
 	_location = selectLocation();
 	code = checkRequest();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirjam <mirjam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/14 22:09:50 by mirjam           ###   ########.fr       */
+/*   Updated: 2024/06/21 14:06:50 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	Server::initErrorPages(void)
 	errorPages[405] = "html/error_pages/MethodNotAllowed.html"; // handled
 	// errorPages[406] = "html/NotAcceptable.html";
 	// errorPages[407] = "html/ProxyAuthenticationRequired.html";
-	errorPages[408] = "html/RequestTimeout.html"; // handled but page should be deleted
+	errorPages[408] = "html/error_pages/RequestTimeout.html"; // handled
 	// errorPages[409] = "html/Conflict.html";
 	errorPages[411] = "html/error_pages/LengthRequired.html"; // handled
 	errorPages[413] = "html/error_pages/PayloadTooLarge.html"; // handled

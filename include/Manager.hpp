@@ -51,6 +51,7 @@ class	Manager
 	private:
 		std::vector<uint16_t>					_ports;
 		std::map<uint16_t, std::vector<Server>>	_serverMap;
+		std::map<int, int>						_fdMap;
 
 		std::string								_ServerName;
 		std::vector<int>						_listenFds;
@@ -87,6 +88,7 @@ class	Manager
 		bool	isRequestComplete(std::string buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
+		uint16_t	findPort(int clientFd);
 		
 		void	closeClientConnection(unsigned long i);
 		void	monitorSockets(void);
@@ -96,7 +98,7 @@ class	Manager
 		void	addCGIProcess(t_CGIProcess cgiProcess);
 		bool	checkIfCGIProcessExistsForFd(int fd);
 
-		t_header	parseHeader(std::string request);
+		t_header	parseHeader(std::string request, uint16_t port);
 		std::string	getValue(std::string request, std::string key);
 		bool		handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
 

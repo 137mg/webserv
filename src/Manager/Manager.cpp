@@ -80,6 +80,7 @@ int	Manager::newClientConnection(int listenFd)
 		throw ClientSocketException();
 	this->addToPollFds(clientFd);
 	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
+	_fdMap[clientFd] = listenFd;
 	std::cout << std::endl;
 	printTimestamp();
 	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
@@ -109,7 +110,9 @@ void Manager::checkForTimeouts(void)
 		{
 			if (now - _clientActivityMap[clientFd] > this->_timeout)
 			{
-				std::cout << RED <<"Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
+				// std::cout << RED <<"Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
+				selectServer("", clientFd);
+				markFdForWriting(clientFd);
 				closeClientConnection(i);
 				i--; // Adjust index after erasing the element
 			}
