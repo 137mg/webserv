@@ -49,11 +49,9 @@ int	Manager::createSocket(void)
 {
 	int	opt;
 
-	// sa.sin_family or AF_INET
 	int listenFd = socket(this->_ServerAddress.sin_family , SOCK_STREAM, 0);
 	if (listenFd == -1)
 		throw ServerSocketException();
-	// this allows the socket to reuse a local address even if it is already in use
 	opt = 1;
 	if (setsockopt(listenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 		throw ServerSocketException();
@@ -174,19 +172,6 @@ void Manager::handleSocketEvents(void)
 	}
 }
 
-void	Manager::addToPollFds(int clientFd)
-{
-	pollfd newPollFd;
-	newPollFd.fd = clientFd;
-	newPollFd.events = POLLIN;
-	this->_pollFdsVector.push_back(newPollFd);
-}
-
-void	Manager::delFromPollFds(int i)
-{
-	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
-}
-
 const char*	Manager::ServerSocketException::what(void) const throw()
 {
 	return ("Server socket: ");
@@ -195,9 +180,4 @@ const char*	Manager::ServerSocketException::what(void) const throw()
 const char*	Manager::ClientSocketException::what(void) const throw()
 {
 	return ("Client socket: ");
-}
-
-std::vector<pollfd>	Manager::getFdsVector(void)
-{
-	return this->_pollFdsVector;
 }

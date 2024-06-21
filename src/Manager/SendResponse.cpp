@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   Client.cpp                                         :+:    :+:            */
+/*   SendResponse.cpp                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/05/14 17:00:22 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:11:55 by juvan-to      ########   odam.nl         */
+/*   Created: 2024/06/21 13:21:13 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/21 13:21:15 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,6 @@ void	Manager::closeClientConnection(unsigned long i)
     std::cout << RED << "Closing " << RESET << "client socket " << RESET << _pollFdsVector[i].fd << std::endl;
     close(_pollFdsVector[i].fd);
     delFromPollFds(i);
-}
-
-void	Manager::buildResponse(std::string content, int clientFd)
-{
-	std::string response = "";
-
-	response = "HTTP/1.1 200 OK \r\n";
-	response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
-	response += "Connection: keep-alive\r\n";
-	response += "Content-Type: text/html\r\n\r\n";
-	response += content;
-	
-	write(clientFd, response.c_str(), response.size());
-	serverMessage(response, clientFd, GREEN);
 }
 
 void	Manager::sendResponse(std::string response, int clientFd)
