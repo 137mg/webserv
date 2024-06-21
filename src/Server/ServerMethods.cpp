@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerMethods.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 14:09:32 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/21 17:49:47 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	Server::runCGI(std::string filePath)
 {
 	CGI			cgi(*this, *(this->Manager));
 
-	cgi.initEnvp(_header);
+	cgi.initEnvp(_header, _request);
 	cgi.convertVector();
 	if (access(filePath.c_str(), X_OK) == 0)
 	{
