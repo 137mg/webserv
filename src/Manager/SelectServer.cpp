@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   selectServer.cpp                                   :+:    :+:            */
+/*   SelectServer.cpp                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/20 13:51:23 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/21 13:32:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
 
-static std::string	getValue(std::string request, std::string key)
+std::string	Manager::getValue(std::string request, std::string key)
 {
 	std::string	value;
 	size_t		startLine;
@@ -30,7 +30,7 @@ static std::string	getValue(std::string request, std::string key)
 	return (value);
 }
 
-static t_header	parseRequest(std::string request)
+t_header	Manager::parseHeader(std::string request)
 {
 	std::istringstream	iss(request);
 	t_header			header;
@@ -63,7 +63,7 @@ void	Manager::selectServer(std::string buffer, int clientFd)
 	size_t				i;
 	size_t				j;
 
-	header = parseRequest(buffer);
+	header = parseHeader(buffer);
 	server.Manager = this;
 	if (header.port == 0)
 		port = _ports[0];

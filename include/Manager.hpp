@@ -84,9 +84,7 @@ class	Manager
 		void	delFromPollFds(int i);
 
 		bool	readRequest(int clientFd);
-		bool	isRequestComplete(const std::string &request_buffer);
-
-		size_t	getRequestSize(std::string request_buffer);
+		bool	isRequestComplete(std::string buffer);
 
 		void	selectServer(std::string buffer, int clientFd);
 		
@@ -97,6 +95,10 @@ class	Manager
 
 		void	addCGIProcess(t_CGIProcess cgiProcess);
 		bool	checkIfCGIProcessExistsForFd(int fd);
+
+		t_header	parseHeader(std::string request);
+		std::string	getValue(std::string request, std::string key);
+		bool		handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
 
 		// imma try some things here hear me out
 		void				handleCGIOutput(int cgiFd, size_t pollIndex);
