@@ -18,11 +18,26 @@
 	</div>
 
 	<div class ="block form-block">
-		<form enctype = "multipart/form-data" class="form" action="/cgi-bin/upload.py" method="post">
+		<form enctype = "multipart/form-data" class="form" action="/cgi-bin/upload.py" method="post" onsubmit="return validateForm()">
 			<h2>Upload a file</h2>
 			<input type="file" value="" class="form-item file-input" id="filename" name="filename"><br>
 			<input type="submit" value="Submit" class="form-item submit-btn">
 		</form>
 	</div>
+	
+	<script>
+		function validateForm() {
+			var fileInput = document.getElementById('filename');
+			var files = fileInput.files;
+			for (var i = 0; i < files.length; i++) {
+				if (files[i].type === '') {
+					alert('Error: Directories cannot be uploaded. Please select a file.');
+					return false;
+				}
+			}
+			return true;
+		}
+	</script>
+	
 </body>
 </html>

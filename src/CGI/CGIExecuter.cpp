@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGIExecuter.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:13:07 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGIExecuter.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 13:12:47 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/21 17:43:11 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ CGI::~CGI(void)
 	}
 }
 
-void	CGI::initEnvp(const t_header& header)
+void	CGI::initEnvp(const t_header& header, std::string request)
 {
 	std::string	fullContent = "CONTENT_TYPE=" + header.contentType;
-	std::string	fullContentLen = "CONTENT_LENGTH=" + header.contentLength;
+	std::string	fullContentLen = "CONTENT_LENGTH=" + std::to_string(request.size());
 	std::string	fullAddress = "REMOTE_ADDR=" + _server.host;
 	std::string	fullMethod = "REQUEST_METHOD=" + header.method;
 	std::string	fullPort = "SERVER_PORT=" + std::to_string(_server.port);
