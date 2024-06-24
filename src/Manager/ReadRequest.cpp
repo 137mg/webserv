@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ReadRequest.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 12:56:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:43:17 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ReadRequest.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/24 15:09:13 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	Manager::readRequest(int clientFd)
 
 	memset(buffer, '\0', MESSAGE_BUFFER);
 	bytes_read = read(clientFd, buffer, MESSAGE_BUFFER - 1);
-	if (bytes_read == 0)
+	if (bytes_read == 0 && _clientActivityMap[_clientFd] != 0)
 	{
 		printTimestamp();
 		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;
@@ -33,17 +33,19 @@ bool	Manager::readRequest(int clientFd)
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
 		return (false);
 	}
-	_clientBuffers[clientFd].append(buffer, bytes_read);
-	ret = true;
-	if (_clientBuffers[clientFd].size() > MB * 10)
-		ret = false;
-	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
-		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
-	if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
-	{
-		selectServer(_clientBuffers[clientFd], clientFd);
-		markFdForWriting(clientFd);
-		this->_clientBuffers.erase(clientFd);
+	else {
+		_clientBuffers[clientFd].append(buffer, bytes_read);
+		ret = true;
+		if (_clientBuffers[clientFd].size() > MB * 10)
+			ret = false;
+		if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
+			return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
+		if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
+		{
+			selectServer(_clientBuffers[clientFd], clientFd);
+			markFdForWriting(clientFd);
+			this->_clientBuffers.erase(clientFd);
+		}
 	}
 	return (ret);
 }
