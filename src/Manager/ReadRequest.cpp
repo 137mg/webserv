@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ReadRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 15:09:13 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:16:28 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,17 @@ bool	Manager::readRequest(int clientFd)
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;
 		return (false);
 	}
-	else {
-		_clientBuffers[clientFd].append(buffer, bytes_read);
-		ret = true;
-		if (_clientBuffers[clientFd].size() > MB * 10)
-			ret = false;
-		if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
-			return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
-		if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
-		{
-			selectServer(_clientBuffers[clientFd], clientFd);
-			markFdForWriting(clientFd);
-			this->_clientBuffers.erase(clientFd);
-		}
+	_clientBuffers[clientFd].append(buffer, bytes_read);
+	ret = true;
+	if (_clientBuffers[clientFd].size() > MB * 10)
+		ret = false;
+	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
+		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
+	if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
+	{
+		selectServer(_clientBuffers[clientFd], clientFd);
+		markFdForWriting(clientFd);
+		this->_clientBuffers.erase(clientFd);
 	}
 	return (ret);
 }

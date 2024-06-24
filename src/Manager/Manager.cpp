@@ -37,6 +37,7 @@ void	Manager::config(void)
 		int sockfd = createSocket();
 		this->bindSocket(sockfd);
 		this->_listenFds.push_back(sockfd);
+		this->setUpPoll(sockfd);
 		printTimestamp();
 		std::cout << PURPLE << UNDER << this->_ServerName << RESET << " up and running. Listening on port: "
 			<< UNDER << _ports[i] << RESET << std::endl;
@@ -68,109 +69,12 @@ void	Manager::bindSocket(int sockfd)
 		throw ServerSocketException();
 }
 
-int	Manager::newClientConnection(int listenFd)
-{
-	struct sockaddr_storage	client_addr;
-	socklen_t				addr_size;
-	int						clientFd;
-	
-	addr_size = sizeof(client_addr);
-	clientFd = accept(listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
-	if (clientFd == -1)
-		throw ClientSocketException();
-	this->addToPollFds(clientFd);
-	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
-	_fdMap[clientFd] = listenFd;
-	std::cout << std::endl;
-	printTimestamp();
-	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
-	fcntl(clientFd, F_SETFL, O_NONBLOCK);
-	return clientFd;
-}
-
-void	Manager::setUpPoll(void)
+void	Manager::setUpPoll(int listenFd)
 {	
-	for (size_t i = 0; i < _listenFds.size(); ++i)
-	{
-		pollfd pfd;
-		pfd.fd = _listenFds[i];
-		pfd.events = POLLIN;
-		_pollFdsVector.push_back(pfd);
-	}
-	this->monitorSockets();
-}
-
-void Manager::checkForTimeouts(void)
-{
-	time_t now = std::time(nullptr);
-	for (unsigned long i = 0; i < this->_pollFdsVector.size(); i++)
-	{
-		int clientFd = this->_pollFdsVector[i].fd;
-		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end())
-		{
-			if (now - _clientActivityMap[clientFd] > this->_timeout)
-			{
-				std::cout << RED << "Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
-				closeClientConnection(i);
-				i--; // Adjust index after erasing the element
-			}
-		}
-	}
-}
-
-void	Manager::monitorSockets(void)
-{
-	while (RUNNING)
-	{
-		this->_status = poll(this->_pollFdsVector.data(), this->_pollFdsVector.size(), 2000);
-		if (this->_status == -1)
-			throw ServerSocketException();
-		else if (this->_status == 0) {
-			checkForTimeouts();
-			continue;
-		}
-		handleSocketEvents();	
-		checkForTimeouts();
-	}
-}
-
-void Manager::handleSocketEvents(void)
-{
-	for (unsigned long i = 0; i < this->_pollFdsVector.size() && RUNNING; i++)
-	{
-		if ((this->_pollFdsVector[i].revents & POLLIN))
-		{
-			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
-			{
-				handleCGIOutput(_pollFdsVector[i].fd, i);
-				continue;
-			}
-
-			if (std::find(_listenFds.begin(), _listenFds.end(), this->_pollFdsVector[i].fd) != _listenFds.end()) 
-				this->newClientConnection(this->_pollFdsVector[i].fd);
-			else
-			{
-				if (!this->readRequest(this->_pollFdsVector[i].fd))
-				{
-					closeClientConnection(i);
-					break;
-				}
-				_clientActivityMap[this->_pollFdsVector[i].fd] = std::time(nullptr); // Update the last activity time
-			}
-		}
-		else if (this->_pollFdsVector[i].revents & POLLOUT)
-        {
-			if (isCGIInputFd(_pollFdsVector[i].fd))
-            {
-                handleCGIInput(_pollFdsVector[i].fd, i);
-                continue;
-            }
-            // Handle outgoing data (response)
-            sendPendingResponse(_pollFdsVector[i].fd);
-        }
-		else if (this->_pollFdsVector[i].revents & (POLLHUP | POLLERR))
-			this->closeClientConnection(i);
-	}
+	pollfd pfd;
+	pfd.fd = listenFd;
+	pfd.events = POLLIN;
+	_pollFdsVector.push_back(pfd);
 }
 
 const char*	Manager::ServerSocketException::what(void) const throw()

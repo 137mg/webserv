@@ -82,7 +82,7 @@ class	Manager
 		int		createSocket(void);
 		void	bindSocket(int sockfd);
 
-		void	setUpPoll(void);
+		void	setUpPoll(int listenFd);
 		void	addToPollFds(int clientFd);
 		void	delFromPollFds(int i);
 

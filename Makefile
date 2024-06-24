@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
-#                                                    +#+                       #
-#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/21 13:21:25 by juvan-to      ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
+#    Updated: 2024/06/24 14:54:02 by mgoedkoo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC =	src/CGI/CGIExecuter.cpp					\
 		src/Manager/ReadRequest.cpp				\
 		src/Manager/FdManager.cpp				\
 		src/Manager/Manager.cpp					\
+		src/Manager/MonitorSockets.cpp			\
 		src/Manager/SendResponse.cpp			\
 		src/Logger.cpp							\
 		src/main.cpp
