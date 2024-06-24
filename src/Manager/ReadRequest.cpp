@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 15:16:28 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:33:01 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	Manager::readRequest(int clientFd)
 	}
 	_clientBuffers[clientFd].append(buffer, bytes_read);
 	ret = true;
-	if (_clientBuffers[clientFd].size() > MB * 10)
+	if (isRequestTooLarge(_clientBuffers[clientFd]))
 		ret = false;
 	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
 		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
@@ -48,6 +48,42 @@ bool	Manager::readRequest(int clientFd)
 	return (ret);
 }
 
+bool	Manager::isRequestTooLarge(std::string buffer)
+{
+	std::string	contentLength;
+	size_t		number;
+
+	contentLength = getValue(buffer, "Content-Length");
+	if (!contentLength.empty())
+	{
+		number = std::stoi(contentLength);
+		if (number > MB * 10)
+			return (true);
+	}
+	return (false);
+}
+
+bool	Manager::isRequestComplete(std::string buffer)
+{
+	std::string	contentLength;
+	size_t		number;
+	size_t		headerEnd;
+	size_t		totalExpectedSize;
+
+	headerEnd = buffer.find("\r\n\r\n");
+	if (headerEnd == std::string::npos)
+		return (false);
+	contentLength = getValue(buffer, "Content-Length");
+	if (!contentLength.empty())
+	{
+		number = std::stoi(contentLength);
+		totalExpectedSize = headerEnd + 4 + number;
+		if (buffer.size() >= totalExpectedSize)
+			return (true);
+		return (false);
+	}
+	return (true);
+}
 
 bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd, bool ret)
 {
@@ -71,26 +107,4 @@ bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd, bool ret)
 	newStart = buffer.find("\r\n", lastEnd + 2);
 	buffer.erase(lastEnd, newStart - lastEnd + 2);
 	return (ret);
-}
-
-bool	Manager::isRequestComplete(std::string buffer)
-{
-	std::string	contentLength;
-	size_t		number;
-	size_t		headerEnd;
-	size_t		totalExpectedSize;
-
-	headerEnd = buffer.find("\r\n\r\n");
-	if (headerEnd == std::string::npos)
-		return (false);
-	contentLength = getValue(buffer, "Content-Length");
-	if (!contentLength.empty())
-	{
-		number = std::stoi(contentLength);
-		totalExpectedSize = headerEnd + 4 + number;
-		if (buffer.size() >= totalExpectedSize)
-			return (true);
-		return (false);
-	}
-	return (true);
 }

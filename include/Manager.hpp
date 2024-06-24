@@ -87,6 +87,7 @@ class	Manager
 		void	delFromPollFds(int i);
 
 		bool	readRequest(int clientFd);
+		bool	isRequestTooLarge(std::string buffer);
 		bool	isRequestComplete(std::string buffer);
 		bool	handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
 
