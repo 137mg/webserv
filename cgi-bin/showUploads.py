@@ -49,7 +49,7 @@ print("        <ul>")
 
 
 cwd = os.getcwd()
-sub_dir = 'cgi-bin/uploads'
+sub_dir = 'uploads'
 upload_dir = os.path.join(cwd, sub_dir)
 if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
 	count = 0

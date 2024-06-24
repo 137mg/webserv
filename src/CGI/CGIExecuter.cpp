@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGIExecuter.cpp                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 13:12:47 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 17:43:11 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGIExecuter.cpp                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/24 14:02:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	CGI::initEnvp(const t_header& header, std::string request)
 	
 	this->_envpVector.push_back(fullContent);
 	this->_envpVector.push_back(fullContentLen);
-	this->_envpVector.push_back("HTTP_COOKIE=test");
 	this->_envpVector.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	this->_envpVector.push_back("HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.1234.56 Safari/537.36");
 	this->_envpVector.push_back("PATH_INFO=test");
@@ -50,11 +49,8 @@ void	CGI::initEnvp(const t_header& header, std::string request)
 	this->_envpVector.push_back(directoryPathEnv);
 	// this->_envpVector.push_back("SCRIPT_FILENAME=/cgi-bin/hello.py");
 	// this->_envpVector.push_back("SCRIPT_NAME=hello.py");
-	this->_envpVector.push_back("SERVER_NAME=Webserv");
 	this->_envpVector.push_back(fullPort);
 	this->_envpVector.push_back(fullProtocol);
-	this->_envpVector.push_back("SERVER_SOFTWARE=webserv");
-	this->_envpVector.push_back("REDIRECT_STATUS=200");
 	this->_envpVector.push_back("");
 }
 
@@ -71,7 +67,7 @@ void	CGI::convertVector(void)
 	this->_envp[this->_envpVector.size()] = nullptr; // NULL terminator
 }
 
-void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
+void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd)
 {
 	int 	stdoutPipe[2];
     int		stdinPipe[2];
@@ -87,7 +83,6 @@ void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
 	{
         perror("fork failed");
     }
-
     if (pid == 0)
 	{
         close(stdoutPipe[0]); // close read end of stdout pipe
@@ -99,8 +94,14 @@ void	CGI::executeScript(std::string file, std::string cgiRequest, int clientFd)
         close(stdinPipe[0]);
         close(stdoutPipe[1]);
 
-        const char *args[] = {file.c_str(), nullptr};
-        execve(file.c_str(), const_cast<char **>(args), _envp);
+		// Change the working directory to the script's directory
+        if (chdir(CGIdirectory.c_str()) != 0)
+        {
+            perror("chdir failed");
+            exit(EXIT_FAILURE);
+        }
+        const char *args[] = {CGIfile.c_str(), nullptr};
+        execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
         perror("execve failed");
         exit(EXIT_FAILURE);
     }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ServerMethods.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 17:49:47 by psadeghi         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ServerMethods.cpp                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/24 14:03:03 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,17 @@ void	Server::postMethod(void)
 void	Server::runCGI(std::string filePath)
 {
 	CGI			cgi(*this, *(this->Manager));
+	std::string	CGIdirectory;
+	std::string	CGIfile;
+
+	CGIdirectory = _location.root + _location.match;
+	CGIfile = filePath.substr(filePath.rfind("/") + 1);
 
 	cgi.initEnvp(_header, _request);
 	cgi.convertVector();
 	if (access(filePath.c_str(), X_OK) == 0)
 	{
-		cgi.executeScript(filePath, _request, _clientFd);
+		cgi.executeScript(CGIfile, CGIdirectory, _request, _clientFd);
 	}
 	else
 		buildErrorResponse(403);
