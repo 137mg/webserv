@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 17:51:44 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 14:01:24 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,6 @@ std::string	Manager::getValue(std::string request, std::string key)
 	return (value);
 }
 
-t_header	Manager::parseHeader(std::string request, uint16_t port)
-{
-	std::istringstream	iss(request);
-	t_header			header;
-	size_t				i;
-
-	std::getline(iss, header.method, ' ');
-	std::getline(iss, header.file, ' ');
-	std::getline(iss, header.protocol, '\r');
-	header.host = getValue(request, "Host");
-	i = header.host.find(":");
-	if (i != std::string::npos)
-		header.host.erase(i);
-	header.port = port;
-	if (header.method == "POST")
-	{
-		header.contentLength = getValue(request, "Content-Length");
-		header.contentType = getValue(request, "Content-Type");
-	}
-	return (header);
-}
-
 uint16_t	Manager::findPort(int clientFd)
 {
 	int		listenFd;
@@ -68,24 +46,38 @@ uint16_t	Manager::findPort(int clientFd)
 	return (_ports[i]);
 }
 
+t_header	Manager::parseHeader(std::string request, int clientFd)
+{
+	std::istringstream	iss(request);
+	t_header			header;
+	size_t				i;
+
+	std::getline(iss, header.method, ' ');
+	std::getline(iss, header.file, ' ');
+	std::getline(iss, header.protocol, '\r');
+	header.host = getValue(request, "Host");
+	i = header.host.find(":");
+	if (i != std::string::npos)
+		header.host.erase(i);
+	header.port = findPort(clientFd);
+	if (header.method == "POST")
+	{
+		header.contentLength = getValue(request, "Content-Length");
+		header.contentType = getValue(request, "Content-Type");
+	}
+	return (header);
+}
+
 void	Manager::selectServer(std::string buffer, int clientFd)
 {
 	t_header			header;
-	uint16_t			port;
 	std::vector<Server>	serverList;
 	Server				server;
 	size_t				i;
 	size_t				j;
 
-	port = findPort(clientFd);
-	if (buffer.empty())
-	{
-		server = _serverMap[port][0];
-		server.handleRequest(header, buffer, clientFd);
-		return;
-	}
-	header = parseHeader(buffer, port);
-	serverList = _serverMap[port];
+	header = parseHeader(buffer, clientFd);
+	serverList = _serverMap[header.port];
 	for (i = 0; i < serverList.size(); i++)
 	{
 		for (j = 0; j < serverList[i].serverNames.size(); j++)

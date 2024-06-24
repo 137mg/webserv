@@ -88,9 +88,12 @@ class	Manager
 
 		bool	readRequest(int clientFd);
 		bool	isRequestComplete(std::string buffer);
+		bool	handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
 
-		void	selectServer(std::string buffer, int clientFd);
+		std::string	getValue(std::string request, std::string key);
 		uint16_t	findPort(int clientFd);
+		t_header	parseHeader(std::string request, int clientFd);
+		void		selectServer(std::string buffer, int clientFd);
 		
 		void	closeClientConnection(unsigned long i);
 		void	monitorSockets(void);
@@ -99,10 +102,6 @@ class	Manager
 
 		void	addCGIProcess(t_CGIProcess cgiProcess);
 		bool	checkIfCGIProcessExistsForFd(int fd);
-
-		t_header	parseHeader(std::string request, uint16_t port);
-		std::string	getValue(std::string request, std::string key);
-		bool		handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
 
 		// imma try some things here hear me out
 		void				handleCGIOutput(int cgiFd, size_t pollIndex);
