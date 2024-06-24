@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 16:24:00 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:15:44 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ bool	Manager::readRequest(int clientFd)
 {
 	char	buffer[MESSAGE_BUFFER];
 	int		bytes_read;
-	bool	ret;
 
 	memset(buffer, '\0', MESSAGE_BUFFER);
 	bytes_read = read(clientFd, buffer, MESSAGE_BUFFER - 1);
@@ -36,16 +35,13 @@ bool	Manager::readRequest(int clientFd)
 	_clientBuffers[clientFd].append(buffer, bytes_read);
 	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
 		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd));
-	ret = true;
-	if (isRequestTooLarge(_clientBuffers[clientFd]))
-		ret = false;
-	if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
+	if (isRequestTooLarge(_clientBuffers[clientFd]) || isRequestComplete(_clientBuffers[clientFd]))
 	{
 		selectServer(_clientBuffers[clientFd], clientFd);
 		markFdForWriting(clientFd);
 		this->_clientBuffers.erase(clientFd);
 	}
-	return (ret);
+	return (true);
 }
 
 bool	Manager::isRequestTooLarge(std::string buffer)
@@ -91,22 +87,18 @@ bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd)
 	size_t	bodyEnd;
 	size_t	lastEnd;
 	size_t	newStart;
-	bool	ret;
 
 	headerEnd = buffer.find("\r\n\r\n");
 	if (headerEnd == std::string::npos)
 		return (true);
-	ret = true;
-	if (buffer.size() - (headerEnd + 4) > MB * 10)
-		ret = false;
 	bodyEnd = buffer.find("0\r\n\r\n", headerEnd + 4);
-	if (ret == false || bodyEnd != std::string::npos)
+	if (bodyEnd != std::string::npos)
 	{
 		buffer.erase(bodyEnd, 5);
 		selectServer(buffer, clientFd);
 		markFdForWriting(clientFd);
 		buffer.clear();
-		return (ret);
+		return (true);
 	}
 	lastEnd = buffer.find("\r\n", headerEnd + 4);
 	newStart = buffer.find("\r\n", lastEnd + 2);

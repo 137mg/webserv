@@ -84,7 +84,6 @@ class	Manager
 
 		void	setUpPoll(int listenFd);
 		void	addToPollFds(int clientFd);
-		void	delFromPollFds(int i);
 
 		bool	readRequest(int clientFd);
 		bool	isRequestTooLarge(std::string buffer);
@@ -96,7 +95,7 @@ class	Manager
 		t_header	parseHeader(std::string request, int clientFd);
 		void		selectServer(std::string buffer, int clientFd);
 		
-		void	closeClientConnection(unsigned long i);
+		void	closeClientConnection(int clientFd);
 		void	monitorSockets(void);
 		void	handleSocketEvents(void);
 		void	checkForTimeouts(void);
@@ -115,7 +114,7 @@ class	Manager
 		bool				isCGIInputFd(int fd);
 		void				removeCGIProcess(int fd);
 		void				delFromPollFdsByValue(int fd);
-		void				sendErrorResponse(std::string response, int clientFd);
+		bool				sendErrorResponse(std::string response, int clientFd);
 	
 		//void	signalHandler(int signum);
 

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:21:13 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 14:46:43 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:29:42 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,19 @@ void	Manager::sendResponse(std::string response, int clientFd)
 	serverMessage(response, clientFd, GREEN);
 }
 
-void	Manager::sendErrorResponse(std::string response, int clientFd)
+bool	Manager::sendErrorResponse(std::string response, int clientFd)
 {
+    std::string errorLine;
+
 	write(clientFd, response.c_str(), response.size());
 	serverMessage(response, clientFd, RED);
+    errorLine = response.substr(0, response.find("\r\n"));
+    if (errorLine == "HTTP/1.1 413 Payload Too Large")
+    {
+        closeClientConnection(clientFd);
+        return (false);
+    }
+    return (true);
 }
 
 void	Manager::sendPendingResponse(int clientFd)
@@ -35,8 +44,8 @@ void	Manager::sendPendingResponse(int clientFd)
     }
     else if (clientErrorResponses.count(clientFd) > 0 && !clientErrorResponses[clientFd].empty())
     {
-        sendErrorResponse(clientErrorResponses[clientFd], clientFd);
-        clearFdForWriting(clientFd);
+        if (sendErrorResponse(clientErrorResponses[clientFd], clientFd))
+            clearFdForWriting(clientFd);
 		clientErrorResponses.erase(clientFd);
     }
 }

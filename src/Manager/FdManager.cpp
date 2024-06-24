@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:10:57 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 15:51:38 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:29:32 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,5 @@ void	Manager::addToPollFds(int clientFd)
 	pollfd newPollFd;
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
-	this->_pollFdsVector.push_back(newPollFd);
-}
-
-void	Manager::delFromPollFds(int i)
-{
-	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
+	_pollFdsVector.push_back(newPollFd);
 }
