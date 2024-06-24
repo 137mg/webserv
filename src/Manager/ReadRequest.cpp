@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 16:00:40 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:24:00 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd)
 	size_t	bodyEnd;
 	size_t	lastEnd;
 	size_t	newStart;
-	int		ret;
+	bool	ret;
 
 	headerEnd = buffer.find("\r\n\r\n");
 	if (headerEnd == std::string::npos)
