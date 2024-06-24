@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 15:33:01 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:00:40 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ bool	Manager::readRequest(int clientFd)
 		return (false);
 	}
 	_clientBuffers[clientFd].append(buffer, bytes_read);
+	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
+		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd));
 	ret = true;
 	if (isRequestTooLarge(_clientBuffers[clientFd]))
 		ret = false;
-	if (getValue(_clientBuffers[clientFd], "Transfer-Encoding") == "chunked")
-		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd, ret));
 	if (ret == false || isRequestComplete(_clientBuffers[clientFd]))
 	{
 		selectServer(_clientBuffers[clientFd], clientFd);
@@ -85,26 +85,31 @@ bool	Manager::isRequestComplete(std::string buffer)
 	return (true);
 }
 
-bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd, bool ret)
+bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd)
 {
 	size_t	headerEnd;
 	size_t	bodyEnd;
 	size_t	lastEnd;
 	size_t	newStart;
+	int		ret;
 
 	headerEnd = buffer.find("\r\n\r\n");
 	if (headerEnd == std::string::npos)
-		return (ret);
+		return (true);
+	ret = true;
+	if (buffer.size() - (headerEnd + 4) > MB * 10)
+		ret = false;
 	bodyEnd = buffer.find("0\r\n\r\n", headerEnd + 4);
-	if (bodyEnd != std::string::npos)
+	if (ret == false || bodyEnd != std::string::npos)
 	{
 		buffer.erase(bodyEnd, 5);
 		selectServer(buffer, clientFd);
+		markFdForWriting(clientFd);
 		buffer.clear();
 		return (ret);
 	}
 	lastEnd = buffer.find("\r\n", headerEnd + 4);
 	newStart = buffer.find("\r\n", lastEnd + 2);
 	buffer.erase(lastEnd, newStart - lastEnd + 2);
-	return (ret);
+	return (true);
 }

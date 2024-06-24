@@ -70,8 +70,9 @@ void	Manager::bindSocket(int sockfd)
 }
 
 void	Manager::setUpPoll(int listenFd)
-{	
-	pollfd pfd;
+{
+	pollfd	pfd;
+
 	pfd.fd = listenFd;
 	pfd.events = POLLIN;
 	_pollFdsVector.push_back(pfd);

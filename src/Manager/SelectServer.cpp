@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 14:01:24 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:59:37 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,14 @@ t_header	Manager::parseHeader(std::string request, int clientFd)
 	if (i != std::string::npos)
 		header.host.erase(i);
 	header.port = findPort(clientFd);
-	if (header.method == "POST")
+	if (getValue(request, "Transfer-Encoding") == "chunked")
 	{
-		header.contentLength = getValue(request, "Content-Length");
-		header.contentType = getValue(request, "Content-Type");
+		i = request.size() - (request.find("\r\n\r\n") + 4);
+		header.contentLength = std::to_string(i);
 	}
+	else
+		header.contentLength = getValue(request, "Content-Length");
+	header.contentType = getValue(request, "Content-Type");
 	return (header);
 }
 

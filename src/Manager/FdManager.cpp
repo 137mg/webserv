@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   FdManager.cpp                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 13:10:57 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:48:41 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   FdManager.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 13:10:57 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/06/24 15:51:38 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,4 @@ void	Manager::addToPollFds(int clientFd)
 void	Manager::delFromPollFds(int i)
 {
 	this->_pollFdsVector.erase(this->_pollFdsVector.begin() + i);
-}
-
-std::vector<pollfd> Manager::getFdsVector(void)
-{
-	return this->_pollFdsVector;
 }

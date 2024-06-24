@@ -89,7 +89,7 @@ class	Manager
 		bool	readRequest(int clientFd);
 		bool	isRequestTooLarge(std::string buffer);
 		bool	isRequestComplete(std::string buffer);
-		bool	handleChunkedRequest(std::string& buffer, int clientFd, bool ret);
+		bool	handleChunkedRequest(std::string& buffer, int clientFd);
 
 		std::string	getValue(std::string request, std::string key);
 		uint16_t	findPort(int clientFd);
@@ -115,7 +115,6 @@ class	Manager
 		bool				isCGIInputFd(int fd);
 		void				removeCGIProcess(int fd);
 		void				delFromPollFdsByValue(int fd);
-		std::vector<pollfd>	getFdsVector(void);
 		void				sendErrorResponse(std::string response, int clientFd);
 	
 		//void	signalHandler(int signum);
