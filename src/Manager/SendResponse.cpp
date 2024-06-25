@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   SendResponse.cpp                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 13:21:13 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 17:29:42 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   SendResponse.cpp                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 13:21:13 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/24 18:44:28 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@ void	Manager::sendPendingResponse(int clientFd)
         sendResponse(clientResponses[clientFd], clientFd);
         clearFdForWriting(clientFd);
 		clientResponses.erase(clientFd);
+		_clientStatus[clientFd] = READING;
     }
     else if (clientErrorResponses.count(clientFd) > 0 && !clientErrorResponses[clientFd].empty())
     {
         if (sendErrorResponse(clientErrorResponses[clientFd], clientFd))
             clearFdForWriting(clientFd);
 		clientErrorResponses.erase(clientFd);
+		_clientStatus[clientFd] = READING;
     }
 }

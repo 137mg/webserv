@@ -42,6 +42,9 @@
 #include "structs.hpp"
 #include "Server.hpp"
 
+#define READING 0
+#define WRITING 1
+
 extern volatile bool RUNNING;
 
 class	Server;
@@ -67,6 +70,7 @@ class	Manager
 		int										_status;
 
 		std::map<int, time_t> 					_clientActivityMap;
+		std::map<int, int>						_clientStatus;
 		const int								_timeout;
 
 	public:

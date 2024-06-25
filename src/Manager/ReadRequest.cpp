@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ReadRequest.cpp                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 17:15:44 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ReadRequest.cpp                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 12:56:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/24 18:44:05 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ bool	Manager::readRequest(int clientFd)
 		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd));
 	if (isRequestTooLarge(_clientBuffers[clientFd]) || isRequestComplete(_clientBuffers[clientFd]))
 	{
+		_clientStatus[clientFd] = WRITING;
 		selectServer(_clientBuffers[clientFd], clientFd);
 		markFdForWriting(clientFd);
 		this->_clientBuffers.erase(clientFd);

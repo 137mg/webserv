@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MonitorSockets.cpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 14:48:56 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/06/24 17:27:00 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   MonitorSockets.cpp                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/06/24 18:46:48 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void Manager::handleSocketEvents(void)
 {
 	for (unsigned long i = 0; i < _pollFdsVector.size() && RUNNING; i++)
 	{
-		if ((_pollFdsVector[i].revents & POLLIN))
+		if ((_pollFdsVector[i].revents & POLLIN) && _clientStatus[_pollFdsVector[i].fd] == READING)
 		{
 			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
 			{
@@ -52,7 +52,7 @@ void Manager::handleSocketEvents(void)
 				_clientActivityMap[_pollFdsVector[i].fd] = std::time(nullptr); // Update the last activity time
 			}
 		}
-		else if (_pollFdsVector[i].revents & POLLOUT)
+		else if ((_pollFdsVector[i].revents & POLLOUT) && _clientStatus[_pollFdsVector[i].fd] == WRITING)
 		{
 			if (isCGIInputFd(_pollFdsVector[i].fd))
 			{
@@ -98,6 +98,7 @@ int	Manager::newClientConnection(int listenFd)
 	addToPollFds(clientFd);
 	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
 	_fdMap[clientFd] = listenFd;
+	_clientStatus[clientFd] = READING;
 	std::cout << std::endl;
 	printTimestamp();
 	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
