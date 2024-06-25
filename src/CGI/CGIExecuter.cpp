@@ -6,34 +6,52 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 16:06:34 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/25 17:48:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd)
+int	CGI::setUpPipes(void)
 {
-    pid_t	pid;
-
-    if (pipe(_stdoutPipe) == -1 || pipe(_stdinPipe) == -1)
+	if (pipe(_stdoutPipe) < 0)
 	{
         perror("Pipe error");
-		return errorHandler(500, clientFd);
+		return -1;
     }
-
-    pid = fork();
-	// pid = -1;
-    if (pid < 0)
+	if (pipe(_stdinPipe) < 0)
 	{
-        perror("Fork error");
+		close(_stdoutPipe[0]);
+        close(_stdoutPipe[1]);
+        perror("Pipe error");
+		return -1;
+    }
+	return 0;
+}
+
+int	CGI::setUpFork(void)
+{
+	_pid = fork();
+    if (_pid < 0)
+	{
 		close(_stdoutPipe[0]);
         close(_stdoutPipe[1]);
         close(_stdinPipe[0]);
         close(_stdinPipe[1]);
-		return errorHandler(500, clientFd);
+        perror("Fork error");
+		return -1;
     }
-    if (pid == 0)
+	return 0;
+}
+
+void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd)
+{
+    this->_clientFd = clientFd;
+	if (setUpPipes() != 0)
+		return errorHandler(500, _clientFd);
+	if (setUpFork() != 0)
+		return errorHandler(500, _clientFd);
+    if (_pid == 0)
 	{
         close(_stdoutPipe[0]); // close read end of stdout pipe
         close(_stdinPipe[1]);  // close write end of stdin pipe
@@ -60,8 +78,7 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         close(_stdoutPipe[1]); // close write end of stdout pipe
         close(_stdinPipe[0]);  // close read end of stdin pipe
 
-
-        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, "", "", pid};
+        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, "", "", _pid};
         cgi.cgiRequest = cgiRequest; // Store the request body
         cgi.cgiRequestSent = 0; // Track how much of the request body has been sent
 		cgi.stdinFd = _stdinPipe[1];
@@ -72,6 +89,8 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
+
     }
+
 	return;
 }
