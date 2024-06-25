@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/24 14:00:20 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/25 16:05:20 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ class CGI
 		char						**_envp;
 		std::vector<std::string>	_envpVector;
 		std::vector<std::string>	_outputBuffer;
+		int							_stdoutPipe[2];
+		int							_stdinPipe[2];
 		Server						_server;
 		Manager						&_Manager;
 	
@@ -30,6 +32,8 @@ class CGI
 		void		initEnvp(const t_header& header, std::string request);
 		void		convertVector(void);
 		void		executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd);
+		Server		&getServer(void);
+		void		errorHandler(int errorCode, int clientFd);
 };
 
 #endif

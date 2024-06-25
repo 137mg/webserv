@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/08 11:22:23 by psadeghi          #+#    #+#              #
-#    Updated: 2024/06/24 14:54:02 by mgoedkoo         ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
+#                                                    +#+                       #
+#    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
+#    Updated: 2024/06/25 15:35:52 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
 SRC =	src/CGI/CGIExecuter.cpp					\
+		src/CGI/CGI.cpp							\
 		src/CGI/CGIStreamHandler.cpp			\
 		src/CGI/CGIFdManager.cpp				\
 		src/Config/Config.cpp					\
