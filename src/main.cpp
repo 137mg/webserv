@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 14:52:10 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.cpp                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/04/09 13:49:54 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/25 14:23:20 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ volatile bool RUNNING;
 void	signalHandler(int signum)
 {
 	RUNNING = false;
-	std::cout << "Interrupt signal (" << signum << ") received from the user.\n";
+	if (signum == 2)
+		std::cout << std::endl << "Shutting down the server. Goodbye!" << std::endl;
+	else
+		std::cout << "Interrupt signal (" << signum << ") received from the user." << std::endl;
 }
 
 void	setUpSignals()
@@ -56,7 +59,7 @@ int main(int argc, char** argv)
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "Error: " << e.what() << std::strerror(errno) << std::endl;
+		// std::cerr << "Error: " << e.what() << std::strerror(errno) << std::endl;
 		return (1);
 	}
 	return (0);

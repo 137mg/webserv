@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/24 18:46:48 by Julia         ########   odam.nl         */
+/*   Updated: 2024/06/25 14:13:57 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void Manager::checkForTimeouts(void)
 		{
 			if (now - _clientActivityMap[clientFd] > _timeout)
 			{
+				printTimestamp();
 				std::cout << RED << "Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
 				closeClientConnection(clientFd);
 				i--; // Adjust index after erasing the element
