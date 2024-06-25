@@ -119,6 +119,8 @@ class	Manager
 		void				removeCGIProcess(int fd);
 		void				delFromPollFdsByValue(int fd);
 		bool				sendErrorResponse(std::string response, int clientFd);
+		std::map<int, int>	getClientStatus(void);
+		void				setClientStatus(int fd, int status);
 	
 		//void	signalHandler(int signum);
 

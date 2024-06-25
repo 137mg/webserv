@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   FdManager.cpp                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 13:10:57 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/24 17:29:32 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   FdManager.cpp                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 13:10:57 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/25 15:16:19 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,14 @@ void	Manager::addToPollFds(int clientFd)
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
 	_pollFdsVector.push_back(newPollFd);
+}
+
+void    Manager::setClientStatus(int fd, int status)
+{
+    this->_clientStatus[fd] = status;
+}
+
+std::map<int, int>	Manager::getClientStatus(void)
+{
+    return this->_clientStatus;
 }
