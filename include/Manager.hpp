@@ -71,7 +71,7 @@ class	Manager
 
 		std::map<int, time_t> 					_clientActivityMap;
 		std::map<int, int>						_clientStatus;
-		const int								_timeout;
+		int								_timeout;
 
 	public:
 		Manager(void);

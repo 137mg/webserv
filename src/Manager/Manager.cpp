@@ -15,6 +15,9 @@
 Manager::Manager(void) : _timeout(60)
 {
 	this->_ServerName = "Webserv";
+    this->_clientFd = -1;
+    this->_requestSize = 0;
+    this->_status = 0;
 }
 
 Manager::~Manager(void)
