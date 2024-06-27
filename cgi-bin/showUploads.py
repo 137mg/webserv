@@ -43,33 +43,45 @@ print("            }")
 print("        })")
 print("    }")
 print("    </script>")
-print("    <div class ='block form-block files-block'>")
-print("        <h2>Uploaded files</h2>")
-print("        <ul>")
 
+try:
 
-bullshit()
-
-cwd = os.getcwd()
-sub_dir = 'uploads'
-upload_dir = os.path.join(cwd, sub_dir)
-if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
-	count = 0
-	for filename in os.listdir(upload_dir):
-		display_filename = filename.replace('%20', ' ')
-		line = "<div class='entry'><button class='delete-button'"
-		line += "value='"
-		line += filename
-		line += "'onclick='deleteFile(\""
-		line += filename
-		line += "\")'>Delete</button><p>"
-		line += display_filename
-		line += "</p><br></div>"
-		print(line)
-		count += 1
-	if count == 0:
+	bullshit()
+	cwd = os.getcwd()
+	sub_dir = 'uploads'
+	upload_dir = os.path.join(cwd, sub_dir)
+	if os.path.exists(upload_dir) and os.path.isdir(upload_dir):
+		count = 0
+		print("    <div class ='block form-block files-block'>")
+		print("        <h2>Uploaded files</h2>")
+		print("        <ul>")
+		for filename in os.listdir(upload_dir):
+			display_filename = filename.replace('%20', ' ')
+			line = "<div class='entry'><button class='delete-button'"
+			line += "value='"
+			line += filename
+			line += "'onclick='deleteFile(\""
+			line += filename
+			line += "\")'>Delete</button><p>"
+			line += display_filename
+			line += "</p><br></div>"
+			print(line)
+			count += 1
+		if count == 0:
+			print("<p>No files uploaded</p>")
+	else:
 		print("<p>No files uploaded</p>")
-else:
-	print("<p>No files uploaded</p>")
 
-print("</ul></div></body></html>")
+	print("</ul></div></body></html>")
+
+except Exception as e:
+	print('\t<div class ="block">')
+	print('\t\t<h1 style="font-size:4vw">500 <br>Internal Server Error</h1>')
+	print('\t\t<p>The server encountered an internal error and was unable to complete your request. Please try again later.</p>')
+	print('\t</div>')
+	print('')
+	print('\t<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>')
+	print('\t<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>')
+	print('\t<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>')
+	print('</body>')
+	print('</html>')
