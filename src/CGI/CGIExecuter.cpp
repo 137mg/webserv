@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 17:48:38 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/27 14:26:29 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	CGI::setUpFork(void)
 
 void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd)
 {
+    int fout = 0;
+    
     this->_clientFd = clientFd;
 	if (setUpPipes() != 0)
 		return errorHandler(500, _clientFd);
@@ -71,7 +73,7 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         const char *args[] = {CGIfile.c_str(), nullptr};
         execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
         perror("execve failed");
-        exit(EXIT_FAILURE);
+        return errorHandler(500, _clientFd);
     }
 	else
 	{
@@ -90,7 +92,28 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
 
+        int status;
+        pid_t result = waitpid(_pid, &status, WNOHANG);
+        if (result == _pid)
+        {
+            // Child process terminated
+            if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+            {
+                fout = 1;
+                std::cerr << "CGI script exited with status: " << WEXITSTATUS(status) << std::endl;
+                return errorHandler(500, _clientFd);
+            }
+        }
+        else
+        {
+            // waitpid failed
+            perror("waitpid failed");
+            return errorHandler(500, _clientFd);
+        }
+        
     }
-
-	return;
+    if (fout == 1)
+    {
+        return errorHandler(500, _clientFd);
+    }
 }

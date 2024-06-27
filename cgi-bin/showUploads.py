@@ -47,6 +47,9 @@ print("    <div class ='block form-block files-block'>")
 print("        <h2>Uploaded files</h2>")
 print("        <ul>")
 
+
+bullshit()
+
 cwd = os.getcwd()
 sub_dir = 'uploads'
 upload_dir = os.path.join(cwd, sub_dir)
