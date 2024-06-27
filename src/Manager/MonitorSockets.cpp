@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/25 14:13:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/27 16:29:50 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void Manager::handleSocketEvents(void)
 		{
 			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
 			{
-				handleCGIOutput(_pollFdsVector[i].fd, i);
+				handleCGIOutput(_pollFdsVector[i].fd);
 				continue;
 			}
 
@@ -56,7 +56,7 @@ void Manager::handleSocketEvents(void)
 		{
 			if (isCGIInputFd(_pollFdsVector[i].fd))
 			{
-				handleCGIInput(_pollFdsVector[i].fd, i);
+				handleCGIInput(_pollFdsVector[i].fd);
 				continue;
 			}
 			// Handle outgoing data (response)

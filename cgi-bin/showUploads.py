@@ -45,7 +45,6 @@ print("    }")
 print("    </script>")
 
 try:
-	bs()
 	cwd = os.getcwd()
 	sub_dir = 'uploads'
 	upload_dir = os.path.join(cwd, sub_dir)

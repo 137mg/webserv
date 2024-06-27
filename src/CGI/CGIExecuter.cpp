@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/27 14:33:41 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/27 16:52:57 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,17 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
-        
+
     }
 }
+
+        // if (WIFEXITED(_status))
+        // {
+        //     int exit_status = WEXITSTATUS(_status);
+        //     if (exit_status != 0)
+        //     {
+        //         // Handle non-zero exit status
+        //         std::cout << "error found" << std::endl;
+        //         // return errorHandler(500, _clientFd);
+        //     }
+        // }

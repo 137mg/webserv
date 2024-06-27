@@ -108,8 +108,8 @@ class	Manager
 		bool	checkIfCGIProcessExistsForFd(int fd);
 
 		// imma try some things here hear me out
-		void				handleCGIOutput(int cgiFd, size_t pollIndex);
-		void				handleCGIInput(int cgiFd, size_t pollIndex);
+		void				handleCGIOutput(int cgiFd);
+		void				handleCGIInput(int cgiFd);
 		t_CGIProcess		&getCGIProcessForFd(int fd);
 		void				sendResponse(std::string response, int clientFd);
 		void				sendPendingResponse(int clientFd);

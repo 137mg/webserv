@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/27 16:04:11 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/27 16:36:04 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Server.hpp"
 
 // This will read the output from thr CGI script and build a response with it
-void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
+void	Manager::handleCGIOutput(int cgiFd)
 {
 	t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
     char buffer[MESSAGE_BUFFER];
@@ -51,12 +51,10 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 	close(cgi.stdoutFd);
 	delFromPollFdsByValue(cgi.stdoutFd);
 	removeCGIProcess(cgiFd);
-	return;
-	std::cout << pollIndex;
 }
 
 // This writes the request to the CGI script
-void	Manager::handleCGIInput(int cgiFd, size_t pollIndex)
+void	Manager::handleCGIInput(int cgiFd)
 {
 	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);
 
@@ -65,9 +63,12 @@ void	Manager::handleCGIInput(int cgiFd, size_t pollIndex)
 	{
 		cgi.cgiRequestSent += bytesWritten;
 	}
+	else if (bytesWritten <= 0)
+	{
+		close(cgi.stdinFd);
+		delFromPollFdsByValue(cgi.stdinFd);
+	}
 	markFdForWriting(cgiFd);
 	close(cgi.stdinFd);
 	delFromPollFdsByValue(cgi.stdinFd);
-	return;
-	std::cout << pollIndex;
 }
