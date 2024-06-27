@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGIStreamHandler.cpp                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 13:05:14 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/06/21 17:51:39 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGIStreamHandler.cpp                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/06/27 16:04:11 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	Manager::handleCGIOutput(int cgiFd, size_t pollIndex)
 		close(cgi.stdoutFd);
 		delFromPollFdsByValue(cgi.stdoutFd);
 		removeCGIProcess(cgiFd);
+		return;
     }
 	close(cgi.stdoutFd);
 	delFromPollFdsByValue(cgi.stdoutFd);
