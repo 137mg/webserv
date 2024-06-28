@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 15:27:14 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 15:39:36 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", _pid};
         cgi.cgiRequest = cgiRequest; // Store the request body
         cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
-		cgi.cgiResponseSize = cgiRequest.size();
         cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);

@@ -6,49 +6,42 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 15:36:19 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 16:48:01 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
 #include "Server.hpp"
 
+
 // This will read the output from thr CGI script and build a response with it
 void	Manager::handleCGIOutput(int cgiFd)
 {
 	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
-    char			buffer[MESSAGE_BUFFER];
+    char			buffer[MESSAGE_BUFFER2];
     ssize_t			bytesRead;
-	bool			fullyRead = false;
 
-    // Read from the stdoutFd of the CGI process
-	memset(buffer, '\0', MESSAGE_BUFFER);
-    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER - 1);
+    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER2);
     if (bytesRead > 0)
     {
-		fullyRead = true;
-		buffer[bytesRead] = '\0';
+		cgi.cgiResponseSize += bytesRead;
 		cgi.cgiResponse.append(buffer);
-		cgi.cgiResponse[cgi.cgiResponseSize] = '\0';
     }
-	if (bytesRead <= 0)
-    {
-        if (bytesRead < 0)
-        {
-            perror("read from CGI stdout failed");
-        }
+	else if (bytesRead < 0)
+	{
+        perror("read from CGI stdout failed");
 		close(cgi.stdoutFd);
 		delFromPollFdsByValue(cgi.stdoutFd);
 		removeCGIProcess(cgiFd);
 		return;
-    }
-
-	if (fullyRead == true)
+	}
+	if (bytesRead < MESSAGE_BUFFER2)
 	{
+		cgi.cgiResponse[cgi.cgiResponseSize] = '\0';
 		std::string response = "";
 
 		response = "HTTP/1.1 200 OK \r\n";
-		response += "Content-Length: " + std::to_string(std::string(cgi.cgiResponse).size()) + "\r\n";
+		response += "Content-Length: " + std::to_string(cgi.cgiResponseSize) + "\r\n";
 		response += "Connection: keep-alive\r\n";
 		response += "Content-Type: text/html\r\n\r\n";
 		response += cgi.cgiResponse;
