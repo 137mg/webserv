@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/27 16:52:57 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 15:17:22 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
     this->_clientFd = clientFd;
 	if (setUpPipes() != 0)
 		return errorHandler(500, _clientFd);
+    fcntl(_stdinPipe[0], F_SETFL, O_NONBLOCK);
+    fcntl(_stdinPipe[1], F_SETFL, O_NONBLOCK);
+    fcntl(_stdoutPipe[0], F_SETFL, O_NONBLOCK);
+    fcntl(_stdoutPipe[1], F_SETFL, O_NONBLOCK);
 	if (setUpFork() != 0)
 		return errorHandler(500, _clientFd);
     if (_pid == 0)
@@ -71,16 +75,17 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         const char *args[] = {CGIfile.c_str(), nullptr};
         execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
         perror("execve failed");
-        return errorHandler(500, _clientFd);
+        exit(EXIT_FAILURE);
+        // return errorHandler(500, _clientFd);
     }
 	else
 	{
         close(_stdoutPipe[1]); // close write end of stdout pipe
         close(_stdinPipe[0]);  // close read end of stdin pipe
 
-        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, "", "", _pid};
+        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0, 0, "", "", "", _pid};
         cgi.cgiRequest = cgiRequest; // Store the request body
-        cgi.cgiRequestSent = 0; // Track how much of the request body has been sent
+        cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
 		cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);
@@ -89,7 +94,6 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
-
     }
 }
 

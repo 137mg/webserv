@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/27 16:36:04 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 15:17:09 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	Manager::handleCGIInput(int cgiFd)
 	ssize_t bytesWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str(), cgi.cgiRequest.size());
 	if (bytesWritten > 0)
 	{
-		cgi.cgiRequestSent += bytesWritten;
+		cgi.cgiRequestWritten += bytesWritten;
 	}
 	else if (bytesWritten <= 0)
 	{
