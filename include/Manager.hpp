@@ -141,7 +141,6 @@ void	clientMessage(const std::string &message, int clientFd);
 void	printTimestamp(void);
 
 #define MESSAGE_BUFFER 8192
-#define MESSAGE_BUFFER2 400
 #define MB 1048576
 #define DEFAULT_PATH "config_files/default.toml"
 

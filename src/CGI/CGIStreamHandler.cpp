@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 18:19:39 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 18:24:02 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 void	Manager::handleCGIOutput(int cgiFd)
 {
 	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
-    char			buffer[MESSAGE_BUFFER2];
+    char			buffer[MESSAGE_BUFFER];
     ssize_t			bytesRead;
 
-    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER2);
+    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER);
     if (bytesRead > 0)
     {
 		cgi.cgiResponseSize += bytesRead;
@@ -35,12 +35,9 @@ void	Manager::handleCGIOutput(int cgiFd)
 		removeCGIProcess(cgiFd);
 		return;
 	}
-	// Check if the read was incomplete (less than the buffer size)
-	if (bytesRead == MESSAGE_BUFFER2)
-	{
-		// Not finished reading yet, wait for more data
+	// Not finished reading yet, wait for more data
+	if (bytesRead == MESSAGE_BUFFER)
 		return;
-	}
 	
 	std::string response = "";
 

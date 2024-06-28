@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/27 15:15:13 by juvan-to      ########   odam.nl          #
+#    Updated: 2024/06/28 18:31:03 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ PROJECT = Webserv
 INCLUDE = -I include
 NAME = webserv
 CC = clang++
-CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
+CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11 -fsanitize=address
 OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads
@@ -65,7 +65,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "---------$(BOLD)Linking...$(RESET)---------"
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
 	@echo "$(GREEN)$(BOLD)["$(NAME)"]$(RESET)" "ready for execution!"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
