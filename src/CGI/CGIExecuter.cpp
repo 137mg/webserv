@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 15:17:22 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/28 15:27:14 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
         perror("execve failed");
         exit(EXIT_FAILURE);
-        // return errorHandler(500, _clientFd);
     }
 	else
 	{
         close(_stdoutPipe[1]); // close write end of stdout pipe
         close(_stdinPipe[0]);  // close read end of stdin pipe
 
-        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0, 0, "", "", "", _pid};
+        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", _pid};
         cgi.cgiRequest = cgiRequest; // Store the request body
         cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
-		cgi.stdinFd = _stdinPipe[1];
+		cgi.cgiResponseSize = cgiRequest.size();
+        cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);
 		this->_Manager.setClientStatus(cgi.stdoutFd, READING);
@@ -96,14 +96,3 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.addToPollFds(cgi.stdoutFd);
     }
 }
-
-        // if (WIFEXITED(_status))
-        // {
-        //     int exit_status = WEXITSTATUS(_status);
-        //     if (exit_status != 0)
-        //     {
-        //         // Handle non-zero exit status
-        //         std::cout << "error found" << std::endl;
-        //         // return errorHandler(500, _clientFd);
-        //     }
-        // }
