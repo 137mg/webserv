@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 17:31:01 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/30 02:30:26 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class CGI
 		Manager						&_Manager;
 	
 	public:
+		std::string					errorResponse;
 		CGI(const Server& server, Manager &Manager);
 		~CGI(void);
 		void		initEnvp(const t_header& header, std::string request);

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 18:24:02 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/30 02:38:02 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,21 @@ void	Manager::handleCGIOutput(int cgiFd)
 	// Not finished reading yet, wait for more data
 	if (bytesRead == MESSAGE_BUFFER)
 		return;
+	
+	waitpid(cgi.pid, &cgi.status, 0);
+	if (WIFEXITED(cgi.status))
+	{
+		int exitStatus = WEXITSTATUS(cgi.status);
+		if (exitStatus != 0)
+		{
+			this->clientErrorResponses[cgi.clientFd] = cgi.cgiErrorResponse;
+			markFdForWriting(cgi.clientFd);
+			close(cgi.stdoutFd);
+			delFromPollFdsByValue(cgi.stdoutFd);
+			removeCGIProcess(cgiFd);
+			return;
+		}
+	}
 	
 	std::string response = "";
 

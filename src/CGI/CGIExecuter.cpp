@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/28 15:39:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/30 02:31:53 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,30 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         close(_stdoutPipe[1]); // close write end of stdout pipe
         close(_stdinPipe[0]);  // close read end of stdin pipe
 
-        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", _pid};
+        t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid};
         cgi.cgiRequest = cgiRequest; // Store the request body
         cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
         cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
+        cgi.cgiErrorResponse = errorResponse;
+        cgi.status = 0;
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);
 		this->_Manager.setClientStatus(cgi.stdoutFd, READING);
         _Manager.addCGIProcess(cgi); // Add CGI process to Manager
 		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
+        // waitpid(_pid, &_status, 0);
+        // if (WIFEXITED(_status))
+        // {
+        //     int exitStatus = WEXITSTATUS(_status);
+        //     if (exitStatus != 0)
+        //     {
+        //         this->_Manager.delFromPollFdsByValue(cgi.stdinFd);
+        //         this->_Manager.delFromPollFdsByValue(cgi.stdoutFd);
+        //         this->_Manager.removeCGIProcess(cgi.stdinFd);
+        //         return errorHandler(500, _clientFd);
+        //     }
+        // }
     }
 }

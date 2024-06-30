@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 16:10:25 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/30 02:31:11 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	Server::runCGI(std::string filePath)
 
 	cgi.initEnvp(_header, _request);
 	cgi.convertVector();
+	cgi.errorResponse = buildResponse(errorPages[500], errorMessages[500]);
 	if (access(filePath.c_str(), X_OK) == 0)
 	{
 		cgi.executeScript(CGIfile, CGIdirectory, _request, _clientFd);

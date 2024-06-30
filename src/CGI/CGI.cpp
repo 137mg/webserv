@@ -6,11 +6,12 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/25 15:34:24 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 17:32:01 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/06/30 02:28:08 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
+#include "Server.hpp"
 
 CGI::CGI(const Server& server, Manager &Manager) : _server(server), _Manager(Manager)
 {
