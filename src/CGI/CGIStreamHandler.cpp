@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/01 14:10:54 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/01 15:10:37 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,15 @@ void	Manager::handleCGIInput(int cgiFd)
 {
 	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);
 
-	std::cout << cgi.stdinFd << std::endl;
-	ssize_t bytesWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str(), cgi.cgiRequest.size());
-	if (bytesWritten > 0)
+	std::cout << cgi.cgiRequest << std::endl;
+	cgi.cgiRequestWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str(), cgi.cgiRequest.size());
+	std::cout << cgi.stdinFd << " -> " << cgi.cgiRequestWritten << std::endl;
+	
+	if (cgi.cgiRequestWritten > 0)
 	{
 		std::cout << "succesfull write\n" << std::endl;
-		cgi.cgiRequestWritten += bytesWritten;
 	}
-	else if (bytesWritten <= 0)
+	else if (cgi.cgiRequestWritten <= 0)
 	{
 		std::cout << "unsuccesfull write\n" << std::endl;
 		close(cgi.stdinFd);
