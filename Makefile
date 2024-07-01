@@ -6,7 +6,7 @@
 #    By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/02/08 11:22:23 by psadeghi      #+#    #+#                  #
-#    Updated: 2024/06/29 20:41:07 by Julia         ########   odam.nl          #
+#    Updated: 2024/07/01 13:01:01 by juvan-to      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ PROJECT = Webserv
 INCLUDE = -I include
 NAME = webserv
 CC = clang++
-CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11 -fsanitize=address
+CPPFLAGS = -Wall -Werror -Wextra -Wshadow -Wno-shadow -std=c++11
 OBJ_DIR	= obj/
 SRC_DIR	= src/
 UPLOAD_DIR = cgi-bin/uploads

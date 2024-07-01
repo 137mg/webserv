@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/01 12:55:06 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/01 13:02:06 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
     this->_clientFd = clientFd;
 	if (setUpPipes() != 0)
 		return errorHandler(500, _clientFd);
-    fcntl(_stdinPipe[0], F_SETFL, O_NONBLOCK);
-    fcntl(_stdinPipe[1], F_SETFL, O_NONBLOCK);
-    fcntl(_stdoutPipe[0], F_SETFL, O_NONBLOCK);
-    fcntl(_stdoutPipe[1], F_SETFL, O_NONBLOCK);
+    // fcntl(_stdinPipe[0], F_SETFL, O_NONBLOCK);
+    // fcntl(_stdinPipe[1], F_SETFL, O_NONBLOCK);
+    // fcntl(_stdoutPipe[0], F_SETFL, O_NONBLOCK);
+    // fcntl(_stdoutPipe[1], F_SETFL, O_NONBLOCK);
 	if (setUpFork() != 0)
 		return errorHandler(500, _clientFd);
     if (_pid == 0)
@@ -95,17 +95,17 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.addToPollFds(cgi.stdoutFd);
-        waitpid(_pid, &_status, 0);
-        if (WIFEXITED(_status))
-        {
-            int exitStatus = WEXITSTATUS(_status);
-            if (exitStatus != 0)
-            {
-                this->_Manager.delFromPollFdsByValue(cgi.stdinFd);
-                this->_Manager.delFromPollFdsByValue(cgi.stdoutFd);
-                this->_Manager.removeCGIProcess(cgi.stdinFd);
-                return errorHandler(500, _clientFd);
-            }
-        }
+        // waitpid(_pid, &_status, 0);
+        // if (WIFEXITED(_status))
+        // {
+        //     int exitStatus = WEXITSTATUS(_status);
+        //     if (exitStatus != 0)
+        //     {
+        //         this->_Manager.delFromPollFdsByValue(cgi.stdinFd);
+        //         this->_Manager.delFromPollFdsByValue(cgi.stdoutFd);
+        //         this->_Manager.removeCGIProcess(cgi.stdinFd);
+        //         return errorHandler(500, _clientFd);
+        //     }
+        // }
     }
 }

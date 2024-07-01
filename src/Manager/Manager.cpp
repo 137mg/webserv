@@ -78,6 +78,7 @@ void	Manager::setUpPoll(int listenFd)
 
 	pfd.fd = listenFd;
 	pfd.events = POLLIN;
+	pfd.revents = 0;
 	_pollFdsVector.push_back(pfd);
 }
 

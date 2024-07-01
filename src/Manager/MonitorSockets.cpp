@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/27 16:29:50 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/01 13:14:54 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	Manager::newClientConnection(int listenFd)
 	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
 	_fdMap[clientFd] = listenFd;
 	_clientStatus[clientFd] = READING;
+	_clientBuffers[clientFd] = "";
 	std::cout << std::endl;
 	printTimestamp();
 	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;

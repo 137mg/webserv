@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:10:57 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/25 15:16:19 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/01 13:17:41 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	Manager::addToPollFds(int clientFd)
 	pollfd newPollFd;
 	newPollFd.fd = clientFd;
 	newPollFd.events = POLLIN;
+    newPollFd.revents = 0;
 	_pollFdsVector.push_back(newPollFd);
 }
 
