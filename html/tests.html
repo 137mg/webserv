@@ -20,6 +20,8 @@
 	
 	<div class ="block form-block">
 		<input type="button" onclick='putRequest("http://localhost:8080")' value="Send forbidden method (PUT)" class="form-item submit-btn">
+		<input type="button" onclick='getScript("/cgi-bin/hello.py")' value="CGI script (GET)" class="form-item submit-btn">
+		<input type="button" onclick='getScript("/cgi-bin/notAllowed.py")' value="Forbidden CGI script (GET)" class="form-item submit-btn">
 	</div>
 
     <script>
@@ -42,6 +44,10 @@
 					});
 				}
 			});
+		}
+		function getScript(script)
+		{
+			window.location.href = script;
 		}
     </script>
 

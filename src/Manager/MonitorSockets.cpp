@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/01 15:07:49 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/02 01:26:48 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	Manager::newClientConnection(int listenFd)
 	clientFd = accept(listenFd, reinterpret_cast<struct sockaddr *>(&client_addr), &addr_size);
 	if (clientFd == -1)
 		throw ClientSocketException();
-	addToPollFds(clientFd);
+	addToPollFds(clientFd, POLLIN);
 	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
 	_fdMap[clientFd] = listenFd;
 	_clientStatus[clientFd] = READING;

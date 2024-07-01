@@ -87,7 +87,7 @@ class	Manager
 		void	bindSocket(int sockfd);
 
 		void	setUpPoll(int listenFd);
-		void	addToPollFds(int clientFd);
+		void	addToPollFds(int clientFd, short events);
 
 		bool	readRequest(int clientFd);
 		bool	isRequestTooLarge(std::string buffer);

@@ -6,11 +6,12 @@
 /*   By: juvan-to <juvan-to@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:06:44 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/21 13:12:27 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/02 01:42:23 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
+#include "CGI.hpp"
 #include "Server.hpp"
 
 bool	Manager::isCGIInputFd(int fd)
@@ -75,7 +76,23 @@ bool	Manager::checkIfCGIProcessExistsForFd(int fd)
 	return found;
 }
 
-void Manager::addCGIProcess(t_CGIProcess cgiProcess)
+void    Manager::addCGIProcess(t_CGIProcess cgiProcess)
 {
 	_cgiProcesses.push_back(cgiProcess);
+}
+
+void    CGI::setNonBlocking(int fd)
+{
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1)
+    {
+        perror("fcntl F_GETFL");
+        exit(EXIT_FAILURE);
+    }
+
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+    {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
 }

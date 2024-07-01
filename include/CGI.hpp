@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/30 02:30:26 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/02 01:41:33 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class CGI
 		void		executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd);
 		Server		&getServer(void);
 		void		errorHandler(int errorCode, int clientFd);
+		void		setNonBlocking(int fd);
 		int			setUpPipes(void);
 		int			setUpFork(void);
 		int			getStatus(void);

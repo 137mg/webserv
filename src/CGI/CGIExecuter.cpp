@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/01 14:59:48 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/02 01:42:58 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
     this->_clientFd = clientFd;
 	if (setUpPipes() != 0)
 		return errorHandler(500, _clientFd);
+    setNonBlocking(_stdinPipe[1]);
+    setNonBlocking(_stdoutPipe[0]);
 	if (setUpFork() != 0)
 		return errorHandler(500, _clientFd);
-
     t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid};
 
     if (_pid == 0)
@@ -88,8 +89,8 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         cgi.cgiErrorResponse = errorResponse;
         cgi.status = 0;
         _Manager.addCGIProcess(cgi); // Add CGI process to Manager
-		_Manager.addToPollFds(cgi.stdinFd); // Add stdin pipe to poll list with POLLOUT
-		_Manager.addToPollFds(cgi.stdoutFd);
+		_Manager.addToPollFds(cgi.stdinFd, POLLOUT); // Add stdin pipe to poll list with POLLOUT
+		_Manager.addToPollFds(cgi.stdoutFd, POLLIN);
 
 		_Manager.markFdForWriting(cgi.stdinFd);
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);
