@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/02 01:42:58 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/02 01:56:41 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,3 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		this->_Manager.setClientStatus(cgi.stdoutFd, READING);
     }
 }
-
-        // waitpid(_pid, &_status, 0);
-        // if (WIFEXITED(_status))
-        // {
-        //     int exitStatus = WEXITSTATUS(_status);
-        //     if (exitStatus != 0)
-        //     {
-        //         this->_Manager.delFromPollFdsByValue(cgi.stdinFd);
-        //         this->_Manager.delFromPollFdsByValue(cgi.stdoutFd);
-        //         this->_Manager.removeCGIProcess(cgi.stdinFd);
-        //         return errorHandler(500, _clientFd);
-        //     }
-        // }
