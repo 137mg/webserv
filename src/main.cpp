@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:49:54 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/06/29 16:53:41 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/01 14:14:19 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	setUpSignals()
 	RUNNING = true;
 	signal(SIGINT, signalHandler);
 	signal(SIGQUIT, signalHandler);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 int main(int argc, char** argv)
