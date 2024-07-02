@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/02 13:13:03 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/02 13:23:46 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,5 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.markFdForWriting(cgi.stdinFd);
 		this->_Manager.setClientStatus(cgi.stdinFd, WRITING);
 		this->_Manager.setClientStatus(cgi.stdoutFd, READING);
-
-        // waitpid(_pid, &_status, 0);
-        // if (WIFEXITED(_status))
-        // {
-        //     int exitStatus = WEXITSTATUS(_status);
-        //     if (exitStatus != 0)
-        //     {
-        //         std::cerr << "CGI script exited with status: " << exitStatus << std::endl;
-        //         return;
-        //     }
-        // }
     }
 }
