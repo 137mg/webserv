@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/02 01:26:48 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/02 13:13:36 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ int	Manager::newClientConnection(int listenFd)
 
 void	Manager::closeClientConnection(int clientFd)
 {
+	_clientActivityMap.erase(clientFd);
+	_fdMap.erase(clientFd);
+	_clientStatus.erase(clientFd);
+    _clientBuffers.erase(clientFd);
 	printTimestamp();
 	std::cout << RED << "Closing " << RESET << "client socket " << RESET << clientFd << std::endl;
 	close(clientFd);

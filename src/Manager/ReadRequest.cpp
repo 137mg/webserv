@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 12:56:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/01 14:12:37 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/02 13:01:02 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ bool	Manager::readRequest(int clientFd)
 
 	memset(buffer, '\0', MESSAGE_BUFFER);
 	bytes_read = read(clientFd, buffer, MESSAGE_BUFFER - 1);
-	if (bytes_read == 0 && _clientActivityMap[_clientFd] != 0)
+	// if (bytes_read == 0 && _clientActivityMap[_clientFd] != 0)
+	if (bytes_read == 0)
 	{
 		printTimestamp();
 		std::cout << GREEN << "Client socket " << RESET << clientFd << RED << " closed " << RESET << "the connection." << std::endl;

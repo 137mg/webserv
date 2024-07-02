@@ -44,6 +44,7 @@
 
 #define READING 0
 #define WRITING 1
+#define START	2
 
 extern volatile bool RUNNING;
 
