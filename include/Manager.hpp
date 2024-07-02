@@ -115,7 +115,7 @@ class	Manager
 		void				sendResponse(std::string response, int clientFd);
 		void				sendPendingResponse(int clientFd);
 		void				markFdForWriting(int clientFd);
-		void				clearFdForWriting(int clientFd);
+		void				markFdForReading(int clientFd);
 		bool				isCGIInputFd(int fd);
 		void				removeCGIProcess(int fd);
 		void				delFromPollFdsByValue(int fd);
