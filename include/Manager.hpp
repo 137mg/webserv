@@ -122,6 +122,7 @@ class	Manager
 		bool				sendErrorResponse(std::string response, int clientFd);
 		std::map<int, int>	getClientStatus(void);
 		void				setClientStatus(int fd, int status);
+		bool				isDataAvailable(int clientFd);
 	
 		//void	signalHandler(int signum);
 
