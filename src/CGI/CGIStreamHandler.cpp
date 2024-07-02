@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/02 01:56:27 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/02 01:58:13 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,15 @@ void	Manager::handleCGIInput(int cgiFd)
 	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);
 
 	cgi.cgiRequestWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str(), cgi.cgiRequest.size());
+	std::cout << cgi.stdinFd << " -> " << cgi.cgiRequestWritten << std::endl;
 	
 	if (cgi.cgiRequestWritten > 0)
 	{
-		// std::cout << "succesfull write\n" << std::endl;
+		std::cout << "succesfull write\n" << std::endl;
 	}
 	else if (cgi.cgiRequestWritten <= 0)
 	{
-		// std::cout << "unsuccesfull write\n" << std::endl;
+		std::cout << "unsuccesfull write\n" << std::endl;
 		close(cgi.stdinFd);
 		delFromPollFdsByValue(cgi.stdinFd);
 		return;
