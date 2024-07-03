@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/02 13:23:36 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 03:20:09 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	Manager::monitorSockets(void)
 		_status = poll(_pollFdsVector.data(), _pollFdsVector.size(), 2000);
 		if (_status == -1)
 			throw ServerSocketException();
-		else if (_status == 0) {
+		else if (_status == 0)
+		{
 			checkForTimeouts();
 			continue;
 		}
@@ -64,6 +65,7 @@ void Manager::handleSocketEvents(void)
 		}
 		else if (_pollFdsVector[i].revents & (POLLHUP | POLLERR))
 			closeClientConnection(_pollFdsVector[i].fd);
+		_pollFdsVector[i].revents = 0;
 	}
 }
 
@@ -80,7 +82,7 @@ void Manager::checkForTimeouts(void)
 				printTimestamp();
 				std::cout << RED << "Client " << clientFd << " 408 Request Timeout"  << RESET << std::endl;
 				closeClientConnection(clientFd);
-				i--; // Adjust index after erasing the element
+				i--;
 			}
 		}
 	}
@@ -97,7 +99,7 @@ int	Manager::newClientConnection(int listenFd)
 	if (clientFd == -1)
 		throw ClientSocketException();
 	addToPollFds(clientFd, POLLIN);
-	_clientActivityMap[clientFd] = std::time(nullptr); // Track the last activity time
+	_clientActivityMap[clientFd] = std::time(nullptr);
 	_fdMap[clientFd] = listenFd;
 	_clientStatus[clientFd] = READING;
 	_clientBuffers[clientFd] = "";

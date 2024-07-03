@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:21:13 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 00:54:12 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/03 01:16:26 by Julia         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	Manager::sendPendingResponse(int clientFd)
 	if (clientResponses.count(clientFd) > 0 && !clientResponses[clientFd].empty())
     {
         sendResponse(clientResponses[clientFd], clientFd);
-        markFdForReading(clientFd);
 		clientResponses.erase(clientFd);
 		_clientStatus[clientFd] = READING;
+        markFdForReading(clientFd);
     }
     else if (clientErrorResponses.count(clientFd) > 0 && !clientErrorResponses[clientFd].empty())
     {
