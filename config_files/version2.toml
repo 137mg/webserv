@@ -1,0 +1,40 @@
+[[server]]
+
+listen =				"8080"
+host =					"127.0.0.1"
+server_names =			"localhost"
+client_max_body_size =	"10MB"
+
+	[server.error_pages]
+
+	404 =				"html/error_pages/PageNotFound.html"
+
+	[[server.location]]
+
+	match =				"/"
+	allowed_methods =	"GET"
+	root =				"./html/version2"
+	index =				"newhome.html"
+	auto_index =		"false"
+
+	[[server.location]]
+
+	match =				"/html"
+	allowed_methods =	"GET"
+	root =				"."
+	auto_index =		"true"
+
+	[[server.location]]
+
+	match =				"/cgi-bin"
+	allowed_methods =	["GET", "POST", "DELETE"]
+	root =				"."
+	index =				"upload.py"
+	auto_index =		"false"
+	cgi_extents =		".py"
+	cgi_paths =			"/usr/bin/python3"
+
+	[[server.location]]
+
+	match =				"/nonexistent"
+	redirect =			"/"
