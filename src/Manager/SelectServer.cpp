@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:32:08 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 17:56:02 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_header	Manager::parseHeader(std::string request, int clientFd)
 	std::istringstream	iss(request);
 	t_header			header;
 	size_t				i;
+	size_t				j;
 
 	std::getline(iss, header.method, ' ');
 	std::getline(iss, header.file, ' ');
@@ -68,6 +69,9 @@ t_header	Manager::parseHeader(std::string request, int clientFd)
 	else
 		header.contentLength = getValue(request, "Content-Length");
 	header.contentType = getValue(request, "Content-Type");
+	header.accept = getValue(request, "Accept");
+	j = header.accept.find(',');
+	header.accept = header.accept.substr(0, j);
 	return (header);
 }
 
@@ -85,6 +89,7 @@ void	Manager::selectServer(std::string buffer, int clientFd)
 	{
 		for (j = 0; j < serverList[i].serverNames.size(); j++)
 		{
+			// std::cout << header.host << "   ---   " << serverList[i].serverNames[j] << std::endl;
 			if (header.host == serverList[i].serverNames[j])
 			{
 				server = serverList[i];

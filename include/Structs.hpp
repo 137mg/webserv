@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   structs.hpp                                        :+:    :+:            */
+/*   Structs.hpp                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/13 16:46:08 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/30 02:07:56 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/03 17:50:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_header
 	uint16_t	port;
 	std::string	contentLength;
 	std::string	contentType;
+	std::string	accept;
 }	t_header;
 
 typedef struct s_location
