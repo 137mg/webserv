@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/02 13:02:39 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 12:59:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	Manager::handleCGIOutput(int cgiFd)
 	response += "Content-Type: text/html\r\n\r\n";
 	response += cgi.cgiResponse;
 	
-	this->clientResponses[cgi.clientFd] = response;
+	this->_clientResponses[cgi.clientFd] = response;
 	markFdForWriting(cgi.clientFd);
 	
 	close(cgi.stdoutFd);

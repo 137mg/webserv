@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:21:13 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 01:16:26 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/03 12:59:20 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ bool	Manager::sendErrorResponse(std::string response, int clientFd)
 
 void	Manager::sendPendingResponse(int clientFd)
 {
-	if (clientResponses.count(clientFd) > 0 && !clientResponses[clientFd].empty())
+	if (_clientResponses.count(clientFd) > 0 && !_clientResponses[clientFd].empty())
     {
-        sendResponse(clientResponses[clientFd], clientFd);
-		clientResponses.erase(clientFd);
+        sendResponse(_clientResponses[clientFd], clientFd);
+		_clientResponses.erase(clientFd);
 		_clientStatus[clientFd] = READING;
         markFdForReading(clientFd);
     }
-    else if (clientErrorResponses.count(clientFd) > 0 && !clientErrorResponses[clientFd].empty())
+    else if (_clientErrorResponses.count(clientFd) > 0 && !_clientErrorResponses[clientFd].empty())
     {
-        if (sendErrorResponse(clientErrorResponses[clientFd], clientFd))
+        if (sendErrorResponse(_clientErrorResponses[clientFd], clientFd))
             markFdForReading(clientFd);
-		clientErrorResponses.erase(clientFd);
+		_clientErrorResponses.erase(clientFd);
 		_clientStatus[clientFd] = READING;
     }
 }

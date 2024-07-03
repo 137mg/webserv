@@ -44,7 +44,6 @@
 
 #define READING 0
 #define WRITING 1
-#define START	2
 
 extern volatile bool RUNNING;
 
@@ -67,6 +66,8 @@ class	Manager
 		std::vector<pollfd>						_pollFdsVector;
 		std::vector<t_CGIProcess>				_cgiProcesses;
 		
+		std::map<int, std::string>				_clientResponses;
+		std::map<int, std::string>				_clientErrorResponses;
 		std::map<int, std::string>				_clientBuffers;
 		int										_status;
 
@@ -78,53 +79,52 @@ class	Manager
 		Manager(void);
 		~Manager(void);
 	
-		std::map<int, std::string>				clientResponses;
-		std::map<int, std::string>				clientErrorResponses;
-	
-		int		newClientConnection(int listenFd);
-		void	config(void);
-		void	configFile(const char* filename);
-		int		createSocket(void);
-		void	bindSocket(int sockfd);
+		int							newClientConnection(int listenFd);
+		void						config(void);
+		void						configFile(const char* filename);
+		int							createSocket(void);
+		void						bindSocket(int sockfd);
 
-		void	setUpPoll(int listenFd);
-		void	addToPollFds(int clientFd, short events);
+		void						setUpPoll(int listenFd);
+		void						addToPollFds(int clientFd, short events);
 
-		bool	readRequest(int clientFd);
-		bool	isRequestTooLarge(std::string buffer);
-		bool	isRequestComplete(std::string buffer);
-		bool	handleChunkedRequest(std::string& buffer, int clientFd);
+		bool						readRequest(int clientFd);
+		bool						isRequestTooLarge(std::string buffer);
+		bool						isRequestComplete(std::string buffer);
+		bool						handleChunkedRequest(std::string& buffer, int clientFd);
 
-		std::string	getValue(std::string request, std::string key);
-		uint16_t	findPort(int clientFd);
-		t_header	parseHeader(std::string request, int clientFd);
-		void		selectServer(std::string buffer, int clientFd);
+		std::string					getValue(std::string request, std::string key);
+		uint16_t					findPort(int clientFd);
+		t_header					parseHeader(std::string request, int clientFd);
+		void						selectServer(std::string buffer, int clientFd);
 		
-		void	closeClientConnection(int clientFd);
-		void	monitorSockets(void);
-		void	handleSocketEvents(void);
-		void	checkForTimeouts(void);
+		void						closeClientConnection(int clientFd);
+		void						monitorSockets(void);
+		void						handleSocketEvents(void);
+		void						checkForTimeouts(void);
 
-		void	addCGIProcess(t_CGIProcess cgiProcess);
-		bool	checkIfCGIProcessExistsForFd(int fd);
+		void						addCGIProcess(t_CGIProcess cgiProcess);
+		bool						checkIfCGIProcessExistsForFd(int fd);
 
-		// imma try some things here hear me out
-		void				handleCGIOutput(int cgiFd);
-		void				handleCGIInput(int cgiFd);
-		t_CGIProcess		&getCGIProcessForFd(int fd);
-		void				sendResponse(std::string response, int clientFd);
-		void				sendPendingResponse(int clientFd);
-		void				markFdForWriting(int clientFd);
-		void				markFdForReading(int clientFd);
-		bool				isCGIInputFd(int fd);
-		void				removeCGIProcess(int fd);
-		void				delFromPollFdsByValue(int fd);
-		bool				sendErrorResponse(std::string response, int clientFd);
-		std::map<int, int>	getClientStatus(void);
-		void				setClientStatus(int fd, int status);
-		bool				isDataAvailable(int clientFd);
+		void						handleCGIOutput(int cgiFd);
+		void						handleCGIInput(int cgiFd);
+		t_CGIProcess				&getCGIProcessForFd(int fd);
+		void						sendResponse(std::string response, int clientFd);
+		void						sendPendingResponse(int clientFd);
+		void						markFdForWriting(int clientFd);
+		void						markFdForReading(int clientFd);
+		bool						isCGIInputFd(int fd);
+		void						removeCGIProcess(int fd);
+		void						delFromPollFdsByValue(int fd);
+		bool						sendErrorResponse(std::string response, int clientFd);
+		void						setClientStatus(int fd, int status);
+		bool						isDataAvailable(int clientFd);
+
+
+		std::map<int, int>			getClientStatus(void);
+		std::map<int, std::string>	getClientResponses(void);
+		std::map<int, std::string>	getClientErrorResponses(void);
 	
-		//void	signalHandler(int signum);
 
 		class	ServerSocketException : public std::exception
 		{

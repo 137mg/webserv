@@ -91,3 +91,14 @@ const char*	Manager::ClientSocketException::what(void) const throw()
 {
 	return ("Client socket: ");
 }
+
+
+std::map<int, std::string>	Manager::getClientResponses(void)
+{
+	return _clientResponses;
+}
+
+std::map<int, std::string>	Manager::getClientErrorResponses(void)
+{
+	return _clientErrorResponses;
+}
