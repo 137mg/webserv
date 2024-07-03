@@ -2,7 +2,7 @@
 
 import os
 
-# bs()
+bs()
 
 print("<!DOCTYPE html>")
 print("<html>")

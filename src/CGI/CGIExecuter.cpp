@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGIExecuter.cpp                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 13:12:47 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/03 14:54:08 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGIExecuter.cpp                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/07/03 15:05:24 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,28 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		close(_stdoutPipe[1]);
 
 		// Change the working directory to the script's directory
-		if (chdir(CGIdirectory.c_str()) != 0)
-		{
-			perror("Chdir error");
-			exit(EXIT_FAILURE);
-		}
-		const char *args[] = {CGIfile.c_str(), nullptr};
-		execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
-		perror("Execve error");
-		exit(EXIT_FAILURE);
-	}
+        if (chdir(CGIdirectory.c_str()) != 0)
+        {
+            perror("Chdir error");
+            exit(EXIT_FAILURE);
+        }
+        const char *args[] = {CGIfile.c_str(), nullptr};
+        execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
+        perror("Execve error");
+        exit(EXIT_FAILURE);
+    }
 	else
 	{
-		close(_stdoutPipe[1]); // close write end of stdout pipe
-		close(_stdinPipe[0]);  // close read end of stdin pipe
+        close(_stdoutPipe[1]);
+        close(_stdinPipe[0]);
 
-		cgi.cgiRequest = cgiRequest; // Store the request body
-		cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
-		cgi.stdinFd = _stdinPipe[1];
+        cgi.cgiRequest = cgiRequest;
+        cgi.cgiRequestWritten = 0;
+        cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
-		cgi.status = 0;
-		_Manager.addCGIProcess(cgi); // Add CGI process to Manager
-		_Manager.addToPollFds(cgi.stdinFd, POLLOUT); // Add stdin pipe to poll list with POLLOUT
+        cgi.status = 0;
+        _Manager.addCGIProcess(cgi);
+		_Manager.addToPollFds(cgi.stdinFd, POLLOUT);
 		_Manager.addToPollFds(cgi.stdoutFd, POLLIN);
 
 		_Manager.markFdForWriting(cgi.stdinFd);
