@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:05:24 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 15:08:10 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,26 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 {
 	_clientFd = clientFd;
 	if (setUpPipes() != 0)
-		return (errorHandler(500, _clientFd));
-	setNonBlocking(_stdinPipe[1]);
-	setNonBlocking(_stdoutPipe[0]);
+		return errorHandler(500, _clientFd);
+    setNonBlocking(_stdinPipe[1]);
+    setNonBlocking(_stdoutPipe[0]);
+    setNonBlocking(_stdinPipe[0]);
+    setNonBlocking(_stdoutPipe[1]);
 	if (setUpFork() != 0)
-		return (errorHandler(500, _clientFd));
-	t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid};
-
-	if (_pid == 0)
+		return errorHandler(500, _clientFd);
+    
+    t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid};
+    if (_pid == 0)
 	{
-		close(_stdoutPipe[0]); // close read end of stdout pipe
-		close(_stdinPipe[1]);  // close write end of stdin pipe
+        close(_stdoutPipe[0]);
+        close(_stdinPipe[1]);
 
-		dup2(_stdinPipe[0], STDIN_FILENO); // redirect stdin
-		dup2(_stdoutPipe[1], STDOUT_FILENO); // redirect stdout
+        dup2(_stdinPipe[0], STDIN_FILENO);
+        dup2(_stdoutPipe[1], STDOUT_FILENO);
 
 		close(_stdinPipe[0]);
 		close(_stdoutPipe[1]);
 
-		// Change the working directory to the script's directory
         if (chdir(CGIdirectory.c_str()) != 0)
         {
             perror("Chdir error");
@@ -87,6 +88,7 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
         cgi.status = 0;
+
         _Manager.addCGIProcess(cgi);
 		_Manager.addToPollFds(cgi.stdinFd, POLLOUT);
 		_Manager.addToPollFds(cgi.stdoutFd, POLLIN);
@@ -94,5 +96,5 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
 		_Manager.markFdForWriting(cgi.stdinFd);
 		_Manager.setClientStatus(cgi.stdinFd, WRITING);
 		_Manager.setClientStatus(cgi.stdoutFd, READING);
-	}
+    }
 }

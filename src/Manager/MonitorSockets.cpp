@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MonitorSockets.cpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 14:48:56 by mgoedkoo          #+#    #+#             */
-/*   Updated: 2024/07/03 14:08:58 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   MonitorSockets.cpp                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
+/*   Updated: 2024/07/03 15:08:27 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,14 @@ void	Manager::handleSocketEvents(void)
 			sendPendingResponse(_pollFdsVector[i].fd);
 		}
 		else if (_pollFdsVector[i].revents & (POLLHUP | POLLERR))
+		{
+			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd) && _pollFdsVector[i].revents & (POLLHUP))
+			{
+				handleHangup(_pollFdsVector[i].fd);
+				continue;
+			}
 			closeClientConnection(_pollFdsVector[i].fd);
+		}
 		_pollFdsVector[i].revents = 0;
 	}
 }
