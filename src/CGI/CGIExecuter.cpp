@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:08:10 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 17:07:12 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	CGI::setUpFork(void)
 	return (0);
 }
 
-void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd)
+void	CGI::executeScript(std::string scriptPath, std::string CGIdirectory, std::string cgiRequest, int clientFd)
 {
 	_clientFd = clientFd;
 	if (setUpPipes() != 0)
@@ -73,8 +73,8 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
             perror("Chdir error");
             exit(EXIT_FAILURE);
         }
-        const char *args[] = {CGIfile.c_str(), nullptr};
-        execve(CGIfile.c_str(), const_cast<char **>(args), _envp);
+        const char *args[] = {"python3", scriptPath.c_str(), nullptr};
+        execve(scriptPath.c_str(), const_cast<char **>(args), _envp);
         perror("Execve error");
         exit(EXIT_FAILURE);
     }
