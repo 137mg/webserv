@@ -111,6 +111,7 @@ class	Manager
 		void						handleCGIOutput(int cgiFd);
 		void						handleCGIInput(int cgiFd);
 		t_CGIProcess				&getCGIProcessForFd(int fd);
+		void						handleHangup(int cgiFd);
 	
 		void						sendResponse(std::string response, int clientFd);
 		bool						sendErrorResponse(std::string response, int clientFd);
