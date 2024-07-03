@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   SelectServer.cpp                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/11 17:38:30 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:56:02 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   SelectServer.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:38:30 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/03 18:27:15 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void	Manager::selectServer(std::string buffer, int clientFd)
 	{
 		for (j = 0; j < serverList[i].serverNames.size(); j++)
 		{
-			// std::cout << header.host << "   ---   " << serverList[i].serverNames[j] << std::endl;
 			if (header.host == serverList[i].serverNames[j])
 			{
 				server = serverList[i];
