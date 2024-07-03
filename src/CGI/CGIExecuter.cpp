@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:07:12 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 18:00:25 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	CGI::setUpPipes(void)
 {
 	if (pipe(_stdoutPipe) < 0)
 	{
-	perror("Pipe error");
+		perror("Pipe error");
 		return (-1);
 	}
 	if (pipe(_stdinPipe) < 0)
