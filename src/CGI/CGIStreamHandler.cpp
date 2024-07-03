@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:58:49 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 16:46:50 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,6 @@ void	Manager::handleCGIOutput(int cgiFd)
 	removeCGIProcess(cgiFd);
 }
 
-
-std::string	buildResponse(const std::string path, std::string status)
-{
-	std::ifstream		fileStream(path);
-	std::stringstream	responseStream;
-	std::string			fileContents;
-	std::string			response;
-
-	responseStream << fileStream.rdbuf();
-	fileContents = responseStream.str();
-
-	response = "HTTP/1.1 " + status + "\r\n";
-	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
-	response += "Connection: keep-alive\r\n";
-	if (path.find(".css") != std::string::npos)
-		response += "Content-Type: text/css\r\n\r\n";
-	else
-		response += "Content-Type: text/html\r\n\r\n";
-	response += fileContents;
-	return (response);
-}
-
 void Manager::handleHangup(int cgiFd)
 {
     t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
@@ -85,8 +63,7 @@ void Manager::handleHangup(int cgiFd)
         if (WEXITSTATUS(cgi.status) != 0)
         {
 			Server server = _serverMap[findPort(cgi.clientFd)][0];
-			server.buildErrorResponse(500);
-			std::string response = buildResponse(server.errorPages[500], server.errorMessages[500]);
+			std::string response = server.buildResponse(server.errorPages[500], server.errorMessages[500]);
 			this->_clientErrorResponses[cgi.clientFd] = response;
 			markFdForWriting(cgi.clientFd);
             
