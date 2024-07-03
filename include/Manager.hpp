@@ -85,7 +85,6 @@ class	Manager
 		int							createSocket(void);
 		void						bindSocket(int sockfd);
 
-		void						setUpPoll(int listenFd);
 		void						addToPollFds(int clientFd, short events);
 
 		bool						readRequest(int clientFd);
@@ -93,7 +92,6 @@ class	Manager
 		bool						isRequestComplete(std::string buffer);
 		bool						handleChunkedRequest(std::string& buffer, int clientFd);
 
-		std::string					getValue(std::string request, std::string key);
 		uint16_t					findPort(int clientFd);
 		t_header					parseHeader(std::string request, int clientFd);
 		void						selectServer(std::string buffer, int clientFd);
@@ -108,25 +106,25 @@ class	Manager
 
 		void						handleCGIOutput(int cgiFd);
 		void						handleCGIInput(int cgiFd);
-		t_CGIProcess				&getCGIProcessForFd(int fd);
 		void						sendResponse(std::string response, int clientFd);
 		void						sendPendingResponse(int clientFd);
 		void						markFdForWriting(int clientFd);
 		void						markFdForReading(int clientFd);
-		bool						isCGIInputFd(int fd);
 		void						removeCGIProcess(int fd);
 		void						delFromPollFdsByValue(int fd);
 		bool						sendErrorResponse(std::string response, int clientFd);
-		void						setClientStatus(int fd, int status);
-		bool						isDataAvailable(int clientFd);
-
+		bool						isCGIInputFd(int fd);
+		t_CGIProcess				&getCGIProcessForFd(int fd);
 
 		std::map<int, int>			getClientStatus(void);
 		std::map<int, std::string>	getClientResponses(void);
 		std::map<int, std::string>	getClientErrorResponses(void);
+		std::string					getValue(std::string request, std::string key);
 
+		void						setClientStatus(int fd, int status);
 		void						setClientResponses(int clientFd, std::string response);
 		void						setClientErrorResponses(int clientFd, std::string response);
+		void						setUpPoll(int listenFd);
 	
 
 		class	ServerSocketException : public std::exception

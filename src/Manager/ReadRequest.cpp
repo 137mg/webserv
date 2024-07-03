@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 12:56:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 02:47:27 by Julia         ########   odam.nl         */
+/*   Updated: 2024/07/03 13:22:31 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,4 @@ bool	Manager::handleChunkedRequest(std::string& buffer, int clientFd)
 	newStart = buffer.find("\r\n", lastEnd + 2);
 	buffer.erase(lastEnd, newStart - lastEnd + 2);
 	return (true);
-}
-
-bool	Manager::isDataAvailable(int clientFd)
-{
-    // Implement your logic to check if there's data available to read
-    // This could involve checking internal buffers or using non-blocking read
-    // For example:
-    char buffer[1];
-    int bytesRead = recv(clientFd, buffer, 1, MSG_PEEK | MSG_DONTWAIT); // Peeking into the socket
-    if (bytesRead > 0)
-        return true;
-    return false;
 }

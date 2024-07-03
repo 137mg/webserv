@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/02 13:23:46 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 13:22:05 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	CGI::executeScript(std::string CGIfile, std::string CGIdirectory, std::stri
         cgi.cgiRequestWritten = 0; // Track how much of the request body has been sent
         cgi.stdinFd = _stdinPipe[1];
 		cgi.stdoutFd = _stdoutPipe[0];
-        cgi.cgiErrorResponse = errorResponse;
         cgi.status = 0;
         _Manager.addCGIProcess(cgi); // Add CGI process to Manager
 		_Manager.addToPollFds(cgi.stdinFd, POLLOUT); // Add stdin pipe to poll list with POLLOUT
