@@ -102,3 +102,13 @@ std::map<int, std::string>	Manager::getClientErrorResponses(void)
 {
 	return _clientErrorResponses;
 }
+
+void 	Manager::setClientResponses(int clientFd, std::string response)
+{
+	this->_clientResponses[clientFd] = response;
+}
+
+void	Manager::setClientErrorResponses(int clientFd, std::string response)
+{
+	this->_clientErrorResponses[clientFd] = response;
+}

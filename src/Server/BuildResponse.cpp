@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/13 13:23:18 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 12:59:20 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 13:17:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::buildRedirectResponse(void)
 	response = "HTTP/1.1 301 Moved Permanently\r\n";
 	response += "Location: " + _location.redirect + "\r\n";
 	response += "Connection: keep-alive\r\n\r\n";
-	this->Manager->_clientResponses[_clientFd] = response;
+	this->Manager->setClientResponses(_clientFd, response);
 }
 
 void	Server::buildErrorResponse(int errorCode)
@@ -53,5 +53,5 @@ void	Server::buildErrorResponse(int errorCode)
 		return;
 	}
 	response = buildResponse(errorPages[errorCode], errorMessages[errorCode]);
-	this->Manager->_clientErrorResponses[_clientFd] = response;
+	this->Manager->setClientErrorResponses(_clientFd, response);
 }

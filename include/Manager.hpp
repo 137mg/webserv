@@ -124,6 +124,9 @@ class	Manager
 		std::map<int, int>			getClientStatus(void);
 		std::map<int, std::string>	getClientResponses(void);
 		std::map<int, std::string>	getClientErrorResponses(void);
+
+		void						setClientResponses(int clientFd, std::string response);
+		void						setClientErrorResponses(int clientFd, std::string response);
 	
 
 		class	ServerSocketException : public std::exception
