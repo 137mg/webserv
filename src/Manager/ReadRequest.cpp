@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/03 14:14:26 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:17:29 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ bool	Manager::readRequest(int clientFd)
 		return (handleChunkedRequest(_clientBuffers[clientFd], clientFd));
 	if (isRequestTooLarge(_clientBuffers[clientFd]) || isRequestComplete(_clientBuffers[clientFd]))
 	{
-		_clientStatus[clientFd] = WRITING;
 		selectServer(_clientBuffers[clientFd], clientFd);
 		markFdForWriting(clientFd);
 		this->_clientBuffers.erase(clientFd);

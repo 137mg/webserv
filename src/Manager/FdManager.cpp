@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:10:57 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/03 14:59:40 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:18:03 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	Manager::markFdForWriting(int clientFd)
 {
+	_clientStatus[clientFd] = WRITING;
 	for (size_t i = 0; i < _pollFdsVector.size(); i++)
 	{
 		if (_pollFdsVector[i].fd == clientFd)
@@ -27,6 +28,7 @@ void	Manager::markFdForWriting(int clientFd)
 
 void	Manager::markFdForReading(int clientFd)
 {
+	_clientStatus[clientFd] = READING;
 	for (size_t i = 0; i < _pollFdsVector.size(); i++)
 	{
 		if (_pollFdsVector[i].fd == clientFd)

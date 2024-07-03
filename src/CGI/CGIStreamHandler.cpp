@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:05:14 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/03 14:58:10 by mgoedkoo         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:21:29 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	Manager::handleCGIOutput(int cgiFd)
 	char			buffer[MESSAGE_BUFFER];
 	ssize_t			bytesRead;
 
-	bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER);
+	memset(buffer, '\0', MESSAGE_BUFFER);
+	bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER - 1);
 	if (bytesRead > 0)
 	{
 		cgi.cgiResponseSize += bytesRead;
