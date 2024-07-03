@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:37:12 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 15:37:35 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,47 @@ void	Manager::handleCGIOutput(int cgiFd)
 	removeCGIProcess(cgiFd);
 }
 
-void	Manager::handleHangup(int cgiFd)
+
+std::string	buildResponse(const std::string path, std::string status)
 {
-	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
-	
-	std::cout << "before waiting\n";
-	waitpid(cgi.pid, &cgi.status, WNOHANG);
-	std::cout << "after waiting\n";
-	if (WIFEXITED(cgi.status))
-	{
-		std::cout << WEXITSTATUS(cgi.status) << std::endl;
-		if (WEXITSTATUS(cgi.status) != 0)
-		{
-			std::cout << "error seen\n";
-			exit (1);
+	std::ifstream		fileStream(path);
+	std::stringstream	responseStream;
+	std::string			fileContents;
+	std::string			response;
+
+	responseStream << fileStream.rdbuf();
+	fileContents = responseStream.str();
+
+	response = "HTTP/1.1 " + status + "\r\n";
+	response += "Content-Length: " + std::to_string(fileContents.size()) + "\r\n";
+	response += "Connection: keep-alive\r\n";
+	if (path.find(".css") != std::string::npos)
+		response += "Content-Type: text/css\r\n\r\n";
+	else
+		response += "Content-Type: text/html\r\n\r\n";
+	response += fileContents;
+	return (response);
+}
+
+void Manager::handleHangup(int cgiFd)
+{
+    t_CGIProcess &cgi = getCGIProcessForFd(cgiFd);
+
+    waitpid(cgi.pid, &cgi.status, WNOHANG);
+    
+    if (WIFEXITED(cgi.status))
+    {
+        if (WEXITSTATUS(cgi.status) != 0)
+        {
+            // Respond with an error message
+			this->_clientResponses[cgi.clientFd] = "CGI script exited with status " + std::to_string(WEXITSTATUS(cgi.status));
+			markFdForWriting(cgi.clientFd);
+            
+            close(cgi.stdoutFd);
+			delFromPollFdsByValue(cgi.stdoutFd);
+			removeCGIProcess(cgiFd);
 		}
-	}
+        }
 }
 
 
