@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:37:35 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 15:58:49 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,17 @@ void Manager::handleHangup(int cgiFd)
     {
         if (WEXITSTATUS(cgi.status) != 0)
         {
-            // Respond with an error message
-			this->_clientResponses[cgi.clientFd] = "CGI script exited with status " + std::to_string(WEXITSTATUS(cgi.status));
+			Server server = _serverMap[findPort(cgi.clientFd)][0];
+			server.buildErrorResponse(500);
+			std::string response = buildResponse(server.errorPages[500], server.errorMessages[500]);
+			this->_clientErrorResponses[cgi.clientFd] = response;
 			markFdForWriting(cgi.clientFd);
             
             close(cgi.stdoutFd);
 			delFromPollFdsByValue(cgi.stdoutFd);
 			removeCGIProcess(cgiFd);
 		}
-        }
+    }
 }
 
 
