@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os
+import os, time
 
 print("<!DOCTYPE html>")
 print("<html>")

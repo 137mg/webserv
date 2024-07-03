@@ -22,6 +22,8 @@
 		<input type="button" onclick='putRequest("http://localhost:8080")' value="Send forbidden method (PUT)" class="form-item submit-btn">
 		<input type="button" onclick='getScript("/cgi-bin/hello.py")' value="CGI script (GET)" class="form-item submit-btn">
 		<input type="button" onclick='getScript("/cgi-bin/notAllowed.py")' value="Forbidden CGI script (GET)" class="form-item submit-btn">
+		<input type="button" onclick='getScript("/cgi-bin/infiniteLoop.py")' value="Hanging CGI script (GET)" class="form-item submit-btn">
+		<input type="button" onclick='getScript("/cgi-bin/incorrectFunction.py")' value="Error in script (GET)" class="form-item submit-btn">
 	</div>
 
     <script>

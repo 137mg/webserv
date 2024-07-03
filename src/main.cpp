@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/09 13:49:54 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:37:30 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 16:28:06 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	main(int argc, char** argv)
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << e.what() << std::strerror(errno) << std::endl;
 		std::cerr << e.what() << std::strerror(errno) << std::endl;
 		return (1);
 	}
