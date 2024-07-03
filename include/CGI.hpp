@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/25 14:52:49 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:06:24 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 17:07:41 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class CGI
 		~CGI(void);
 		void		initEnvp(const t_header& header, std::string request);
 		void		convertVector(void);
-		void		executeScript(std::string CGIfile, std::string CGIdirectory, std::string cgiRequest, int clientFd);
+		void		executeScript(std::string scriptPath, std::string CGIdirectory, std::string cgiRequest, int clientFd);
 		void		errorHandler(int errorCode, int clientFd);
 		void		setNonBlocking(int fd);
 		int			setUpPipes(void);

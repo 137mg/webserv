@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   CGI.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/25 15:34:24 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/03 14:51:35 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   CGI.cpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/25 15:34:24 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/07/03 16:53:07 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,14 @@ void	CGI::initEnvp(const t_header& header, std::string request)
 
 void	CGI::convertVector(void)
 {
-	// Allocate memory for the char ** array
-	_envp = new char*[_envpVector.size() + 1]; // +1 for the NULL terminator
+	_envp = new char*[_envpVector.size() + 1];
 
-	// Copy each string from the vector to the char ** array
-	for (size_t i = 0; i < _envpVector.size(); ++i) {
+	for (size_t i = 0; i < _envpVector.size(); ++i)
+	{
 		_envp[i] = new char[_envpVector[i].size() + 1];
 		std::strcpy(_envp[i], _envpVector[i].c_str());
 	}
-	_envp[_envpVector.size()] = nullptr; // NULL terminator
+	_envp[_envpVector.size()] = nullptr;
 }
 
 void	CGI::errorHandler(int errorCode, int clientFd)

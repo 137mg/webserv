@@ -6,7 +6,7 @@
 /*   By: mirjam <mirjam@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/16 17:09:18 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/06/25 15:43:59 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/03 16:46:38 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ class	Server
 		t_header		_header;
 		t_location		_location;
 		
-		std::string	buildResponse(const std::string path, std::string status);
 
 	public:
 		Manager								*Manager;
@@ -56,6 +55,7 @@ class	Server
 		t_location							selectLocation(void);
 		int									checkRequest(void);
 		void								runCGI(std::string filePath);
+		std::string							buildResponse(const std::string path, std::string status);
 		class								StandardValuesException : public std::exception
 		{
 			public:
