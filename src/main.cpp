@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.cpp                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/04/09 13:49:54 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/01 14:14:19 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/09 13:49:54 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/03 14:22:14 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	signalHandler(int signum)
 		std::cout << "Interrupt signal (" << signum << ") received from the user." << std::endl;
 }
 
-void	setUpSignals()
+void	setUpSignals(void)
 {
 	RUNNING = true;
 	signal(SIGINT, signalHandler);
@@ -31,7 +31,7 @@ void	setUpSignals()
 	signal(SIGPIPE, SIG_IGN);
 }
 
-int main(int argc, char** argv)
+int	main(int argc, char** argv)
 {
 	Manager	Manager;
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 		if (argc == 2)
 			Manager.configFile(argv[1]);
 		else
-			Manager.configFile(DEFAULT_PATH);
+			Manager.configFile("config_files/default.toml");
 	}
 	catch (std::exception& e)
 	{
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	setUpSignals();
 	try
 	{
-		Manager.config();
+		Manager.startServer();
 		Manager.monitorSockets();
 	}
 	catch (std::exception& e)

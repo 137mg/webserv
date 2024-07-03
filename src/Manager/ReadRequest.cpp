@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ReadRequest.cpp                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 12:56:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 13:22:31 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ReadRequest.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 12:56:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/03 14:14:26 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
-#include "Server.hpp"
 
 bool	Manager::readRequest(int clientFd)
 {
@@ -21,9 +20,7 @@ bool	Manager::readRequest(int clientFd)
 	memset(buffer, '\0', MESSAGE_BUFFER);
 	bytes_read = read(clientFd, buffer, MESSAGE_BUFFER - 1);
 	if (bytes_read == 0)
-	{
 		return (false);
-	}
 	if (bytes_read < 0)
 	{
 		std::cerr << RED << BOLD << "Read error " << std::strerror(errno) << RESET << std::endl;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   MonitorSockets.cpp                                 :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/03 03:20:09 by Julia         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   MonitorSockets.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/24 14:48:56 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/07/03 14:08:58 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,19 @@ void	Manager::monitorSockets(void)
 		_status = poll(_pollFdsVector.data(), _pollFdsVector.size(), 2000);
 		if (_status == -1)
 			throw ServerSocketException();
-		else if (_status == 0)
-		{
-			checkForTimeouts();
-			continue;
-		}
-		handleSocketEvents();	
 		checkForTimeouts();
+		if (_status != 0)
+			handleSocketEvents();
 	}
 }
 
-void Manager::handleSocketEvents(void)
+void	Manager::handleSocketEvents(void)
 {
-	for (unsigned long i = 0; i < _pollFdsVector.size() && RUNNING; i++)
+	for (size_t i = 0; i < _pollFdsVector.size() && RUNNING; i++)
 	{
 		if ((_pollFdsVector[i].revents & POLLIN) && _clientStatus[_pollFdsVector[i].fd] == READING)
 		{
-			if (checkIfCGIProcessExistsForFd(_pollFdsVector[i].fd))
+			if (isCGIOutputFd(_pollFdsVector[i].fd))
 			{
 				handleCGIOutput(_pollFdsVector[i].fd);
 				continue;
@@ -69,10 +65,10 @@ void Manager::handleSocketEvents(void)
 	}
 }
 
-void Manager::checkForTimeouts(void)
+void	Manager::checkForTimeouts(void)
 {
 	time_t now = std::time(nullptr);
-	for (unsigned long i = 0; i < _pollFdsVector.size(); i++)
+	for (size_t i = 0; i < _pollFdsVector.size(); i++)
 	{
 		int clientFd = _pollFdsVector[i].fd;
 		if (_clientActivityMap.find(clientFd) != _clientActivityMap.end())
@@ -107,7 +103,7 @@ int	Manager::newClientConnection(int listenFd)
 	printTimestamp();
 	std::cout << YELLOW << "Server" << RESET << " accepted new connection on client socket " << clientFd << std::endl;
 	fcntl(clientFd, F_SETFL, O_NONBLOCK);
-	return clientFd;
+	return (clientFd);
 }
 
 void	Manager::closeClientConnection(int clientFd)
@@ -115,7 +111,7 @@ void	Manager::closeClientConnection(int clientFd)
 	_clientActivityMap.erase(clientFd);
 	_fdMap.erase(clientFd);
 	_clientStatus.erase(clientFd);
-    _clientBuffers.erase(clientFd);
+	_clientBuffers.erase(clientFd);
 	printTimestamp();
 	std::cout << RED << "Closing " << RESET << "client socket " << RESET << clientFd << std::endl;
 	close(clientFd);

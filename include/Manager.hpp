@@ -11,39 +11,40 @@
 /* ************************************************************************** */
 
 #ifndef MANAGER_HPP
-#define MANAGER_HPP
+# define MANAGER_HPP
 
-#include <netinet/in.h>
-#include <netdb.h>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <ctime>
-#include <cstring>
-#include <string>
-#include <cerrno>
-#include <vector>
-#include <deque>
-#include <map>
-#include <algorithm>
-#include <dirent.h>
-#include <fcntl.h>
-#include <poll.h>
+# include <netinet/in.h>
+# include <netdb.h>
+# include <iostream>
+# include <iomanip>
+# include <fstream>
+# include <sstream>
+# include <arpa/inet.h>
+# include <sys/socket.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+# include <csignal>
+# include <ctime>
+# include <cstring>
+# include <string>
+# include <cerrno>
+# include <vector>
+# include <deque>
+# include <map>
+# include <algorithm>
+# include <dirent.h>
+# include <fcntl.h>
+# include <poll.h>
 
-#include <csignal>
+# include "Colors.h"
+# include "Structs.hpp"
+# include "Server.hpp"
 
-#include "Colors.h"
-#include "structs.hpp"
-#include "Server.hpp"
-
-#define READING 0
-#define WRITING 1
+# define READING 0
+# define WRITING 1
+# define MESSAGE_BUFFER 8192
+# define MB 1048576
 
 extern volatile bool RUNNING;
 
@@ -79,52 +80,47 @@ class	Manager
 		Manager(void);
 		~Manager(void);
 	
-		int							newClientConnection(int listenFd);
-		void						config(void);
 		void						configFile(const char* filename);
+		void						startServer(void);
 		int							createSocket(void);
 		void						bindSocket(int sockfd);
-
+		void						setUpPoll(int listenFd);
 		void						addToPollFds(int clientFd, short events);
+		void						delFromPollFdsByValue(int fd);
 
 		bool						readRequest(int clientFd);
 		bool						isRequestTooLarge(std::string buffer);
 		bool						isRequestComplete(std::string buffer);
 		bool						handleChunkedRequest(std::string& buffer, int clientFd);
 
+		std::string					getValue(std::string request, std::string key);
 		uint16_t					findPort(int clientFd);
 		t_header					parseHeader(std::string request, int clientFd);
 		void						selectServer(std::string buffer, int clientFd);
 		
+		int							newClientConnection(int listenFd);
 		void						closeClientConnection(int clientFd);
 		void						monitorSockets(void);
 		void						handleSocketEvents(void);
 		void						checkForTimeouts(void);
 
 		void						addCGIProcess(t_CGIProcess cgiProcess);
-		bool						checkIfCGIProcessExistsForFd(int fd);
-
+		void						removeCGIProcess(int fd);
+		bool						isCGIOutputFd(int fd);
+		bool						isCGIInputFd(int fd);
 		void						handleCGIOutput(int cgiFd);
 		void						handleCGIInput(int cgiFd);
+		t_CGIProcess				&getCGIProcessForFd(int fd);
+	
 		void						sendResponse(std::string response, int clientFd);
+		bool						sendErrorResponse(std::string response, int clientFd);
 		void						sendPendingResponse(int clientFd);
 		void						markFdForWriting(int clientFd);
 		void						markFdForReading(int clientFd);
-		void						removeCGIProcess(int fd);
-		void						delFromPollFdsByValue(int fd);
-		bool						sendErrorResponse(std::string response, int clientFd);
-		bool						isCGIInputFd(int fd);
-		t_CGIProcess				&getCGIProcessForFd(int fd);
-
-		std::map<int, int>			getClientStatus(void);
-		std::map<int, std::string>	getClientResponses(void);
-		std::map<int, std::string>	getClientErrorResponses(void);
-		std::string					getValue(std::string request, std::string key);
 
 		void						setClientStatus(int fd, int status);
 		void						setClientResponses(int clientFd, std::string response);
 		void						setClientErrorResponses(int clientFd, std::string response);
-		void						setUpPoll(int listenFd);
 	
 
 		class	ServerSocketException : public std::exception
@@ -142,9 +138,5 @@ class	Manager
 void	serverMessage(const std::string &message, int clientFd, std::string color);
 void	clientMessage(const std::string &message, int clientFd);
 void	printTimestamp(void);
-
-#define MESSAGE_BUFFER 8192
-#define MB 1048576
-#define DEFAULT_PATH "config_files/default.toml"
 
 #endif

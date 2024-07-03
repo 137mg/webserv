@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGIStreamHandler.cpp                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 12:59:12 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGIStreamHandler.cpp                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/21 13:05:14 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/03 14:58:10 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Manager.hpp"
-#include "Server.hpp"
-
 
 // This will read the output from thr CGI script and build a response with it
 void	Manager::handleCGIOutput(int cgiFd)
 {
 	t_CGIProcess	&cgi = getCGIProcessForFd(cgiFd);
-    char			buffer[MESSAGE_BUFFER];
-    ssize_t			bytesRead;
+	char			buffer[MESSAGE_BUFFER];
+	ssize_t			bytesRead;
 
-    bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER);
-    if (bytesRead > 0)
-    {
+	bytesRead = read(cgi.stdoutFd, buffer, MESSAGE_BUFFER);
+	if (bytesRead > 0)
+	{
 		cgi.cgiResponseSize += bytesRead;
 		cgi.cgiResponse.append(buffer, bytesRead);
-    }
+	}
 	else if (bytesRead < 0)
 	{
-        perror("read from CGI stdout failed");
+		perror("read from CGI stdout failed");
 		close(cgi.stdoutFd);
 		delFromPollFdsByValue(cgi.stdoutFd);
 		removeCGIProcess(cgiFd);
@@ -53,7 +51,6 @@ void	Manager::handleCGIOutput(int cgiFd)
 	delFromPollFdsByValue(cgi.stdoutFd);
 	removeCGIProcess(cgiFd);
 }
-
 
 // This writes the request to the CGI script
 void	Manager::handleCGIInput(int cgiFd)
