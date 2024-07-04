@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/24 14:48:56 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/03 15:20:16 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 15:01:36 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	Manager::handleSocketEvents(void)
 				handleCGIInput(_pollFdsVector[i].fd);
 				continue;
 			}
-			// Handle outgoing data (response)
 			sendPendingResponse(_pollFdsVector[i].fd);
 		}
 		else if (_pollFdsVector[i].revents & (POLLHUP | POLLERR))
@@ -68,7 +67,6 @@ void	Manager::handleSocketEvents(void)
 			}
 			closeClientConnection(_pollFdsVector[i].fd);
 		}
-		_pollFdsVector[i].revents = 0;
 	}
 }
 

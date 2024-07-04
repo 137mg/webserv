@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/04 14:33:28 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 15:02:20 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@ void	Manager::handleCGIOutput(int cgiFd)
 	{
 		cgi.cgiResponseSize += bytesRead;
 		cgi.cgiResponse.append(buffer, bytesRead);
+		cgi.moreDataAvailable = (bytesRead == MESSAGE_BUFFER - 1);
 	}
 	else if (bytesRead < 0)
 	{
-		perror("read from CGI stdout failed");
+		perror("Error read from CGI");
 		close(cgi.stdoutFd);
 		delFromPollFdsByValue(cgi.stdoutFd);
 		removeCGIProcess(cgiFd);
 		return;
 	}
 	else if (bytesRead == 0)
-		return;
-	
-	// Not finished reading yet, wait for more data
-	if (bytesRead == MESSAGE_BUFFER)
+		cgi.moreDataAvailable = false;
+
+	if (cgi.moreDataAvailable)
 		return;
 	std::string response = "";
 	response = "HTTP/1.1 200 OK \r\n";
@@ -82,16 +82,29 @@ void Manager::handleHangup(int cgiFd)
 void	Manager::handleCGIInput(int cgiFd)
 {
 	t_CGIProcess& cgi = getCGIProcessForFd(cgiFd);
+	ssize_t				bytesWritten;
+	size_t				bytesToWrite;
 
-	cgi.cgiRequestWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str(), cgi.cgiRequest.size());
-	
-	if (cgi.cgiRequestWritten <= 0)
+	bytesToWrite = cgi.cgiRequest.size() - cgi.cgiRequestWritten;
+	bytesWritten = write(cgi.stdinFd, cgi.cgiRequest.c_str() + cgi.cgiRequestWritten, bytesToWrite);
+	if (bytesWritten > 0)
+		cgi.cgiRequestWritten += bytesWritten;
+	else if (bytesWritten < 0)
+	{
+		perror("Error write to CGI");
+        close(cgi.stdinFd);
+        delFromPollFdsByValue(cgi.stdinFd);
+		removeCGIProcess(cgiFd);
+        return;
+	}
+	else if (bytesWritten)
+		return;
+
+	if (cgi.cgiRequestWritten == cgi.cgiRequest.size())
 	{
 		close(cgi.stdinFd);
 		delFromPollFdsByValue(cgi.stdinFd);
-		return;
 	}
-	markFdForWriting(cgiFd);
-	close(cgi.stdinFd);
-	delFromPollFdsByValue(cgi.stdinFd);
+	else
+        markFdForWriting(cgi.stdinFd);
 }

@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/13 16:46:08 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:50:12 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 14:58:13 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_CGIProcess
     int 		stdoutFd;
     int 		clientFd; 
 	int			status;
-	int			cgiRequestWritten;
+	size_t		cgiRequestWritten;
 	int			cgiRequestRead;
 	int			cgiResponseSize;
 	std::string	cgiRequest;
@@ -51,6 +51,7 @@ typedef struct s_CGIProcess
 	std::string	cgiErrorResponse;
 	std::string	outputBuffer;
     pid_t 		pid;
+	bool		moreDataAvailable;
 }	t_CGIProcess;
 
 #endif

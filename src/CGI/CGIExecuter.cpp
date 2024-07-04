@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:12:47 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 18:00:25 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 14:40:39 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	CGI::executeScript(std::string scriptPath, std::string CGIdirectory, std::s
 	if (setUpFork() != 0)
 		return errorHandler(500, _clientFd);
     
-    t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid};
+    t_CGIProcess cgi = {_stdinPipe[1], _stdoutPipe[0], clientFd, 0, 0,0, 0, "", "", "", "", _pid, true};
     if (_pid == 0)
 	{
         close(_stdoutPipe[0]);
