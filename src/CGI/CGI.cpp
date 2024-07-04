@@ -6,7 +6,7 @@
 /*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:34:24 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/04 11:42:15 by psadeghi         ###   ########.fr       */
+/*   Updated: 2024/07/04 11:51:04 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ CGI::CGI(const CGI& var) :
 		_envp = new char*[count + 1];
 		for (size_t i = 0; i < count; ++i)
 		{
-			_envp[i] = new char[strlen(var._envp[i]) + 1];
-			strcpy(_envp[i], var._envp[i]);
+			_envp[i] = new char[std::strlen(var._envp[i]) + 1];
+			std::strcpy(_envp[i], var._envp[i]);
 		}
 		_envp[count] = nullptr;
 	}
