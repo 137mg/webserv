@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Methods.cpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
-/*   Updated: 2024/07/04 13:51:24 by mgoedkoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   Methods.cpp                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
+/*   Updated: 2024/07/04 14:08:31 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	Server::getMethod(void)
 {
 	std::string	filePath;
 	std::string	response;
+	DIR			*dir;
 
 	filePath = _location.root + _header.file;
 	if (filePath.back() == '/' && !_location.index.empty())
@@ -30,6 +31,13 @@ void	Server::getMethod(void)
 	{
 		_header.file = "." + _location.root + _header.file;
 		runCGI("./cgi-bin/directoryListing.py");
+		return;
+	}
+	dir = opendir(filePath.c_str());
+	if (dir != nullptr)
+	{
+		closedir(dir);
+		buildErrorResponse(404);
 		return;
 	}
 	for (size_t i = 0; i < _location.cgiExtents.size(); i++)
@@ -91,7 +99,6 @@ void	Server::runCGI(std::string filePath)
 	else
 		CGIdirectory = _location.root + _location.match;
 	scriptPath = filePath.substr(filePath.rfind("/") + 1);
-
 	cgi.initEnvp(_header, _request);
 	cgi.convertVector();
 	if (access(filePath.c_str(), X_OK) == 0)
