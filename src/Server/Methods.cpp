@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ServerMethods.cpp                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: psadeghi <psadeghi@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/14 15:11:58 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:07:36 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Methods.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 15:11:58 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/04 13:51:24 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	Server::getMethod(void)
 	}
 	if (filePath.back() == '/')
 	{
+		_header.file = "." + _location.root + _header.file;
 		runCGI("./cgi-bin/directoryListing.py");
 		return;
 	}
@@ -85,7 +86,10 @@ void	Server::runCGI(std::string filePath)
 	std::string	CGIdirectory;
 	std::string	scriptPath;
 
-	CGIdirectory = _location.root + _location.match;
+	if (filePath == "./cgi-bin/directoryListing.py")
+		CGIdirectory = "./cgi-bin";
+	else
+		CGIdirectory = _location.root + _location.match;
 	scriptPath = filePath.substr(filePath.rfind("/") + 1);
 
 	cgi.initEnvp(_header, _request);
