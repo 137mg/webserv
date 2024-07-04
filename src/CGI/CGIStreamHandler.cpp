@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:02:20 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 15:03:52 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	Manager::handleCGIInput(int cgiFd)
 		removeCGIProcess(cgiFd);
         return;
 	}
-	else if (bytesWritten)
+	else if (bytesWritten == 0)
 		return;
 
 	if (cgi.cgiRequestWritten == cgi.cgiRequest.size())
