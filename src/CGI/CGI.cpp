@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   CGI.cpp                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/25 15:34:24 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 16:53:07 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   CGI.cpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psadeghi <psadeghi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/25 15:34:24 by juvan-to          #+#    #+#             */
+/*   Updated: 2024/07/04 11:42:15 by psadeghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,37 @@ CGI::CGI(const Server& server, Manager &Manager) : _server(server), _Manager(Man
 	_envp = nullptr;
 	_status = 0;
 }
+
+CGI::CGI(const CGI& var) :
+	_envp(nullptr),
+	_envpVector(var._envpVector),
+	_outputBuffer(var._outputBuffer),
+	_pid(var._pid),
+	_clientFd(var._clientFd),
+	_status(var._status),
+	_server(var._server),
+	_Manager(var._Manager)
+{
+	_stdoutPipe[0] = var._stdoutPipe[0];
+	_stdoutPipe[1] = var._stdoutPipe[1];
+	_stdinPipe[0] = var._stdinPipe[0];
+	_stdinPipe[1] = var._stdinPipe[1];
+
+	if (var._envp)
+	{
+		size_t count = 0;
+		while (var._envp[count])
+			count++;
+		_envp = new char*[count + 1];
+		for (size_t i = 0; i < count; ++i)
+		{
+			_envp[i] = new char[strlen(var._envp[i]) + 1];
+			strcpy(_envp[i], var._envp[i]);
+		}
+		_envp[count] = nullptr;
+	}
+}
+
 
 CGI::~CGI(void)
 {
