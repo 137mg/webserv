@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:05:14 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/03 16:46:50 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 14:33:28 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	Manager::handleCGIOutput(int cgiFd)
 		removeCGIProcess(cgiFd);
 		return;
 	}
+	else if (bytesRead == 0)
+		return;
+	
 	// Not finished reading yet, wait for more data
 	if (bytesRead == MESSAGE_BUFFER)
 		return;
