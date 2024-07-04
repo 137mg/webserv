@@ -6,7 +6,7 @@
 /*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/21 13:21:13 by juvan-to      #+#    #+#                 */
-/*   Updated: 2024/07/04 14:26:04 by juvan-to      ########   odam.nl         */
+/*   Updated: 2024/07/04 14:26:52 by juvan-to      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ bool	Manager::sendErrorResponse(std::string response, int clientFd)
 {
 	std::string		errorLine;
 	ssize_t			bytesWritten;
-
 
 	bytesWritten = write(clientFd, response.c_str(), response.size());
 	if (bytesWritten < 0)
