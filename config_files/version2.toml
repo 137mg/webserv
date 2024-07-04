@@ -29,8 +29,7 @@ client_max_body_size =	"10MB"
 	match =				"/cgi-bin"
 	allowed_methods =	["GET", "POST", "DELETE"]
 	root =				"."
-	index =				"upload.py"
-	auto_index =		"false"
+	auto_index =		"true"
 	cgi_extents =		".py"
 	cgi_paths =			"/usr/bin/python3"
 
