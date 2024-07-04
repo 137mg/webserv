@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   Server.cpp                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mgoedkoo <mgoedkoo@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/05/16 17:13:40 by mgoedkoo      #+#    #+#                 */
-/*   Updated: 2024/07/03 17:23:20 by juvan-to      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgoedkoo <mgoedkoo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 17:13:40 by mgoedkoo          #+#    #+#             */
+/*   Updated: 2024/07/04 12:49:04 by mgoedkoo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ Server&	Server::operator=(const Server& original)
 		return (*this);
 	_clientFd = original._clientFd;
 	_request = original._request;
+	_lastPath = original._lastPath;
 	_header = original._header;
 	_location = original._location;
 	port = original.port;
